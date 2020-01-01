@@ -39,7 +39,7 @@ function formatText(inputString, italicStrings, flavourIndex, centredText) {
     "{R/P}": "Qp",
     "{G/P}": "Qp",
     "{E}": "e",
-    "{T}": "ot",
+    "{T}": "o@@t",
     "{X}": "ox",
     "{0}": "o0",
     "{1}": "o1",
@@ -491,6 +491,152 @@ function formatText(inputString, italicStrings, flavourIndex, centredText) {
         desc726.putDouble(idGrn, 0.000000);
         idBl = charIDToTypeID("Bl  ");
         desc726.putDouble(idBl, 0.000000);
+        idRGBC = charIDToTypeID("RGBC");
+        desc725.putObject(idClr, idRGBC, desc726);
+        idTxtS = charIDToTypeID("TxtS");
+        desc724.putObject(idTxtS, idTxtS, desc725);
+        idTxtt = charIDToTypeID("Txtt");
+        list12.putObject(idTxtt, desc724);
+        desc724.putList(idTxtt, list12);
+        currentLayerReference = desc724;
+
+      } else if (inputString.slice(symbolIndices[i] + 1, symbolIndices[i] + 3) == "@@") {
+        // Old school tap symbol
+        // Character 1
+        idTxtt = charIDToTypeID("Txtt");
+        list12.putObject(idTxtt, currentLayerReference);
+        var desc712 = new ActionDescriptor();
+        idFrom = charIDToTypeID("From");
+        desc712.putInteger(idFrom, symbolIndices[i]);
+        idT = charIDToTypeID("T   ");
+        desc712.putInteger(idT, symbolIndices[i] + 1);
+        idTxtS = charIDToTypeID("TxtS");
+        var desc713 = new ActionDescriptor();
+        idfontPostScriptName = stringIDToTypeID("fontPostScriptName");
+        desc713.putString(idfontPostScriptName, selectedFont);
+        idFntN = charIDToTypeID("FntN");
+        desc713.putString(idFntN, selectedFont);
+        idSz = charIDToTypeID("Sz  ");
+        idPnt = charIDToTypeID("#Pnt");
+        desc713.putUnitDouble(idSz, idPnt, myFontSize);
+        idautoLeading = stringIDToTypeID("autoLeading");
+        desc713.putBoolean(idautoLeading, false);
+        idLdng = charIDToTypeID("Ldng");
+        idPnt = charIDToTypeID("#Pnt");
+        desc713.putUnitDouble(idLdng, idPnt, myFontSize);
+        idClr = charIDToTypeID("Clr ");
+        var desc714 = new ActionDescriptor();
+        idRd = charIDToTypeID("Rd  ");
+        desc714.putDouble(idRd, rgbC[0]);
+        idGrn = charIDToTypeID("Grn ");
+        desc714.putDouble(idGrn, rgbC[1]);
+        idBl = charIDToTypeID("Bl  ");
+        desc714.putDouble(idBl, rgbC[2]);
+        idRGBC = charIDToTypeID("RGBC");
+        desc713.putObject(idClr, idRGBC, desc714);
+        idTxtS = charIDToTypeID("TxtS");
+        desc712.putObject(idTxtS, idTxtS, desc713);
+
+        // Character 2
+        idTxtt = charIDToTypeID("Txtt");
+        list12.putObject(idTxtt, desc712);
+        var desc716 = new ActionDescriptor();
+        idFrom = charIDToTypeID("From");
+        desc716.putInteger(idFrom, symbolIndices[i] + 1);
+        idT = charIDToTypeID("T   ");
+        desc716.putInteger(idT, symbolIndices[i] + 2);
+        idTxtS = charIDToTypeID("TxtS");
+        var desc717 = new ActionDescriptor();
+        idfontPostScriptName = stringIDToTypeID("fontPostScriptName");
+        desc717.putString(idfontPostScriptName, selectedFont);
+        idFntN = charIDToTypeID("FntN");
+        desc717.putString(idFntN, selectedFont);
+        idSz = charIDToTypeID("Sz  ");
+        idPnt = charIDToTypeID("#Pnt");
+        desc717.putUnitDouble(idSz, idPnt, myFontSize);
+        idautoLeading = stringIDToTypeID("autoLeading");
+        desc717.putBoolean(idautoLeading, false);
+        idLdng = charIDToTypeID("Ldng");
+        idPnt = charIDToTypeID("#Pnt");
+        desc717.putUnitDouble(idLdng, idPnt, myFontSize);
+        idClr = charIDToTypeID("Clr ");
+        var desc718 = new ActionDescriptor();
+        idRd = charIDToTypeID("Rd  ");
+        desc718.putDouble(idRd, 0.000000);
+        idGrn = charIDToTypeID("Grn ");
+        desc718.putDouble(idGrn, 0.000000);
+        idBl = charIDToTypeID("Bl  ");
+        desc718.putDouble(idBl, 0.000000);
+        idRGBC = charIDToTypeID("RGBC");
+        desc717.putObject(idClr, idRGBC, desc718);
+        idTxtS = charIDToTypeID("TxtS");
+        desc716.putObject(idTxtS, idTxtS, desc717);
+
+        // Character 3
+        idTxtt = charIDToTypeID("Txtt");
+        list12.putObject(idTxtt, desc716);
+        var desc720 = new ActionDescriptor();
+        idFrom = charIDToTypeID("From");
+        desc720.putInteger(idFrom, symbolIndices[i] + 2);
+        idT = charIDToTypeID("T   ");
+        desc720.putInteger(idT, symbolIndices[i] + 3);
+        idTxtS = charIDToTypeID("TxtS");
+        var desc721 = new ActionDescriptor();
+        idfontPostScriptName = stringIDToTypeID("fontPostScriptName");
+        desc721.putString(idfontPostScriptName, selectedFont);
+        idFntN = charIDToTypeID("FntN");
+        desc721.putString(idFntN, selectedFont);
+        idSz = charIDToTypeID("Sz  ");
+        idPnt = charIDToTypeID("#Pnt");
+        desc721.putUnitDouble(idSz, idPnt, myFontSize);
+        idautoLeading = stringIDToTypeID("autoLeading");
+        desc721.putBoolean(idautoLeading, false);
+        idLdng = charIDToTypeID("Ldng");
+        idPnt = charIDToTypeID("#Pnt");
+        desc721.putUnitDouble(idLdng, idPnt, myFontSize);
+        idClr = charIDToTypeID("Clr ");
+        var desc722 = new ActionDescriptor();
+        idRd = charIDToTypeID("Rd  ");
+        desc722.putDouble(idRd, 0.000000);
+        idGrn = charIDToTypeID("Grn ");
+        desc722.putDouble(idGrn, 0.000000);
+        idBl = charIDToTypeID("Bl  ");
+        desc722.putDouble(idBl, 0.000000);
+        idRGBC = charIDToTypeID("RGBC");
+        desc721.putObject(idClr, idRGBC, desc722);
+        idTxtS = charIDToTypeID("TxtS");
+        desc720.putObject(idTxtS, idTxtS, desc721);
+
+        // Character 4
+        idTxtt = charIDToTypeID("Txtt");
+        list12.putObject(idTxtt, desc720);
+        var desc724 = new ActionDescriptor();
+        idFrom = charIDToTypeID("From");
+        desc724.putInteger(idFrom, symbolIndices[i] + 3);
+        idT = charIDToTypeID("T   ");
+        desc724.putInteger(idT, symbolIndices[i] + 4);
+        idTxtS = charIDToTypeID("TxtS");
+        var desc725 = new ActionDescriptor();
+        idfontPostScriptName = stringIDToTypeID("fontPostScriptName");
+        desc725.putString(idfontPostScriptName, selectedFont);
+        idFntN = charIDToTypeID("FntN");
+        desc725.putString(idFntN, selectedFont);
+        idSz = charIDToTypeID("Sz  ");
+        idPnt = charIDToTypeID("#Pnt");
+        desc725.putUnitDouble(idSz, idPnt, myFontSize);
+        idautoLeading = stringIDToTypeID("autoLeading");
+        desc725.putBoolean(idautoLeading, false);
+        idLdng = charIDToTypeID("Ldng");
+        idPnt = charIDToTypeID("#Pnt");
+        desc725.putUnitDouble(idLdng, idPnt, myFontSize);
+        idClr = charIDToTypeID("Clr ");
+        var desc726 = new ActionDescriptor();
+        idRd = charIDToTypeID("Rd  ");
+        desc726.putDouble(idRd, 255.000000);
+        idGrn = charIDToTypeID("Grn ");
+        desc726.putDouble(idGrn, 255.000000);
+        idBl = charIDToTypeID("Bl  ");
+        desc726.putDouble(idBl, 255.000000);
         idRGBC = charIDToTypeID("RGBC");
         desc725.putObject(idClr, idRGBC, desc726);
         idTxtS = charIDToTypeID("TxtS");
