@@ -1,3 +1,4 @@
+import html
 import logging
 import time
 import sys
@@ -52,7 +53,8 @@ def get_dict(card):
         "toughness": toughness,
         "layout": card.layout(),
         "colourIdentity": card.color_identity(),
-        "artist": card.artist()
+        "artist": card.artist(),
+        "setSymbol": get_set_symbol(card.set_code())
     }
     return card_json
 
@@ -91,7 +93,8 @@ def get_dict_tf(card, cardfull):
         "layout": "transform",
         "colourIdentity": card["colors"],
         "frame_effect": cardfull.scryfallJson['frame_effects'][0],
-        "artist": cardfull.artist()
+        "artist": cardfull.artist(),
+        "setSymbol": get_set_symbol(cardfull.set_code()),
     }
     log.info(card_json)
     return card_json
@@ -116,6 +119,7 @@ def get_dict_pw(card):
         "layout": "planeswalker",
         "colourIdentity": card.color_identity(),
         "artist": card.artist(),
+        "setSymbol": get_set_symbol(card.set_code()),
     }
 
     img_data = requests.get(card.image_uris()['large']).content
@@ -124,19 +128,41 @@ def get_dict_pw(card):
     return card_json
 
 
+def get_set_symbol(set_code):
+    DEFAULT = "&#xe90c;" # Cube
+    set_code = set_code.upper()
+
+    with open(sys.path[0] + "/set_symbols.json", 'r') as f:
+        symbols = json.load(f)
+    
+    try:
+        html_entity = symbols[set_code]
+    except KeyError:
+        log.warning(f"Unable to find set symbol for [{set_code}]")
+        html_entity = DEFAULT
+    
+    return html.unescape(html_entity)
+
+
 def save_json(card_json):
     json_dump = json.dumps(card_json)
     log.info(card_json)
     with open(sys.path[0] + "/card.json", 'w') as f:
         json.dump(json_dump, f)
 
-
-if __name__ == "__main__":
-    cardname = sys.argv[1]
-    log.info("Asking Scryfall for information for: " + cardname)
+def main():
+    _, cardname, set_code = sys.argv
+    
+    log.info(f"Asking Scryfall for information for: {cardname} [{set_code}]")
     # Use Scryfall to search for this card
     time.sleep(0.05)
-    card = scrython.cards.Named(fuzzy=cardname)
+
+    # Try to find card from specifed set code, fallback if nothing is found
+    try:
+        card = scrython.cards.Named(fuzzy=cardname, set=set_code)
+    except scrython.foundation.ScryfallError:
+        log.warning(f"Unable to find: {cardname} [{set_code}]. Ignoring expansion code...")
+        card = scrython.cards.Named(fuzzy=cardname)
 
     if card.layout() == "transform":
         if card.card_faces()[0]["name"] == cardname:
@@ -196,3 +222,9 @@ if __name__ == "__main__":
         log.info("Unsupported")
 
     # TODO: Add more card types. Meld? Sagas?
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception:
+        log.exception("Unhandled exception occured")

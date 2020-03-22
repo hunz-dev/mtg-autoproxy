@@ -6,7 +6,8 @@ const boxtopper = "";
 const python = "C:/Users/evanh/Code/Environments/mtg-autoproxy/Scripts/python"
 
 function proxy(file, ye) {
-  var expansionSymbol = ""; // Cube
+  // var expansionSymbol = ""; // Cube
+  var expansionSymbol;
   var filePath = File($.fileName).parent.parent.fsName;
   $.evalFile(filePath + "/scripts/json2.js");
 
@@ -19,7 +20,10 @@ function proxy(file, ye) {
   // Retrieve the card's name and artist
   var openIndex = fullCardName.lastIndexOf(" (");
   var closeIndex = fullCardName.lastIndexOf(")");
-  var cardName = ""; var cardArtist = "";
+  var cardName = "";
+  var cardArtist = "";
+  var cardSet = "MMA"; // TODO: Get from file name
+
   if (openIndex < 0 || closeIndex < 0) {
     // File name didn't include the artist name - retrieve it from card.json
     cardName = fullCardName;
@@ -39,12 +43,12 @@ function proxy(file, ye) {
     // Thanks to jamesthe500 on stackoverflow for the OS-detecting code
     if ($.os.search(/windows/i) != -1) {
       // Windows
-      app.system(python + " " + filePath + "/scripts/get_card_info.py \"" + cardName + "\"");
+      app.system(python + " " + filePath + "/scripts/get_card_info.py \"" + cardName + "\" " + cardSet);
     } else {
       // macOS
       app.system("/usr/local/bin/python3 " + filePath + "/scripts/get_card_info.py \"" + cardName + "\" >> " + filePath + "/scripts/debug.log 2>&1");
     }
-
+    
     var cardJSONFile = new File(filePath + "/scripts/card.json");
     cardJSONFile.open('r');
     var cardJSON = cardJSONFile.read();
@@ -52,6 +56,9 @@ function proxy(file, ye) {
 
     // Why do we have to parse this twice? To be honest only God knows lmao
     var jsonParsed = JSON.parse(JSON.parse(cardJSON));
+    
+    // Obtain the set symbol
+    expansionSymbol = jsonParsed.setSymbol;
 
     // If no artist name was supplied, use the name from Scryfall
     if (cardArtist == "") cardArtist = jsonParsed.artist;
