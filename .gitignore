@@ -1,5 +1,6 @@
 templates/
 out/
 art/
+art_raw/
 *.log
 card.json
