@@ -562,6 +562,7 @@ function insertManaCost(textAndIcons, cardManaCost) {
     docRef.activeLayer = manaCostLayer;
     formatText(cardManaCost, [], -1, false);
     docRef.activeLayer.name = "Mana Cost";
+    docRef.activeLayer.textItem.justification = Justification.RIGHT  // Force justification
   } else {
     manaCostLayer.visible = false;
   }
