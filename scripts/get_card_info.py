@@ -1,3 +1,4 @@
+import logging
 import time
 import sys
 import scrython
@@ -5,11 +6,22 @@ import json
 import requests
 
 
+log = logging.getLogger('mtg-autoproxy')
+log.setLevel(logging.DEBUG)
+
+file_handler = logging.FileHandler(f'{sys.path[0]}/get_card_info.log')
+file_handler.setLevel(logging.DEBUG)
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.DEBUG)
+log.addHandler(file_handler)
+log.addHandler(stream_handler)
+
+
 def get_dict(card):
     # As per Scryfall documentation, insert a delay between each request
     time.sleep(0.01)
 
-    print("Found information for: " + card.name())
+    log.info("Found information for: " + card.name())
     # Handle missing power/toughness
     try:
         power = card.power()
@@ -49,7 +61,7 @@ def get_dict_tf(card, cardfull):
     # As per Scryfall documentation, insert a delay between each request
     time.sleep(0.01)
 
-    print("Found information for: " + card["name"])
+    log.info("Found information for: " + card["name"])
     # Handle missing power/toughness
     try:
         power = card["power"]
@@ -81,7 +93,7 @@ def get_dict_tf(card, cardfull):
         "frame_effect": cardfull.scryfallJson['frame_effects'][0],
         "artist": cardfull.artist()
     }
-    print(card_json)
+    log.info(card_json)
     return card_json
 
 
@@ -89,7 +101,7 @@ def get_dict_pw(card):
     # As per Scryfall documentation, insert a delay between each request
     time.sleep(0.01)
 
-    print("Found information for: " + card.name())
+    log.info("Found information for: " + card.name())
 
     # Split the card text into abilities
     abilities = card.oracle_text().splitlines()
@@ -103,7 +115,7 @@ def get_dict_pw(card):
         "loyalty": card.loyalty(),
         "layout": "planeswalker",
         "colourIdentity": card.color_identity(),
-        "artist": card.artist()
+        "artist": card.artist(),
     }
 
     img_data = requests.get(card.image_uris()['large']).content
@@ -114,15 +126,14 @@ def get_dict_pw(card):
 
 def save_json(card_json):
     json_dump = json.dumps(card_json)
-    print(card_json)
+    log.info(card_json)
     with open(sys.path[0] + "/card.json", 'w') as f:
         json.dump(json_dump, f)
 
 
 if __name__ == "__main__":
-
     cardname = sys.argv[1]
-    print("Asking Scryfall for information for: " + cardname)
+    log.info("Asking Scryfall for information for: " + cardname)
     # Use Scryfall to search for this card
     time.sleep(0.05)
     card = scrython.cards.Named(fuzzy=cardname)
@@ -182,5 +193,6 @@ if __name__ == "__main__":
         save_json(card_json)
 
     else:
-        print("Unsupported")
+        log.info("Unsupported")
+
     # TODO: Add more card types. Meld? Sagas?
