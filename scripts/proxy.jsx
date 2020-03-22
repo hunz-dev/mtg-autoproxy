@@ -1,6 +1,9 @@
 // Toggle between these two lines to use the normal frame or box topper frame
 // boxtopper = "-boxtopper";
-boxtopper = "";
+const boxtopper = "";
+
+// Python interpreter location
+const python = "C:/Users/evanh/Code/Environments/mtg-autoproxy/Scripts/python"
 
 function proxy(file, ye) {
   var expansionSymbol = ""; // Cube
@@ -36,7 +39,7 @@ function proxy(file, ye) {
     // Thanks to jamesthe500 on stackoverflow for the OS-detecting code
     if ($.os.search(/windows/i) != -1) {
       // Windows
-      app.system("python get_card_info.py \"" + cardName + "\"");
+      app.system(python + " " + filePath + "/scripts/get_card_info.py \"" + cardName + "\"");
     } else {
       // macOS
       app.system("/usr/local/bin/python3 " + filePath + "/scripts/get_card_info.py \"" + cardName + "\" >> " + filePath + "/scripts/debug.log 2>&1");
