@@ -17,22 +17,10 @@ function proxy(file, ye) {
   else filename = decodeURI(file[0].name);
   fullCardName = filename.slice(0, filename.lastIndexOf("."));
 
-  // Retrieve the card's name and artist
-  var openIndex = fullCardName.lastIndexOf(" (");
-  var closeIndex = fullCardName.lastIndexOf(")");
-  var cardName = "";
-  var cardArtist = "";
-  var cardSet = "MMA"; // TODO: Get from file name
-
-  if (openIndex < 0 || closeIndex < 0) {
-    // File name didn't include the artist name - retrieve it from card.json
-    cardName = fullCardName;
-  } else {
-    // File name includes artist name - slice and dice
-    cardArtist = fullCardName.slice(openIndex + 2, closeIndex);
-    cardName = fullCardName.slice(0, openIndex);
-  }
-
+  // Retrieve the card's attributes
+  const cardName = fullCardName.substring(0, fullCardName.indexOf('(') - 1);
+  const cardArtist = fullCardName.substring(fullCardName.indexOf('(') + 1, fullCardName.indexOf(')'));
+  const cardSet = fullCardName.substring(fullCardName.indexOf('[') + 1, fullCardName.indexOf(']'));
 
   if (cardName == "Plains" || cardName == "Island" || cardName == "Swamp" || cardName == "Mountain" || cardName == "Forest") {
     proxyBasic(cardName, cardArtist, ye);
