@@ -1,10 +1,13 @@
 import scrython
 import requests
-import config
 import imageio
 import numpy as np
 from numpy.fft import fft2, ifft2, fftshift, ifftshift
 from skimage.transform import resize
+
+
+# Maybe shouldn't be here, but it's published on their own website ¯\_(ツ)_/¯
+DEEPAI_KEY = 'quickstart-QUdJIGlzIGNvbWluZy4uLi4K'
 
 
 def process_scan(card, cardname):
@@ -17,7 +20,7 @@ def process_scan(card, cardname):
             # 'image': card.image_uris()['art_crop'],
             'image': card["image_uris"]["art_crop"]
         },
-        headers={'api-key': config.TOKEN}
+        headers={'api-key': DEEPAI_KEY}
     )
     output_url = r.json()['output_url']
     im = imageio.imread(output_url)
