@@ -1,0 +1,5 @@
+templates/
+out/
+art/
+*.log
+card.json
