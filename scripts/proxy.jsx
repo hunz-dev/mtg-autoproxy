@@ -608,6 +608,16 @@ function insertTypeline(textAndIcons, typeLine, typelineLayerName, isIxalan) {
 
 function saveImage(cardName) {
   var docRef = app.activeDocument;
+
+  // // ----------Save PSD----------
+  // var saveOptions = new PhotoshopSaveOptions();
+  // saveOptions.alphaChannels = false;
+  // saveOptions.annotations = false;
+  // saveOptions.embedColorProfile = true;
+  // saveOptions.layers = true;
+  // saveOptions.spotColors = false;
+  // docRef.saveAs(new File(filePath + '/out/' + cardName + '.psd'), saveOptions, true, Extension.LOWERCASE);
+
   // ----------Save as PNG in the out folder ----------
   var idsave = charIDToTypeID("save");
   var desc3 = new ActionDescriptor();
