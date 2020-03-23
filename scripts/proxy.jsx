@@ -97,6 +97,8 @@ function proxyBasic(cardName, cardArtist, ye) {
   legalLayer = docRef.layers.getByName("Legal");
   legalLayer.layers.getByName("Artist").textItem.contents = cardArtist;
 
+  customAdjustments();
+
   saveImage(cardName + " (" + cardArtist + ")");
 }
 
@@ -135,6 +137,8 @@ function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol
   var templateRef = docRef.layers.getByName("pw-" + String(numAbilities));
   var textAndIcons = templateRef.layers.getByName("Text and Icons");
   templateRef.visible = true;
+
+  customAdjustments();
 
   // Select the correct layers
   selectedLayers = selectFrameLayers(jsonParsed);
@@ -299,6 +303,8 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, layo
   // Create a reference to the active document for convenience
   var docRef = app.activeDocument;
   var textAndIcons = docRef.layers.getByName("Text and Icons");
+
+  customAdjustments();
 
   // Retrieve some more info about the card.
   var typeLine = jsonParsed.type;
@@ -604,6 +610,24 @@ function insertTypeline(textAndIcons, typeLine, typelineLayerName, isIxalan) {
       typelineRightBound = typelineLayer.bounds[2];
     }
   }
+}
+
+// Put some custom changes to the template here since manual modifications seem to break the script
+function customAdjustments() {
+  var legalLayer = app.activeDocument.layers.getByName("Legal");
+
+  legalLayer.layers.getByName("Legal").translate(0, -0.1);
+
+  var legalText = legalLayer.layers.getByName("Legal").textItem;
+  var textColor = new SolidColor();
+  textColor.rgb.hexValue = "555555"; 
+  legalText.contents = "PROXY: THE GATHERING";
+  legalText.font = "Relay-Medium";
+  legalText.size = new UnitValue(15, "px");
+  legalText.color = textColor;
+
+  var setText = legalLayer.layers.getByName("Set").textItem;
+  setText.contents = "PRX";
 }
 
 function saveImage(cardName) {
