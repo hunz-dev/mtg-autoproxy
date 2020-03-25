@@ -628,6 +628,12 @@ function customAdjustments() {
 
   var setText = legalLayer.layers.getByName("Set").textItem;
   setText.contents = "PRX";
+
+  // Uncomment for wider set symbols
+  // var textAndIcons = app.activeDocument.layers.getByName("Text and Icons");
+  // var expansionSymbol = textAndIcons.layers.getByName("Expansion Symbol");
+  // expansionSymbol.textItem.size = new UnitValue(120, "px");
+  // expansionSymbol.translate(-1, 0.7);
 }
 
 function saveImage(cardName) {
