@@ -1,3 +1,5 @@
+import os
+from time import sleep
 import scrython
 import requests
 import imageio
@@ -6,11 +8,18 @@ from numpy.fft import fft2, ifft2, fftshift, ifftshift
 from skimage.transform import resize
 
 
-# Maybe shouldn't be here, but it's published on their own website ¯\_(ツ)_/¯
-DEEPAI_KEY = 'quickstart-QUdJIGlzIGNvbWluZy4uLi4K'
+DEEPAI_KEY = os.env['DEEPAI_KEY']
 
+# Input list of cards, set optional with '|'
+cards = [
+    "Dragonskull Summit|XLN",
+    "Drowned Catacomb|XLN",
+    "Sulfur Falls|ISD",
+    "Woodland Cemetery|ISD"
+]
 
 def process_scan(card, cardname):
+    sleep(1)
     # Retrieve and process the art scan for this card.
     # Throw scryfall scan through waifu2x
     print("Throwing scryfall scan through waifu2x")
@@ -22,6 +31,7 @@ def process_scan(card, cardname):
         },
         headers={'api-key': DEEPAI_KEY}
     )
+    print(r.json())
     output_url = r.json()['output_url']
     im = imageio.imread(output_url)
 
@@ -47,12 +57,10 @@ def process_scan(card, cardname):
     im_recon_sc = 255*((im_recon - minval)/(maxval - minval))
 
     # Write image to disk, casting to uint8
-    imageio.imwrite("../art_raw/" + cardname + " (" + card["artist"] + ").jpg", im_recon_sc.astype(np.uint8))
+    imageio.imwrite("../art_raw/" + cardname + " (" + card["artist"] + ") [" + card["set"].upper() + "].jpg", im_recon_sc.astype(np.uint8))
     print("Successfully processed scan for {}.".format(cardname))
 
-
-if __name__ == "__main__":
-    cardname = input("Card name (exact): ")
+def fetch_card(cardname):
     try:
         # If the card specifies which set to retrieve the scan from, do that
         try:
@@ -79,4 +87,7 @@ if __name__ == "__main__":
             print("Couldn't find that card.")
     except Exception as e:
         print("Exception: " + str(e))
-    input("Press enter to continue.")
+
+if __name__ == "__main__":
+    for card in cards:
+        fetch_card(card)
