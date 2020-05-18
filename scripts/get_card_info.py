@@ -129,7 +129,7 @@ def get_dict_pw(card):
 
 
 def get_set_symbol(set_code):
-    DEFAULT = "&#xe90c;" # Cube
+    DEFAULT = "&#xe687;"  # Promo
     set_code = set_code.upper()
 
     with open(sys.path[0] + "/set_symbols.json", 'r') as f:
