@@ -47,19 +47,20 @@ function proxy(file, ye) {
     
     // Obtain the set symbol
     expansionSymbol = jsonParsed.setSymbol;
+    isWideSymbol = jsonParsed.wideSetSymbol
 
     // If no artist name was supplied, use the name from Scryfall
     if (cardArtist == "") cardArtist = jsonParsed.artist;
 
     if (jsonParsed.layout == "normal") {
-      proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, "normal");
+      proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWideSymbol, "normal");
     } else if (jsonParsed.layout == "planeswalker" || jsonParsed.type.indexOf("Planeswalker") > 0) {
-      proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol);
+      proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWideSymbol);
     } else if (jsonParsed.layout == "transform") {
       if (jsonParsed.face == "front") {
-        proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, "tf-front");
+        proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWideSymbol, "tf-front");
       } else if (jsonParsed.face == "back") {
-        proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, "tf-back");
+        proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWideSymbol, "tf-back");
       }
     }
   }
@@ -97,12 +98,10 @@ function proxyBasic(cardName, cardArtist, ye) {
   legalLayer = docRef.layers.getByName("Legal");
   legalLayer.layers.getByName("Artist").textItem.contents = cardArtist;
 
-  customAdjustments();
-
   saveImage(cardName + " (" + cardArtist + ")");
 }
 
-function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol) {
+function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWideSymbol) {
   // Load in json2.js and some function files
   $.evalFile(filePath + "/scripts/json2.js");
   $.evalFile(filePath + "/scripts/formatText.jsx");
@@ -138,7 +137,7 @@ function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol
   var textAndIcons = templateRef.layers.getByName("Text and Icons");
   templateRef.visible = true;
 
-  customAdjustments();
+  customAdjustments(isWideSymbol);
 
   // Select the correct layers
   selectedLayers = selectFrameLayers(jsonParsed);
@@ -273,7 +272,7 @@ function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol
   exit();
 }
 
-function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, layout) {
+function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWideSymbol, layout) {
 
   // Load in json2.js and some function files
   $.evalFile(filePath + "/scripts/json2.js");
@@ -304,7 +303,7 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, layo
   var docRef = app.activeDocument;
   var textAndIcons = docRef.layers.getByName("Text and Icons");
 
-  customAdjustments();
+  customAdjustments(isWideSymbol);
 
   // Retrieve some more info about the card.
   var typeLine = jsonParsed.type;
@@ -613,7 +612,7 @@ function insertTypeline(textAndIcons, typeLine, typelineLayerName, isIxalan) {
 }
 
 // Put some custom changes to the template here since manual modifications seem to break the script
-function customAdjustments() {
+function customAdjustments(isWideSymbol) {
   var legalLayer = app.activeDocument.layers.getByName("Legal");
 
   legalLayer.layers.getByName("Legal").translate(0, -0.1);
@@ -629,11 +628,12 @@ function customAdjustments() {
   var setText = legalLayer.layers.getByName("Set").textItem;
   setText.contents = "PRX";
 
-  // Uncomment for wider set symbols
-  // var textAndIcons = app.activeDocument.layers.getByName("Text and Icons");
-  // var expansionSymbol = textAndIcons.layers.getByName("Expansion Symbol");
-  // expansionSymbol.textItem.size = new UnitValue(120, "px");
-  // expansionSymbol.translate(-1, 0.7);
+  if (isWideSymbol) {
+    var textAndIcons = app.activeDocument.layers.getByName("Text and Icons");
+    var expansionSymbol = textAndIcons.layers.getByName("Expansion Symbol");
+    expansionSymbol.textItem.size = new UnitValue(110, "px");
+    expansionSymbol.translate(-1, 0.5);
+  }
 }
 
 function saveImage(cardName) {

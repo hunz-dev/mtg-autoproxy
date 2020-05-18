@@ -17,6 +17,12 @@ stream_handler.setLevel(logging.DEBUG)
 log.addHandler(file_handler)
 log.addHandler(stream_handler)
 
+# Add to this list for any wide set symbols to adjust in template
+wide_symbols = [
+    '',
+    'SHM',
+]
+
 
 def get_dict(card):
     # As per Scryfall documentation, insert a delay between each request
@@ -54,8 +60,10 @@ def get_dict(card):
         "layout": card.layout(),
         "colourIdentity": card.color_identity(),
         "artist": card.artist(),
-        "setSymbol": get_set_symbol(card.set_code())
+        "setSymbol": get_set_symbol(card.set_code()),
+        "wideSetSymbol": card.set_code().upper() in wide_symbols
     }
+
     return card_json
 
 
