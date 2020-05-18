@@ -163,6 +163,7 @@ def main():
     except scrython.foundation.ScryfallError:
         log.warning(f"Unable to find: {cardname} [{set_code}]. Ignoring expansion code...")
         card = scrython.cards.Named(fuzzy=cardname)
+        card.scryfallJson['set'] = ''  # Remove found set symbol, custom behavior for undesired set symbols
 
     if card.layout() == "transform":
         if card.card_faces()[0]["name"] == cardname:
