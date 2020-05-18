@@ -19,8 +19,10 @@ log.addHandler(stream_handler)
 
 # Add to this list for any wide set symbols to adjust in template
 wide_symbols = [
-    '',
+    '',  # For default set symbol
+    'MRD',
     'SHM',
+    'USG',
 ]
 
 
