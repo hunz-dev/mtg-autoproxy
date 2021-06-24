@@ -109,7 +109,6 @@ function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol
   $.evalFile(filePath + "/scripts/framelogic.jsx");
 
   var templateName = "pw" + boxtopper;
-  var isBoxtopper = boxtopper != "";
   var fileRef = new File(filePath + "/templates/" + templateName + ".psd");
   app.open(fileRef);
 
@@ -147,7 +146,8 @@ function proxyPlaneswalker(jsonParsed, ye, cardName, cardArtist, expansionSymbol
   var artLayerFrameName = "Planeswalker Art Frame";
   if (selectedLayers[4]) artLayerFrameName = "Full Art Frame";
   var artLayerFrame = docRef.layers.getByName(artLayerFrameName);
-  frame(artLayerFrame.bounds[0].as("px"),
+  frame(docRef.layers.getByName("Layer 1"),
+    artLayerFrame.bounds[0].as("px"),
     artLayerFrame.bounds[1].as("px"),
     artLayerFrame.bounds[2].as("px"),
     artLayerFrame.bounds[3].as("px"));
@@ -322,7 +322,8 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
   var artLayerFrameName = "Art Frame";
   if (selectedLayers[4]) artLayerFrameName = "Full Art Frame";
   var artLayerFrame = docRef.layers.getByName(artLayerFrameName);
-  frame(artLayerFrame.bounds[0].as("px"),
+  frame(docRef.layers.getByName("Layer 1"),
+    artLayerFrame.bounds[0].as("px"),
     artLayerFrame.bounds[1].as("px"),
     artLayerFrame.bounds[2].as("px"),
     artLayerFrame.bounds[3].as("px"));
@@ -338,12 +339,12 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
   if (isCreature) textLayerName = "Rules Text - Creature";
   var textColour = new SolidColor();
   textColour.rgb.red = 255.0; textColour.rgb.blue = 255.0; textColour.rgb.green = 255.0;
-
+  var nyxcrown = (typeLine.indexOf("Legendary") >= 0 && typeLine.indexOf("Enchantment") >= 0) && (typeLine.indexOf("Creature") >= 0 || typeLine.indexOf("Artifact") >= 0);
   // Add a colour indicator dot when the card has no mana cost, it isn't a land
   // (or it is a creature: cornercase Dryad Arbor), and it isn't an artifact
   if ((cardManaCost == "" || cardManaCost == "{0}") &&
     (typeLine.indexOf("Land") < 0 || typeLine.indexOf("Creature") >= 0) &&
-    selectedLayers[1] != "Artifact" && ! selectedLayers[4]) {
+    selectedLayers[1] != "Artifact" && !selectedLayers[4]) {
     // Card needs a colour indicator
     var colourIndicator = docRef.layers.getByName("Colour Indicator");
     colourIndicator.layers.getByName(selectedLayers[1]).visible = true;
@@ -398,15 +399,25 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
     if (selectedLayers[3]) {
       var nyxLayer = docRef.layers.getByName("Nyx");
       nyxLayer.layers.getByName(selectedLayers[0]).visible = true;
+    } else {
+      // Background
+      backgroundLayer.layers.getByName(selectedLayers[0]).visible = true;
     }
-
-    // Background
-    backgroundLayer.layers.getByName(selectedLayers[0]).visible = true;
 
     // Pinlines
     if (typeLine.indexOf("Land") >= 0 && jsonParsed.layout == "normal") pinlinesName = "Land " + pinlinesName;
     var pinlinesLayer = docRef.layers.getByName(pinlinesName);
     pinlinesLayer.layers.getByName(selectedLayers[1]).visible = true;
+    if (nyxcrown) {
+      app.activeDocument.activeLayer = docRef.layers.getByName(pinlinesName);
+      enableLayerMask();
+
+      app.activeDocument.activeLayer = docRef.layers.getByName("Border");
+      enableLayerMask();
+
+      app.activeDocument.activeLayer = docRef.layers.getByName("Shadows");
+      enableLayerMask();
+    }
 
     // Twins
     var nameboxLayer = docRef.layers.getByName(nameboxName);
@@ -417,6 +428,11 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
       var legendaryLayer = docRef.layers.getByName("Legendary Crown (Credit to barbecue)");
       legendaryLayer.layers.getByName(selectedLayers[1]).visible = true;
       legendaryLayer.layers.getByName("Effects").visible = true;
+      if (nyxcrown) {
+        app.activeDocument.activeLayer = legendaryLayer.layers.getByName(selectedLayers[1]);
+        // script listener to enable layer mask
+        enableLayerMask();
+      }
     }
 
     // PT box
@@ -441,6 +457,9 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
   if (!isIxalan) insertManaCost(textAndIcons, cardManaCost);
   insertName(textAndIcons, cardName, cardnameLayerName, isIxalan);
   insertTypeline(textAndIcons, typeLine, typelineLayerName, isIxalan);
+
+  // For normal style box topper cards, make the typeline white
+  if (boxtopper != "") textAndIcons.layers.getByName(typelineLayerName).textItem.color = textColour;
 
   // P/T Text
   if (!isIxalan) {
@@ -555,7 +574,8 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
   if (isCreature) verticallyFixText(rulesTextLayer);
 
   // Write image to file and close document
-  saveImage(cardName);
+  if (boxtopper == "") saveImage(cardName);
+  else saveImage("border/" + cardName + " (Extended)");
 }
 
 function insertManaCost(textAndIcons, cardManaCost) {
@@ -581,13 +601,13 @@ function insertName(textAndIcons, cardName, cardnameLayerName, isIxalan) {
 
   if (!isIxalan && textAndIcons.layers.getByName("Mana Cost").visible) {
     // Scale down the name to fit in case it's too long
-    var symbolLeftBound = textAndIcons.layers.getByName("Mana Cost").bounds[0];
-    var typelineRightBound = cardnameLayer.bounds[2];
+    var symbolLeftBound = textAndIcons.layers.getByName("Mana Cost").bounds[0].as("px");
+    var typelineRightBound = cardnameLayer.bounds[2].as("px");
     var nameFontSize = cardnameLayer.textItem.size;
-    while (typelineRightBound > symbolLeftBound - new UnitValue(16, "px")) { // minimum 16 px gap
+    while (typelineRightBound > symbolLeftBound - 16) { // minimum 16 px gap
       cardnameLayer.textItem.size = new UnitValue(nameFontSize - 1, "px");
       nameFontSize = nameFontSize - 1;
-      typelineRightBound = cardnameLayer.bounds[2];
+      typelineRightBound = cardnameLayer.bounds[2].as("px");
     }
   }
 }
@@ -600,13 +620,13 @@ function insertTypeline(textAndIcons, typeLine, typelineLayerName, isIxalan) {
 
   if (!isIxalan) {
     // Scale down the typeline to fit in case it's too long
-    var symbolLeftBound = textAndIcons.layers.getByName("Expansion Symbol").bounds[0];
-    var typelineRightBound = typelineLayer.bounds[2];
+    var symbolLeftBound = textAndIcons.layers.getByName("Expansion Symbol").bounds[0].as("px");
+    var typelineRightBound = typelineLayer.bounds[2].as("px");
     var typelineFontSize = typelineLayer.textItem.size;
-    while (typelineRightBound > symbolLeftBound) {
+    while (typelineRightBound > symbolLeftBound - 16) { // minimum 16 px gap
       typelineLayer.textItem.size = new UnitValue(typelineFontSize - 1, "px");
       typelineFontSize = typelineFontSize - 1;
-      typelineRightBound = typelineLayer.bounds[2];
+      typelineRightBound = typelineLayer.bounds[2].as("px");
     }
   }
 }
@@ -670,4 +690,24 @@ function saveImage(cardName) {
 
   // Close the thing without saving
   docRef.close(SaveOptions.DONOTSAVECHANGES);
+}
+
+function enableLayerMask() {
+  // works on the active layer, I think?
+  var idsetd = charIDToTypeID("setd");
+  var desc3078 = new ActionDescriptor();
+  var idnull = charIDToTypeID("null");
+  var ref1567 = new ActionReference();
+  var idLyr = charIDToTypeID("Lyr ");
+  var idOrdn = charIDToTypeID("Ordn");
+  var idTrgt = charIDToTypeID("Trgt");
+  ref1567.putEnumerated(idLyr, idOrdn, idTrgt);
+  desc3078.putReference(idnull, ref1567);
+  var idT = charIDToTypeID("T   ");
+  var desc3079 = new ActionDescriptor();
+  var idUsrM = charIDToTypeID("UsrM");
+  desc3079.putBoolean(idUsrM, true);
+  var idLyr = charIDToTypeID("Lyr ");
+  desc3078.putObject(idT, idLyr, desc3079);
+  executeAction(idsetd, desc3078, DialogModes.NO);
 }
