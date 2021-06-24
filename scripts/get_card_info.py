@@ -19,10 +19,19 @@ log.addHandler(stream_handler)
 
 # Add to this list for any wide set symbols to adjust in template
 wide_symbols = [
-    '',  # For default set symbol
+    'EXO',
+    'ULG',
     'MRD',
+    'MH1',
     'SHM',
     'USG',
+    'UMA',
+    '10E',
+    '2XM',
+    'MH2',
+    'EMN',
+    'NEM',
+    'RNA'
 ]
 
 
@@ -49,6 +58,9 @@ def get_dict(card):
     flavourText = flavourText.replace("\" —", "\"\n—")
     flavourText = flavourText.replace("\"—", "\"\n—")
     # TODO: Make this more robust. This still sometimes misses and hecks up the formatting on cards.
+
+    # Some flavor is italicized using asterisks, just remove them
+    flavourText = flavourText.replace("*", "")
 
     card_json = {
         "name": card.name(),
@@ -139,7 +151,7 @@ def get_dict_pw(card):
 
 
 def get_set_symbol(set_code):
-    DEFAULT = "&#xe687;"  # Promo
+    DEFAULT = "&#xe684;"  # Promo
     set_code = set_code.upper()
 
     with open(sys.path[0] + "/set_symbols.json", 'r') as f:
