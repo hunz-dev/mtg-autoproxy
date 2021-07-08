@@ -635,14 +635,14 @@ function insertTypeline(textAndIcons, typeLine, typelineLayerName, isIxalan) {
 function customAdjustments(isWideSymbol) {
   var legalLayer = app.activeDocument.layers.getByName("Legal");
 
-  legalLayer.layers.getByName("Legal").translate(0, -0.1);
+  legalLayer.layers.getByName("Legal").translate(0, -0.01);
 
   var legalText = legalLayer.layers.getByName("Legal").textItem;
   var textColor = new SolidColor();
   textColor.rgb.hexValue = "555555"; 
   legalText.contents = "PROXY: THE GATHERING";
   legalText.font = "Relay-Medium";
-  legalText.size = new UnitValue(15, "px");
+  legalText.size = new UnitValue(2, "px");
   legalText.color = textColor;
 
   var setText = legalLayer.layers.getByName("Set").textItem;
@@ -651,8 +651,8 @@ function customAdjustments(isWideSymbol) {
   if (isWideSymbol) {
     var textAndIcons = app.activeDocument.layers.getByName("Text and Icons");
     var expansionSymbol = textAndIcons.layers.getByName("Expansion Symbol");
-    expansionSymbol.textItem.size = new UnitValue(110, "px");
-    expansionSymbol.translate(-1, 0.5);
+    expansionSymbol.textItem.size = new UnitValue(12, "px");
+    expansionSymbol.translate(-0.03, 0.02);
   }
 }
 
