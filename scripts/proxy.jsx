@@ -566,8 +566,7 @@ function proxyNormal(jsonParsed, ye, cardName, cardArtist, expansionSymbol, isWi
   // Scale the text to fit in the text box
   var textboxRef = textAndIcons.layers.getByName("Textbox Reference");
   var tolerance = new UnitValue(10, "px"); // 10 px tolerance from textbox reference
-  var layerHeight = textboxRef.bounds[3] - textboxRef.bounds[1] - tolerance.as("cm");
-  var scaled = scaleTextToFitBox(rulesTextLayer, layerHeight);
+  var scaled = scaleTextToFitBox(rulesTextLayer, getRealTextLayerDimensions(textboxRef).height);
 
   // Align card text in text box
   verticallyAlignText(textLayerName);
