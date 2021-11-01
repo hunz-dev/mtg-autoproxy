@@ -14,7 +14,7 @@ Photoshop scripting to generate high-quality Magic card renders, inserting Scryf
     * [Keyrune](https://keyrune.andrewgioia.com/) and [Mana](https://mana.andrewgioia.com/), for the expansion symbol and transform symbols,
     * [Relay Medium](https://www.fontsmarket.com/font-download/relay-medium) and Calibri (comes with Windows)
   * [json2.js](https://github.com/douglascrockford/JSON-js), included but you may need to download a more recent version.
-  * A standard installation of [Python 3](https://www.python.org/downloads/) (Make sure when you install python to check "Add python to PATH").
+  * A standard installation of [Python 3](https://www.python.org/downloads/) (Make sure when you install python to check "Add python to PATH", if you have Windows 10 or later I HIGHLY recommend you get Python 3 from the windows store).
 
 # Install and Usage Guide
 * Clone to a folder of your choice, referred to as the *working directory*.
