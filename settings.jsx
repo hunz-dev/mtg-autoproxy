@@ -18,7 +18,7 @@ var specified_template = null;
 //var specified_template = NormalClassicTemplate; // Classic mtg frame
 //var specified_template = BasicLandClassicTemplate; // Classic mtg frame for basics
 //var specified_template = MiracleTemplate; // Miracle frame ex: Temporal Mastery
-//var specified_template = KaldheimTemplate;
+//var specified_template = KaldheimTemplate; // Kaldheim showcase border
 
 // MY STUFF -- File extension, change to PSB for Silvan template
 var file_extension = ".psd";
@@ -41,6 +41,10 @@ var expansion_symbol_stroke_weight = 6;
 // Remove the flavour text
 var remove_flavour_text = false;
 //var remove_flavour_text = true;
+
+// Remove the reminder text
+var remove_reminder_text = false;
+//var remove_reminder_text = true;
 
 // Function to automatically choose set symbol
 function generate_set_symbol ( set ) {

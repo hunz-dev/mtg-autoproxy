@@ -215,6 +215,9 @@ function render(file) {
 	if (ret.creator) layout.creator = ret.creator;
 	else layout.creator = null;
 	
+	// Strip reminder text? -- MY STUFF
+	if ((layout.oracle_text) && remove_reminder_text == true ) layout.oracle_text = strip_reminder_text(layout.oracle_text);
+	
     // select and execute the template - insert text fields, set visibility of layers, etc. - and save to disk
     var file_name = select_template(layout, file, file_path).execute();
     if (exit_early) {
