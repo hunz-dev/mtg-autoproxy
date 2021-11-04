@@ -6,19 +6,21 @@ var expansion_symbol_character = "";  // M
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
 var specified_template = null;
-//var specified_template = SilvanExtendedTemplate; // Looks like WillieTanner proxies
-//var specified_template = NormalExtendedTemplate; // Chilli extended template
-//var specified_template = NormalFullArtTemplate; // Modified extended template to be full art
-//var specified_template = WomensDayTemplate; // Secret lair fullart
-//var specified_template = MasterpieceTemplate; // Hour of devastation masterpiece invocations
-//var specified_template = SnowTemplate; // Snow 
-//var specified_template = SketchTemplate; // MH2 Sketch template 
-//var specified_template = StargazingTemplate; // Nyx stargazing secret lair
-//var specified_template = ExpeditionTemplate; // Zendikar Rising expedition template
-//var specified_template = NormalClassicTemplate; // Classic mtg frame
-//var specified_template = BasicLandClassicTemplate; // Classic mtg frame for basics
-//var specified_template = MiracleTemplate; // Miracle frame ex: Temporal Mastery
-//var specified_template = KaldheimTemplate; // Kaldheim showcase border
+//var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
+//var specified_template = NormalExtendedTemplate; // EXTENDED - OG Chilli extended
+//var specified_template = NormalFullArtTemplate; // FULLART - Modded Chilli extended to be full art
+//var specified_template = WomensDayTemplate; // FULLART - 2XM Showcase
+//var specified_template = MasterpieceTemplate; // FULLART - Hour of devastation masterpiece
+//var specified_template = SnowTemplate; // REGULAR - Snow 
+//var specified_template = SketchTemplate; // REGULAR - MH2 Sketch
+//var specified_template = StargazingTemplate; // FULLART - Nyx secret lair
+//var specified_template = ExpeditionTemplate; // FULLART - Zendikar Rising expedition
+//var specified_template = NormalClassicTemplate; // REGULAR - Cassic mtg frame
+//var specified_template = BasicLandClassicTemplate; // REGULAR - Classic mtg basics frame
+//var specified_template = MiracleTemplate; // REGULAR - Miracle frame ex: Temporal Mastery
+//var specified_template = KaldheimTemplate; // REGULAR - Kaldheim showcase
+//var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
+//var specified_template = [SilvanExtendedTemplate,SketchTemplate,KaldheimTemplate,NormalTemplate]; // Do multiple templates at a time
 
 // MY STUFF -- File extension, change to PSB for Silvan template
 var file_extension = ".psd";
@@ -36,7 +38,7 @@ var automatic_set_symbol = true;
 // Manually set stroke weight for thicker or thinner outline
 var expansion_symbol_size = null; // 9 or 10 -- Tested for some
 var expansion_symbol_shift = null; // 2 -- Tested for some
-var expansion_symbol_stroke_weight = 6;
+var expansion_symbol_stroke_weight = 6; // 6 is default
 
 // Remove the flavour text
 var remove_flavour_text = false;
@@ -282,7 +284,8 @@ function generate_set_symbol ( set ) {
 	else if ( set == "MID" ) var output = "";
 	else if ( set == "MIC" ) var output = "";
 	else if ( set == "DCI" ) var output = ""; //Judge Promo
-	else if ( set == "VOW" ) var output = null;
+	else if ( set == "VOW" ) var output = "";
+	else if ( set == "VOC" ) var output = "";
 	else var output = null;
 	
 	if ( output == "" ) output = null;

@@ -1,6 +1,7 @@
 // TODO: consistency between camelcase and snakecase
 
 var json_file_path = "/scripts/card.json";
+var json_custom_file_path = "/scripts/custom_card.json"; // My Stuff
 var image_file_path = "/scripts/card.jpg";
 
 // Card classes - finer grained than Scryfall layouts

@@ -44,29 +44,18 @@ function retrieve_card_name_and_artist(file) {
     }
 }
 
-function call_python(card_name, file_path) {
+function call_json(card_name, file_path) {
     /**
-     * Calls the Python script which queries Scryfall for card info and saves the resulting JSON dump to disk in \scripts.
-     * Returns the parsed JSON result if the Python call was successful, or raises an error if it wasn't.
+     * Grabs json info from custom card
      */
 
-    // default to Windows command
-    var python_command = "python \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\"";
-    if ($.os.search(/windows/i) === -1) {
-        // macOS
-        python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" >> " + file_path + "/scripts/debug.log 2>&1";
-    }
-    app.system(python_command);
-
-    var json_file = new File(file_path + json_file_path);
+    var json_file = new File(file_path + json_custom_file_path);
     json_file.open('r');
     var json_string = json_file.read();
     json_file.close();
     if (json_string === "") {
         throw new Error(
-            "\n\ncard.json does not exist - the system failed to successfully run get_card_info.py.\nThe attempted Python call was made with the " +
-            "following command:\n\n" + python_command + "\n\nYou may need to edit this command in render.jsx depending on your computer's configuration. " +
-            "Try running the command from the command line as that may help you debug the issue"
+            "Folks we have an issue with Json!"
         );
     }
     return JSON.parse(JSON.parse(json_string));
@@ -192,7 +181,7 @@ function render(file,current_template) {
         };
 		
     } else {
-        var scryfall = call_python(card_name, file_path);
+        var scryfall = call_json(card_name, file_path);
         var layout_name = scryfall.layout;
 
         // instantiate layout obj (unpacks scryfall json and stores relevant parts in obj properties)
