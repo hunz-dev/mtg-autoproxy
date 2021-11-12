@@ -20,7 +20,8 @@ var specified_template = null;
 //var specified_template = MiracleTemplate; // REGULAR - Miracle frame ex: Temporal Mastery
 //var specified_template = KaldheimTemplate; // REGULAR - Kaldheim showcase
 //var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
-//var specified_template = [SilvanExtendedTemplate,SketchTemplate,KaldheimTemplate,NormalTemplate]; // Do multiple templates at a time
+//var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
+//var specified_template = [SilvanExtendedTemplate,NormalTemplate]; // Do multiple templates at a time
 
 // MY STUFF -- File extension, change to PSB for Silvan template
 var file_extension = ".psd";
@@ -36,8 +37,8 @@ var automatic_set_symbol = true;
 
 // Manually set size, line shift to position set symbol, useful for classic templates
 // Manually set stroke weight for thicker or thinner outline
-var expansion_symbol_size = null; // 9 or 10 -- Tested for some
-var expansion_symbol_shift = null; // 2 -- Tested for some
+var expansion_symbol_size = null; // 9 or 10? -- Tested for some, (13 MID)
+var expansion_symbol_shift = null; // 2? -- Tested for some (-1.4 MID)
 var expansion_symbol_stroke_weight = 6; // 6 is default
 
 // Remove the flavour text

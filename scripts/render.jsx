@@ -94,17 +94,22 @@ function select_template(layout, file, file_path, new_template) {
 			SketchTemplate,
 			MiracleTemplate, // MY STUFF
 			KaldheimTemplate,
+			CrimsonFangTemplate,
 			PhyrexianTemplate, // MY STUFF
 			SnowTemplate // MY STUFF
         ],
     };
     class_template_map[transform_front_class] = {
         default_: TransformFrontTemplate,
-        other: [],
+        other: [
+			CrimsonFangTemplate
+		],
     };
     class_template_map[transform_back_class] = {
         default_: TransformBackTemplate,
-        other: [],
+        other: [
+			CrimsonFangTemplate
+		],
     };
     class_template_map[ixalan_class] = {
         default_: IxalanTemplate,
