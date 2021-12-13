@@ -6,7 +6,7 @@ Photoshop scripting to generate high-quality Magic card renders, inserting Scryf
 # Requirements
   * A copy of Photoshop. I tested the system using CS5 and CC 2015-2020, but other versions may work as well.
   * The Photoshop templates:
-    * [Automated templates](https://drive.google.com/drive/u/2/folders/1gRZsSM65cDcv0r1hadusojnjQovBfFAN?usp=sharing) (compatible with this project)
+    * [Automated templates](https://drive.google.com/drive/folders/1MfycaXBAvHxTOfZpQ4Lc3ZVfYtJQLPxd?usp=sharing) (compatible with this project)
     * [Manual templates](https://drive.google.com/drive/folders/1wAH-JKPHa5cPcMcEiyE9q46WH6PEaXnj?usp=sharing) which may also be of interest
   * The following fonts:
     * [Beleren Smallcaps, MPlantin and MPlantin-Italics](https://github.com/magarena/magarena/tree/master/resources/cardbuilder/fonts) and [Beleren2016](https://magic.wizards.com/sites/all/themes/wiz_mtg/fonts/Beleren/Beleren2016-Bold.ttf),
