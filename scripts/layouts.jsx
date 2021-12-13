@@ -50,6 +50,9 @@ var BaseLayout = Class({
 		if ( this.set != "MTG" ) this.set = this.scryfall.set;
 		if ( this.set == "" || this.set == null ) this.set = "MTG";
 		
+		//ADD Collector Number, MY STUFF
+		if ( this.scryfall.collector_number ) this.collector_number = this.scryfall.collector_number;
+		
         this.colour_identity = this.scryfall.color_identity;
         this.keywords = [];
         if (this.scryfall.keywords !== undefined) {

@@ -72,6 +72,33 @@ function call_python(card_name, file_path) {
     return JSON.parse(JSON.parse(json_string));
 }
 
+function call_python_set(card_set, file_path) {
+    /**
+     * Calls the Python script which queries Scryfall for set info then dumps the json. -- MY STUFF
+     */
+
+    // default to Windows command
+    var python_command = "python \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\"";
+    if ($.os.search(/windows/i) === -1) {
+        // macOS
+        python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\" >> " + file_path + "/scripts/debug.log 2>&1";
+    }
+    app.system(python_command);
+
+    var json_file = new File(file_path + json_set_file_path);
+    json_file.open('r');
+    var json_string = json_file.read();
+    json_file.close();
+    if (json_string === "") {
+        throw new Error(
+            "\n\ncard.json does not exist - the system failed to successfully run get_card_info.py.\nThe attempted Python call was made with the " +
+            "following command:\n\n" + python_command + "\n\nYou may need to edit this command in render.jsx depending on your computer's configuration. " +
+            "Try running the command from the command line as that may help you debug the issue"
+        );
+    }
+    return JSON.parse(JSON.parse(json_string));
+}
+
 function select_template(layout, file, file_path, new_template) {
     /**
      * Instantiate a template object based on the card layout and user settings.
@@ -222,6 +249,14 @@ function render(file,current_template) {
 	if (ret.set) layout.set = ret.set;
 	else if (scryfall) layout.set = scryfall.set;
 	else layout.set = "MTG";
+	
+	// Include collector number -- MY STUFF
+	if ( scryfall ) layout.collector_number = scryfall.collector_number;
+	
+	// Get full set info from scrython -- MY STUFF
+	mtgset = call_python_set(layout.set, file_path)
+	if ( mtgset.printed_size ) layout.card_count = mtgset.printed_size;
+	else if ( mtgset.card_count ) layout.card_count = mtgset.card_count;
 	
 	// Include creator -- MY STUFF
 	if (ret.creator) layout.creator = ret.creator;

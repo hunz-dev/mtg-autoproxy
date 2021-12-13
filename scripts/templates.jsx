@@ -1,6 +1,7 @@
 #include "layouts.jsx";
 #include "text_layers.jsx";
 #include "constants.jsx";
+#include "content_fill_empty_area.jsx";
 
 /* Template boilerplate class
 Your entrypoint to customising this project for automating your own templates. You should write classes that extend BaseTemplate for your 
@@ -63,15 +64,48 @@ var BaseTemplate = Class({
 		
 		// MY STUFF -- If creator is specified, add the name
 		if ( this.layout.creator != null && this.layout.creator != "" ) try { this.legal.layers.getByName("ProxyCreator").textItem.contents = this.layout.creator; } catch (e) {}
-		
-		this.legal.layers.getByName("Set").textItem.contents = this.layout.set.toUpperCase() + this.legal.layers.getByName("Set").textItem.contents;
-        this.text_layers = [
-            new TextField(
-                layer = this.legal.layers.getByName(LayerNames.ARTIST),
-                text_contents = this.layout.artist,
-                text_colour = rgb_white(),
-            ),
-        ];
+        
+        // MY STUFF -- Use realistic collector information? Is the necessary info available?
+        if ( ( this.layout.collector_number && this.layout.rarity && this.layout.card_count ) && real_collector_info == true ) {
+
+            // Collector layers
+            this.collector = this.legal.layers.getByName(LayerNames.COLLECTOR);
+
+            // Reveal collector group, hide old layers
+            this.collector.visible = true;
+            this.legal.layers.getByName("Artist").visible = false;
+            this.legal.layers.getByName("Set").visible = false;
+            this.legal.layers.getByName("Pen").visible = false;
+
+            // Prepare arity letter + collector number
+            rarity_letter = this.layout.rarity.slice(0,1).toUpperCase();
+            if (this.layout.collector_number.length == 2) this.layout.collector_number = "0" + this.layout.collector_number;
+            else if (this.layout.collector_number.length == 1) this.layout.collector_number = "00" + this.layout.collector_number;
+
+            // Apple the collector info
+            this.collector.layers.getByName(LayerNames.TOP_LINE).textItem.contents = this.layout.collector_number + "/" + this.layout.card_count + " " + rarity_letter;
+            replace_text(this.collector.layers.getByName(LayerNames.BOTTOM_LINE), "SET", this.layout.set.toUpperCase());
+            replace_text(this.collector.layers.getByName(LayerNames.BOTTOM_LINE), "Artist", this.layout.artist);
+
+            // Create text_layers for later
+            this.text_layers = [];
+
+        } else { 
+
+            // Fill set info
+            this.legal.layers.getByName("Set").textItem.contents = this.layout.set.toUpperCase() + this.legal.layers.getByName("Set").textItem.contents;
+
+            // Add Artist name
+            this.text_layers = [
+                new TextField(
+                    layer = this.legal.layers.getByName(LayerNames.ARTIST),
+                    text_contents = this.layout.artist,
+                    text_colour = rgb_white(),
+                ),
+            ];
+            
+        }
+
     },
     template_file_name: function () {
         /**
@@ -279,9 +313,6 @@ var NormalTemplate = Class({
         // centre the rules text if the card has no flavour text, text is all on one line, and that line is fairly short
         var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
 
-        var noncreature_copyright = this.legal.layers.getByName(LayerNames.NONCREATURE_COPYRIGHT);
-        var creature_copyright = this.legal.layers.getByName(LayerNames.CREATURE_COPYRIGHT);
-
         var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
         if (this.is_creature) {
             // creature card - set up creature layer for rules text and insert power & toughness
@@ -304,8 +335,6 @@ var NormalTemplate = Class({
                 ),
             ]);
 
-            noncreature_copyright.visible = false;
-            creature_copyright.visible = true;
         } else {
             // noncreature card - use the normal rules text layer and disable the power/toughness layer
             var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_NONCREATURE);
@@ -384,7 +413,7 @@ var NormalTemplate = Class({
         }
 		
 		// Hide top border if legendary -- MY STUFF for Silvan template
-		if ((this.is_legendary && this.layout.silvan) && this.layout.silvan == true ) {
+		if ((this.is_legendary && this.layout.is_silvan) && this.layout.is_silvan == true ) {
 			var docref = app.activeDocument;
 			docref.activeLayer = docref.layers.getByName('Background');
 			enable_active_layer_mask();
@@ -408,10 +437,6 @@ var NormalClassicTemplate = Class({
         return "Classic";
     },
     constructor: function (layout, file, file_path) {
-		
-		// MY STUFF - change expansion symbol size and shift for this template specifically ?
-		//expansion_symbol_size = 10;
-		//expansion_symbol_shift = 2;
 		
         this.super(layout, file, file_path);
 
@@ -508,8 +533,8 @@ var SilvanExtendedTemplate = Class({
     },
     constructor: function (layout, file, file_path) {
         // strip out reminder text for extended cards
-        layout.oracle_text = strip_reminder_text(layout.oracle_text);
-		layout.silvan = true;
+        if ( layout.oracle_text ) layout.oracle_text = strip_reminder_text(layout.oracle_text);
+		layout.is_silvan = true;
 		
         this.super(layout, file, file_path);
     },
@@ -777,6 +802,33 @@ var SketchTemplate = Class({
 		if ( this.layout.rarity != "common" ) {
 			text_group.layers.getByName("common").visible = false;
 		}
+		
+		/*
+		
+		Interesting Sketch integration?
+		
+		app.activeDocument.activeLayer = app.activeDocument.layers.getByName(default_layer);
+		content_fill_empty_area();
+		this.art_reference.visible = false;
+		doc_ref.layers.getByName(LayerNames.ART_FRAME).visible=false;
+		//app.activeDocument.activeLayer.applyDiffuseGlow(0,2,13)
+		app.activeDocument.activeLayer.applyUnSharpMask(100,5,50)
+		app.activeDocument.activeLayer.autoContrast()
+		app.activeDocument.activeLayer.autoLevels()
+		app.activeDocument.activeLayer.adjustBrightnessContrast(0,10)
+		VibrantSaturation(100,-30)		
+		// =======================================================
+		var idPly = charIDToTypeID( "Ply " );
+		var desc5002 = new ActionDescriptor();
+		var idnull = charIDToTypeID( "null" );
+        var ref1210 = new ActionReference();
+        var idActn = charIDToTypeID( "Actn" );
+        ref1210.putName( idActn, "NewSketchify" );
+        var idASet = charIDToTypeID( "ASet" );
+        ref1210.putName( idASet, "Scoots Actions" );
+		desc5002.putReference( idnull, ref1210 );
+		executeAction( idPly, desc5002, DialogModes.NO );*/
+		
 	}
 });
 
@@ -802,9 +854,6 @@ var CrimsonFangTemplate = Class({
 		
         // centre the rules text if the card has no flavour text, text is all on one line, and that line is fairly short
         var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
-
-        var noncreature_copyright = this.legal.layers.getByName(LayerNames.NONCREATURE_COPYRIGHT);
-        var creature_copyright = this.legal.layers.getByName(LayerNames.CREATURE_COPYRIGHT);
 		
         var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
         if (this.is_creature) {
@@ -828,8 +877,6 @@ var CrimsonFangTemplate = Class({
                 ),
             ]);
 
-            noncreature_copyright.visible = false;
-            creature_copyright.visible = true;
         } else {
             // noncreature card - use the normal rules text layer and disable the power/toughness layer
             var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_NONCREATURE);
@@ -926,9 +973,6 @@ var KaldheimTemplate = Class({
         // centre the rules text if the card has no flavour text, text is all on one line, and that line is fairly short
         var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
 
-        var noncreature_copyright = this.legal.layers.getByName(LayerNames.NONCREATURE_COPYRIGHT);
-        var creature_copyright = this.legal.layers.getByName(LayerNames.CREATURE_COPYRIGHT);
-
         var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
         if (this.is_creature) {
             // creature card - set up creature layer for rules text and insert power & toughness
@@ -951,8 +995,6 @@ var KaldheimTemplate = Class({
                 ),
             ]);
 
-            noncreature_copyright.visible = false;
-            creature_copyright.visible = true;
         } else {
             // noncreature card - use the normal rules text layer and disable the power/toughness layer
             var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_NONCREATURE);
@@ -1040,14 +1082,7 @@ var KaldheimTemplate = Class({
         if ((this.is_legendary && this.layout.is_nyx) || this.is_companion) {
             // legendary crown on nyx background - enable the hollow crown shadow and layer mask on crown, pinlines, and shadows
             this.enable_hollow_crown(crown, pinlines);
-        }
-		
-		// Hide top border if legendary -- silvan
-		if ((this.is_legendary && this.layout.silvan) && this.layout.silvan == true ) {
-			var docref = app.activeDocument;
-			docref.activeLayer = docref.layers.getByName('Background');
-			enable_active_layer_mask();
-		}*/
+        }*/
 		
     },
 });
@@ -1075,9 +1110,6 @@ var PhyrexianTemplate = Class({
         // centre the rules text if the card has no flavour text, text is all on one line, and that line is fairly short
         var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
 
-        var noncreature_copyright = this.legal.layers.getByName(LayerNames.NONCREATURE_COPYRIGHT);
-        var creature_copyright = this.legal.layers.getByName(LayerNames.CREATURE_COPYRIGHT);
-
         var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
         if (this.is_creature) {
             // creature card - set up creature layer for rules text and insert power & toughness
@@ -1100,8 +1132,6 @@ var PhyrexianTemplate = Class({
                 ),
             ]);
 
-            noncreature_copyright.visible = false;
-            creature_copyright.visible = true;
         } else {
             // noncreature card - use the normal rules text layer and disable the power/toughness layer
             var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_NONCREATURE);
@@ -1264,9 +1294,6 @@ var TransformFrontTemplate = Class({
         // centre the rules text if the card has no flavour text, text is all on one line, and that line is fairly short
         var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
 
-        var noncreature_copyright = this.legal.layers.getByName(LayerNames.NONCREATURE_COPYRIGHT);
-        var creature_copyright = this.legal.layers.getByName(LayerNames.CREATURE_COPYRIGHT);
-
         var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
         if (this.is_creature) {
             // creature card - set up creature layer for rules text and insert power & toughness
@@ -1292,8 +1319,6 @@ var TransformFrontTemplate = Class({
                 ),
             ]);
 
-            noncreature_copyright.visible = false;
-            creature_copyright.visible = true;
         } else {
             // noncreature card - use the normal rules text layer and disable the power/toughness layer
             var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_NONCREATURE);
@@ -1847,9 +1872,19 @@ var BasicLandTemplate = Class({
         this.super(layout, file, file_path);
 
         this.art_reference = app.activeDocument.layers.getByName(LayerNames.BASIC_ART_FRAME);
+        layout.is_basic = true;
+
     },
     enable_frame_layers: function () {
         app.activeDocument.layers.getByName(this.layout.name).visible = true;
+        this.text_layers = this.text_layers.concat([
+            new ExpansionSymbolField(
+                layer = app.activeDocument.layers.getByName("Expansion Symbol"),
+                text_contents = expansion_symbol_character,
+                rarity = "common",
+                size = expansion_symbol_size,
+                shift = expansion_symbol_shift)
+        ]);
     },
 });
 
@@ -1861,18 +1896,7 @@ var BasicLandTherosTemplate = Class({
     extends_: BasicLandTemplate,
     template_file_name: function () {
         return "basic-theros";
-    },
-	// Use custom expansion symbol -- MY STUFF
-	constructor: function (layout, file, file_path) {
-        this.super(layout, file, file_path);
-		this.text_layers = this.text_layers.concat([
-            new ExpansionSymbolField(
-                layer = app.activeDocument.layers.getByName("Expansion Symbol"),
-                text_contents = expansion_symbol_character,
-                rarity = "common"
-			)
-		]);
-	}
+    }
 });
 
 var BasicLandUnstableTemplate = Class({
@@ -1894,18 +1918,5 @@ var BasicLandClassicTemplate = Class({
     extends_: BasicLandTemplate,
     template_file_name: function () {
         return "basic-classic";
-    },
-	// Use custom expansion symbol -- MY STUFF
-	constructor: function (layout, file, file_path) {
-        this.super(layout, file, file_path);
-		this.text_layers = this.text_layers.concat([
-            new ExpansionSymbolField(
-                layer = app.activeDocument.layers.getByName("Expansion Symbol"),
-                text_contents = expansion_symbol_character,
-                rarity = "common",
-				size = 9, // Change this to resize symbol
-				shift = 2 // Change this to add space before symbol (placement)
-			)
-		]);
-	}
+    }
 });

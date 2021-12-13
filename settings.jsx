@@ -21,7 +21,7 @@ var specified_template = null;
 //var specified_template = KaldheimTemplate; // REGULAR - Kaldheim showcase
 //var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
 //var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
-//var specified_template = [SilvanExtendedTemplate,NormalTemplate]; // Do multiple templates at a time
+//var specified_template = [SilvanExtendedTemplate, NormalTemplate]; // Do multiple templates at a time
 
 // MY STUFF -- File extension, change to PSB for Silvan template
 var file_extension = ".psd";
@@ -48,6 +48,10 @@ var remove_flavour_text = false;
 // Remove the reminder text
 var remove_reminder_text = false;
 //var remove_reminder_text = true;
+
+// Realistic collector info? (requires the LATEST PSD files
+var real_collector_info = false;
+//var real_collector_info = true;
 
 // Function to automatically choose set symbol
 function generate_set_symbol ( set ) {
@@ -286,7 +290,7 @@ function generate_set_symbol ( set ) {
 	else if ( set == "MIC" ) var output = "";
 	else if ( set == "DCI" ) var output = ""; //Judge Promo
 	else if ( set == "VOW" ) var output = "";
-	else if ( set == "VOC" ) var output = "";
+	else if ( set == "VOC" ) var output = "";
 	else var output = null;
 	
 	if ( output == "" ) output = null;

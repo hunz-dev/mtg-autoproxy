@@ -1,7 +1,8 @@
 // TODO: consistency between camelcase and snakecase
 
 var json_file_path = "/scripts/card.json";
-var json_custom_file_path = "/scripts/custom_card.json"; // My Stuff
+var json_set_file_path = "/scripts/set.json"; // MY STUFF
+var json_custom_file_path = "/scripts/custom_card.json"; // MY STUFF
 var image_file_path = "/scripts/card.jpg";
 
 // Card classes - finer grained than Scryfall layouts
@@ -70,9 +71,10 @@ var LayerNames = {
     // legal
     LEGAL: "Legal",
     ARTIST: "Artist",
-    NONCREATURE_COPYRIGHT: "Noncreature WotC Copyright",
-    CREATURE_COPYRIGHT: "Creature WotC Copyright",
-
+    COLLECTOR: "Collector",
+    TOP_LINE: "Top",
+    BOTTOM_LINE: "Bottom",
+    
     // text and icons
     TEXT_AND_ICONS: "Text and Icons",
     NAME: "Card Name",
@@ -173,6 +175,8 @@ var Faces = {
 var font_name_mplantin = "MPlantin";
 var font_name_mplantin_italic = "MPlantin-Italic";
 var font_name_ndpmtg = "NDPMTG";
+var font_name_beleren_smallcaps = "Beleren Small Caps Bold";
+var font_name_relay_medium = "Relay-Medium";
 
 // Font spacing
 var modal_indent = 5.7;

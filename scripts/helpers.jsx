@@ -432,3 +432,22 @@ function insert_scryfall_scan(image_url, file_path) {
     var scryfall_scan = retrieve_scryfall_scan(image_url, file_path);
     return paste_file_into_new_layer(scryfall_scan);
 }
+
+function VibrantSaturation(VibValue, SatValue) {
+    /**
+     * From SCOOT
+     */
+	//var dialogMode;
+	//dialogMode = 3;
+	var idvibrance;
+	idvibrance = stringIDToTypeID( "vibrance" )
+		var desc232;
+		desc232 = new ActionDescriptor();
+		var idvibrance;
+		idvibrance = stringIDToTypeID( "vibrance" );
+		desc232.putInteger( idvibrance, VibValue );
+		var idStrt;
+		idStrt = charIDToTypeID( "Strt" );
+		desc232.putInteger( idStrt, SatValue );
+	executeAction( idvibrance, desc232, DialogModes.NO );
+}
