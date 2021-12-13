@@ -1,5 +1,5 @@
 # Autoproxy Reloaded - MTG Photoshop Automation
-Photoshop scripting to generate high-quality Magic card renders, inserting Scryfall data into Photoshop frame templates.
+Photoshop scripting to generate high-quality Magic card renders, originally developed by Chilli-Axe, reloaded and updated by MrTeferi for use with developing new proxies by mpcfill.com contributors. If you need personal help with this app, join our discord: https://discord.gg/qdR2S4nQ6U
 
 ![img1](https://i.imgur.com/4TTvpND.png)
 
