@@ -8,7 +8,6 @@ var expansion_symbol_character = "";  // M
 var specified_template = null;
 //var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
 //var specified_template = NormalExtendedTemplate; // EXTENDED - OG Chilli extended
-//var specified_template = NormalFullArtTemplate; // FULLART - Modded Chilli extended to be full art
 //var specified_template = WomensDayTemplate; // FULLART - 2XM Showcase
 //var specified_template = MasterpieceTemplate; // FULLART - Hour of devastation masterpiece
 //var specified_template = SnowTemplate; // REGULAR - Snow 
@@ -21,11 +20,7 @@ var specified_template = null;
 //var specified_template = KaldheimTemplate; // REGULAR - Kaldheim showcase
 //var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
 //var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
-//var specified_template = [SilvanExtendedTemplate, NormalTemplate]; // Do multiple templates at a time
-
-// MY STUFF -- File extension, change to PSB for Silvan template
-var file_extension = ".psd";
-//var file_extension = ".psb";
+//var specified_template = [CrimsonFangTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
@@ -37,9 +32,9 @@ var automatic_set_symbol = true;
 
 // Manually set size, line shift to position set symbol, useful for classic templates
 // Manually set stroke weight for thicker or thinner outline
-var expansion_symbol_size = null; // 9 or 10? -- Tested for some, (13 MID)
-var expansion_symbol_shift = null; // 2? -- Tested for some (-1.4 MID)
-var expansion_symbol_stroke_weight = 6; // 6 is default
+var expansion_symbol_size = null; // (9.8 Classic) (13 MID)
+var expansion_symbol_shift = null; // (-.2 Classic) (-1.4 MID)
+var expansion_symbol_stroke_weight = 5; // 4-6 generally, 6 is default
 
 // Remove the flavour text
 var remove_flavour_text = false;
@@ -50,8 +45,12 @@ var remove_reminder_text = false;
 //var remove_reminder_text = true;
 
 // Realistic collector info? (requires the LATEST PSD files
-var real_collector_info = false;
-//var real_collector_info = true;
+//var real_collector_info = false;
+var real_collector_info = true;
+
+// MY STUFF -- File extension
+var file_extension = ".psd";
+//var file_extension = ".psb";
 
 // Function to automatically choose set symbol
 function generate_set_symbol ( set ) {
@@ -287,13 +286,14 @@ function generate_set_symbol ( set ) {
 	else if ( set == "SLD" ) var output = "";
 	else if ( set == "J21" ) var output = "";
 	else if ( set == "MID" ) var output = "";
-	else if ( set == "MIC" ) var output = "";
+	else if ( set == "MIC" ) var output = "";
 	else if ( set == "DCI" ) var output = ""; //Judge Promo
 	else if ( set == "VOW" ) var output = "";
 	else if ( set == "VOC" ) var output = "";
-	else var output = null;
-	
-	if ( output == "" ) output = null;
+	else if ( set == "NEO" ) var output = "";
+	else if ( set == "UNF" ) var output = "";
+	else if ( set == "Y22" ) var output = "";
+	else var output = expansion_symbol_character;
 	
 	return output;
 	
