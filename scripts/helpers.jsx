@@ -130,6 +130,25 @@ function frame_layer(layer, reference_layer) {
     clear_selection();
 }
 
+function frame_expansion_symbol(layer, reference_layer) {
+    /**
+     * Scale a layer equally to the bounds of a reference layer, then centre the layer vertically and horizontally
+     * within those bounds.
+     */
+
+    var layer_dimensions = compute_layer_dimensions(layer);
+    var reference_dimensions = compute_layer_dimensions(reference_layer);
+
+    // Determine how much to scale the layer by such that it fits into the reference layer's bounds
+    var scale_factor = 100 * Math.min(reference_dimensions.width / layer_dimensions.width, reference_dimensions.height / layer_dimensions.height);
+    layer.resize(scale_factor, scale_factor, AnchorPosition.MIDDLERIGHT);
+
+    select_layer_pixels(reference_layer);
+    app.activeDocument.activeLayer = layer;
+    align_vertical();
+    clear_selection();
+}
+
 function set_active_layer_mask(visible) {
     /**
      * Set the visibility of the active layer's layer mask.

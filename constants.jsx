@@ -87,6 +87,7 @@ var LayerNames = {
     MANA_COST: "Mana Cost",
     MANA_COST_ADVENTURE: "Mana Cost - Adventure",
     EXPANSION_SYMBOL: "Expansion Symbol",
+    EXPANSION_REFERENCE: "Expansion Reference",
     COLOUR_INDICATOR: "Colour Indicator",
     POWER_TOUGHNESS: "Power / Toughness",
     FLIPSIDE_POWER_TOUGHNESS: "Flipside Power / Toughness",

@@ -66,7 +66,7 @@ var BaseTemplate = Class({
 		if ( this.layout.creator != null && this.layout.creator != "" ) try { this.legal.layers.getByName("ProxyCreator").textItem.contents = this.layout.creator; } catch (e) {}
         
         // MY STUFF -- Use realistic collector information? Is the necessary info available?
-        if ( ( this.layout.collector_number && this.layout.rarity && this.layout.card_count ) && real_collector_info == true ) {
+		if ( ( this.layout.collector_number && this.layout.rarity && this.layout.card_count ) && real_collector_info == true && this.layout.is_classic != true ) {
 
             // Collector layers
             this.collector = this.legal.layers.getByName(LayerNames.COLLECTOR);
@@ -77,10 +77,15 @@ var BaseTemplate = Class({
             this.legal.layers.getByName("Set").visible = false;
             this.legal.layers.getByName("Pen").visible = false;
 
-            // Prepare arity letter + collector number
+            // Prepare rarity letter + collector number
             rarity_letter = this.layout.rarity.slice(0,1).toUpperCase();
             if (this.layout.collector_number.length == 2) this.layout.collector_number = "0" + this.layout.collector_number;
             else if (this.layout.collector_number.length == 1) this.layout.collector_number = "00" + this.layout.collector_number;
+			
+			// Prepare card count
+			this.layout.card_count = "" + this.layout.card_count;
+			if (this.layout.card_count.length == 2) this.layout.card_count = "0" + this.layout.card_count;
+			else if (this.layout.card_count.length == 1) this.layout.card_count = "00" + this.layout.card_count;
 
             // Apple the collector info
             this.collector.layers.getByName(LayerNames.TOP_LINE).textItem.contents = this.layout.collector_number + "/" + this.layout.card_count + " " + rarity_letter;
@@ -238,7 +243,9 @@ var ChilliBaseTemplate = Class({
 
         var mana_cost = text_and_icons.layers.getByName(LayerNames.MANA_COST);
         var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
-
+        if ( automatic_set_symbol_size == true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        else var expansion_reference = null;
+		
         this.text_layers = this.text_layers.concat([
             new BasicFormattedTextField(
                 layer = mana_cost,
@@ -255,8 +262,7 @@ var ChilliBaseTemplate = Class({
                 layer = expansion_symbol,
                 text_contents = expansion_symbol_character,
                 rarity = this.layout.rarity,
-				size = expansion_symbol_size,
-				shift = expansion_symbol_shift
+                reference = expansion_reference,
             ),
             new ScaledTextField(
                 layer = type_line_selected,
@@ -265,6 +271,7 @@ var ChilliBaseTemplate = Class({
                 reference_layer = expansion_symbol,
             ),
         ]);
+		
     },
     enable_hollow_crown: function (crown, pinlines) {
         /**
@@ -438,6 +445,7 @@ var NormalClassicTemplate = Class({
     },
     constructor: function (layout, file, file_path) {
 		
+		layout.is_classic = true;
         this.super(layout, file, file_path);
 
         var docref = app.activeDocument;
@@ -708,8 +716,13 @@ var ExpeditionTemplate = Class({
     },
     basic_text_layers: function (text_and_icons) {
         var name = text_and_icons.layers.getByName(LayerNames.NAME);
-        var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
         var type_line = text_and_icons.layers.getByName(LayerNames.TYPE_LINE);
+
+        // Expansion symbol
+        var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
+        if ( automatic_set_symbol_size == true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        else var expansion_reference = null;
+
         this.text_layers = this.text_layers.concat([
             new TextField(
                 layer = name,
@@ -720,6 +733,7 @@ var ExpeditionTemplate = Class({
                 layer = expansion_symbol,
                 text_contents = expansion_symbol_character,
                 rarity = this.layout.rarity,
+                reference = expansion_reference,
             ),
             new ScaledTextField(
                 layer = type_line,
@@ -1057,33 +1071,6 @@ var KaldheimTemplate = Class({
 			
 		}
 		
-        /* No background for this one
-        var background = docref.layers.getByName(LayerNames.BACKGROUND);
-        if (this.layout.is_nyx) {
-            background = docref.layers.getByName(LayerNames.NYX);
-        }
-        background.layers.getByName(this.layout.background).visible = true;*/
-
-       /* if (this.is_legendary) {
-            // legendary crown
-            var crown = docref.layers.getByName(LayerNames.LEGENDARY_CROWN);
-            crown.layers.getByName(this.layout.pinlines).visible = true;
-            border = docref.layers.getByName(LayerNames.BORDER);
-            border.layers.getByName(LayerNames.NORMAL_BORDER).visible = false;
-            border.layers.getByName(LayerNames.LEGENDARY_BORDER).visible = true;
-        }
-
-        if (this.is_companion) {
-            // enable companion texture
-            var companion = docref.layers.getByName(LayerNames.COMPANION);
-            companion.layers.getByName(this.layout.pinlines).visible = true;
-        }
-
-        if ((this.is_legendary && this.layout.is_nyx) || this.is_companion) {
-            // legendary crown on nyx background - enable the hollow crown shadow and layer mask on crown, pinlines, and shadows
-            this.enable_hollow_crown(crown, pinlines);
-        }*/
-		
     },
 });
 
@@ -1353,8 +1340,13 @@ var IxalanTemplate = Class({
     basic_text_layers: function (text_and_icons) {
         // typeline doesn't scale down with expansion symbol, and no mana cost layer
         var name = text_and_icons.layers.getByName(LayerNames.NAME);
-        var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
         var type_line = text_and_icons.layers.getByName(LayerNames.TYPE_LINE);
+
+        // Expansion symbol
+        var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
+        if ( automatic_set_symbol_size == true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        else var expansion_reference = null;
+        
         this.text_layers = this.text_layers.concat([
             new TextField(
                 layer = name,
@@ -1365,6 +1357,7 @@ var IxalanTemplate = Class({
                 layer = expansion_symbol,
                 text_contents = expansion_symbol_character,
                 rarity = this.layout.rarity,
+                reference = expansion_reference,
             ),
             new TextField(
                 layer = type_line,
@@ -1877,13 +1870,15 @@ var BasicLandTemplate = Class({
     },
     enable_frame_layers: function () {
         app.activeDocument.layers.getByName(this.layout.name).visible = true;
+        if ( automatic_set_symbol_size == true ) var expansion_reference = app.activeDocument.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        else var expansion_reference = null;
         this.text_layers = this.text_layers.concat([
             new ExpansionSymbolField(
                 layer = app.activeDocument.layers.getByName("Expansion Symbol"),
                 text_contents = expansion_symbol_character,
                 rarity = "common",
-                size = expansion_symbol_size,
-                shift = expansion_symbol_shift)
+                reference = expansion_reference,
+            )
         ]);
     },
 });

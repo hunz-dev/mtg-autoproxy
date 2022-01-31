@@ -165,12 +165,8 @@ var ExpansionSymbolField = Class({
      */
 	
     extends_: TextField,
-    constructor: function (layer, text_contents, rarity, size, shift) {
+    constructor: function (layer, text_contents, rarity, reference) {
         this.super(layer, text_contents, rgb_black());
-		
-		// MAKE DAMN SURE size IS DEFINED and not NULL -- MY STUFF
-		if (size) { if ( size !== null ) this.size = size; }
-		else this.size = null;
 		
         this.rarity = rarity;
         if (rarity === rarity_bonus || rarity === rarity_special) {
@@ -180,16 +176,10 @@ var ExpansionSymbolField = Class({
     execute: function () {
         this.super();
 		
-		// MY STUFF - Put it into settings
-        //var stroke_weight = 6;  // pixels
-        app.activeDocument.activeLayer = this.layer;
-				
-		//Change size and baseline shift -- MY STUFF
-		if (this.size !== null && this.size !== undefined) {
-			app.activeDocument.activeLayer.textItem.size = size;
-			app.activeDocument.activeLayer.textItem.baselineShift = shift;
-		}
+		if ( automatic_set_symbol_size == true ) frame_expansion_symbol(this.layer, reference);
 		
+        app.activeDocument.activeLayer = this.layer;
+
         if (this.rarity === rarity_common) {
             apply_stroke(expansion_symbol_stroke_weight, rgb_white());
         } else {
