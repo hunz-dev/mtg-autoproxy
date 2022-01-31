@@ -1358,6 +1358,7 @@ var IxalanTemplate = Class({
                 text_contents = expansion_symbol_character,
                 rarity = this.layout.rarity,
                 reference = expansion_reference,
+                centered = true,
             ),
             new TextField(
                 layer = type_line,

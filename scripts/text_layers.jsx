@@ -165,9 +165,10 @@ var ExpansionSymbolField = Class({
      */
 	
     extends_: TextField,
-    constructor: function (layer, text_contents, rarity, reference) {
+    constructor: function (layer, text_contents, rarity, reference, centered) {
         this.super(layer, text_contents, rgb_black());
-		
+		if (centered) if (centered!==null) this.centered = centered;
+        else this.centered = false;
         this.rarity = rarity;
         if (rarity === rarity_bonus || rarity === rarity_special) {
             this.rarity = rarity_mythic;
@@ -176,7 +177,10 @@ var ExpansionSymbolField = Class({
     execute: function () {
         this.super();
 		
-		if ( automatic_set_symbol_size == true ) frame_expansion_symbol(this.layer, reference);
+		if ( automatic_set_symbol_size == true ) {
+            if ( this.centered == true ) frame_expansion_symbol(this.layer, reference, true);
+            else frame_expansion_symbol(this.layer, reference, false);
+        }
 		
         app.activeDocument.activeLayer = this.layer;
 

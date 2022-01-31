@@ -130,7 +130,7 @@ function frame_layer(layer, reference_layer) {
     clear_selection();
 }
 
-function frame_expansion_symbol(layer, reference_layer) {
+function frame_expansion_symbol(layer, reference_layer, centered) {
     /**
      * Scale a layer equally to the bounds of a reference layer, then centre the layer vertically and horizontally
      * within those bounds.
@@ -145,6 +145,8 @@ function frame_expansion_symbol(layer, reference_layer) {
 
     select_layer_pixels(reference_layer);
     app.activeDocument.activeLayer = layer;
+
+    if ( centered == true ) align_horizontal();
     align_vertical();
     clear_selection();
 }

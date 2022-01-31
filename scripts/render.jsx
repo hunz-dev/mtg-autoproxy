@@ -44,17 +44,17 @@ function retrieve_card_name_and_artist(file) {
     }
 }
 
-function call_python(card_name, file_path) {
+function call_python(card_name, file_path, set) {
     /**
      * Calls the Python script which queries Scryfall for card info and saves the resulting JSON dump to disk in \scripts.
      * Returns the parsed JSON result if the Python call was successful, or raises an error if it wasn't.
      */
 
     // default to Windows command
-    var python_command = "python \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\"";
+    var python_command = "python \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\"";
     if ($.os.search(/windows/i) === -1) {
         // macOS
-        python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" >> " + file_path + "/scripts/debug.log 2>&1";
+        python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\" >> " + file_path + "/scripts/debug.log 2>&1";
     }
     app.system(python_command);
 
@@ -224,7 +224,7 @@ function render(file,current_template) {
         };
 		
     } else {
-        var scryfall = call_python(card_name, file_path);
+        var scryfall = call_python(card_name, file_path, ret.set);
         var layout_name = scryfall.layout;
 
         // instantiate layout obj (unpacks scryfall json and stores relevant parts in obj properties)
