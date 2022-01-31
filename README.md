@@ -18,7 +18,7 @@ Photoshop scripting to generate high-quality Magic card renders, originally deve
 
 # Install and Usage Guide
 * Clone to a folder of your choice, referred to as the *working directory*.
-* Install the included font and the other fonts specified above.
+* Install the included fonts, only the ones listed above are required, the others may be useful to have.
 * Download the Photoshop templates, create a folder called `templates` in the working directory, and extract them into the folder.
 * Create a folder called `art` in the working directory, and another called `out`.
 * Move all of your card artwork to the `art` folder. File names should be structured like `<CARDNAME> (<ARTIST NAME>).jpg`. Artist name is optional - if omitted, it will be retrieved from Scryfall. You can optionally specify the card's set by structuring the file name like `<CARDNAME>$<SET> (<ARTIST NAME>).jpg`. You can also specify the card's set with `<CARDNAME> [<SET>] (<ARTIST NAME>).jpg`, this will force the template to display the set code and choose the automatic set symbol using the code but NOT use the set code for the scryfall search. You can also include your proxy creator name like so: `<CARDNAME> {<CREATOR NAME>} (<ARTIST NAME>).jpg`. For this to work you need to go into the pohotoshop template and add a text layer called "ProxyCreator" in the Legal group.
