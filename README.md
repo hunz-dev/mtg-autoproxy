@@ -8,9 +8,9 @@ Photoshop scripting to generate high-quality Magic card renders, originally deve
   * The Photoshop templates:
     * [Automated templates](https://drive.google.com/drive/folders/1MfycaXBAvHxTOfZpQ4Lc3ZVfYtJQLPxd?usp=sharing) (compatible with this project)
     * [Manual templates](https://drive.google.com/drive/folders/1wAH-JKPHa5cPcMcEiyE9q46WH6PEaXnj?usp=sharing) which may also be of interest
-  * The following fonts:
+  * The following fonts, included in fonts folder:
     * [Beleren Smallcaps, MPlantin and MPlantin-Italics](https://github.com/magarena/magarena/tree/master/resources/cardbuilder/fonts) and [Beleren2016](https://magic.wizards.com/sites/all/themes/wiz_mtg/fonts/Beleren/Beleren2016-Bold.ttf),
-    * Chilli's custom Magic symbols font, NDPMTG,ttf, included in the repo
+    * Chilli's custom Magic symbols font, NDPMTG,ttf
     * [Keyrune](https://keyrune.andrewgioia.com/) and [Mana](https://mana.andrewgioia.com/), for the expansion symbol and transform symbols,
     * [Relay Medium](https://www.fontsmarket.com/font-download/relay-medium) and Calibri (comes with Windows)
   * [json2.js](https://github.com/douglascrockford/JSON-js), included but you may need to download a more recent version.
