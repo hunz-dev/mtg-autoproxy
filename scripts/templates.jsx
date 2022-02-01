@@ -243,7 +243,7 @@ var ChilliBaseTemplate = Class({
 
         var mana_cost = text_and_icons.layers.getByName(LayerNames.MANA_COST);
         var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
-        if ( automatic_set_symbol_size == true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        if ( automatic_set_symbol_size === true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
         else var expansion_reference = null;
 		
         this.text_layers = this.text_layers.concat([
@@ -720,7 +720,7 @@ var ExpeditionTemplate = Class({
 
         // Expansion symbol
         var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
-        if ( automatic_set_symbol_size == true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        if ( automatic_set_symbol_size === true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
         else var expansion_reference = null;
 
         this.text_layers = this.text_layers.concat([
@@ -1344,7 +1344,7 @@ var IxalanTemplate = Class({
 
         // Expansion symbol
         var expansion_symbol = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL);
-        if ( automatic_set_symbol_size == true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        if ( automatic_set_symbol_size === true ) var expansion_reference = text_and_icons.layers.getByName(LayerNames.EXPANSION_REFERENCE)
         else var expansion_reference = null;
         
         this.text_layers = this.text_layers.concat([
@@ -1871,7 +1871,7 @@ var BasicLandTemplate = Class({
     },
     enable_frame_layers: function () {
         app.activeDocument.layers.getByName(this.layout.name).visible = true;
-        if ( automatic_set_symbol_size == true ) var expansion_reference = app.activeDocument.layers.getByName(LayerNames.EXPANSION_REFERENCE)
+        if ( automatic_set_symbol_size === true ) var expansion_reference = app.activeDocument.layers.getByName(LayerNames.EXPANSION_REFERENCE)
         else var expansion_reference = null;
         this.text_layers = this.text_layers.concat([
             new ExpansionSymbolField(

@@ -3,3 +3,8 @@
 /templates
 scripts/set.json
 scripts/card.json
+/set symbols
+cover-all.jsx
+scripts/coverup.jsx
+scripts/package-lock.json
+scripts/Scoots Actions.atn
