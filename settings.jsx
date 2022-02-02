@@ -1,6 +1,6 @@
 #include "scripts/templates.jsx";
 
-// Default xpansion symbol - characters copied from Keyrune cheatsheet
+// Default xpansion symbol - character copied from Keyrune cheatsheet
 var expansion_symbol_character = "";  // Cube symbol by default ()
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
@@ -37,6 +37,9 @@ var remove_reminder_text = false;
 // Realistic collector info? (requires the LATEST PSD files
 var real_collector_info = true;
 //var real_collector_info = false;
+
+// Enable fast saving? Results in much large file sizes
+var fast_saving = false;
 
 // Choose file extension, advanced users only
 var file_extension = ".psd";

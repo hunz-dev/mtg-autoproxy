@@ -266,6 +266,13 @@ function save_and_close(file_name, file_path) {
     var idPNGf = charIDToTypeID("PNGf");
     var idPGAd = charIDToTypeID("PGAd");
     desc4.putEnumerated(idPNGf, idPNGf, idPGAd);
+    
+    // Save fast? (uncompressed)
+    if ( fast_saving == true ) {
+        var idCmpr = charIDToTypeID( "Cmpr" );
+        desc4.putInteger( idCmpr, 0 );
+    }
+    
     var idPNGF = charIDToTypeID("PNGF");
     desc3.putObject(idAs, idPNGF, desc4);
     var idIn = charIDToTypeID("In  ");
