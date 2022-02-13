@@ -1,5 +1,5 @@
-#include "scripts/constants.jsx";
 #include "scripts/templates.jsx";
+#include "scripts/constants.jsx";
 #include "scripts/helpers.jsx";
 includeFolder("scripts/plugins");
 
