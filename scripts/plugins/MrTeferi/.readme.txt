@@ -1,0 +1,6 @@
+-- This plugin includes templates implemented by MrTefer --
+
+SketchTemplate     : MH2 Sketch showcase
+PhyrexianTemplate  : Phyrexian secret lair template
+KaldheimTemplate   : Kaldheim showcase template
+CrimsonVowTemplate : Crimson Vow showcase template

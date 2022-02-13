@@ -35,12 +35,18 @@ if __name__ == "__main__":
         card = request.urlopen(
             f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
         ).read()
-
     except ValueError:
-        print(f"Searching Scryfall for: {card_name}...", end="", flush=True)
-        card = request.urlopen(
-            f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}"
-        ).read()
+        try:
+            card_set = sys.argv[2]
+            print(f"Searching Scryfall for: {card_name}, set: {card_set}...", end="", flush=True)
+            card = request.urlopen(
+                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
+            ).read()
+        except:
+            print(f"Searching Scryfall for: {card_name}...", end="", flush=True)
+            card = request.urlopen(
+                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}"
+            ).read()
     except error.HTTPError:
         input("\nError occurred while attempting to query Scryfall. Press enter to exit.")
 

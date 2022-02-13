@@ -1,5 +1,4 @@
 #include "scripts/render.jsx";
-#include "settings.jsx";
 
 // File path to main working directory
 var file_path = File($.fileName).parent.fsName;

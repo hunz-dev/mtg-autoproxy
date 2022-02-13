@@ -1,0 +1,10 @@
+--- This plugin includes templates implemented by SilvanMTG ---
+
+SilvanExtendedTemplate   : Silvan's legendary extended template
+SilvanMDFCBackTemplate   : MDFC extended template, back
+SilvanMDFCFrontTemplate  : MDFC extended template, front
+
+--- NOTES ---
+
+In the layouts file you can choose the Silvan MDFC templates 
+as your default for MDFC cards.

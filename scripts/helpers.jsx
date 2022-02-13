@@ -268,7 +268,7 @@ function save_and_close(file_name, file_path) {
     desc4.putEnumerated(idPNGf, idPNGf, idPGAd);
     
     // Save fast? (uncompressed)
-    if ( fast_saving == true ) {
+    if ( fast_saving === true ) {
         var idCmpr = charIDToTypeID( "Cmpr" );
         desc4.putInteger( idCmpr, 0 );
     }
@@ -478,4 +478,45 @@ function VibrantSaturation(VibValue, SatValue) {
 		idStrt = charIDToTypeID( "Strt" );
 		desc232.putInteger( idStrt, SatValue );
 	executeAction( idvibrance, desc232, DialogModes.NO );
+}
+
+function includeFolder(fName) {
+    pFolder = new Folder (fName);
+    pFolders = pFolder.getFiles();
+
+    var layout_files = [];
+    var other_files = [];
+
+    for (var f in pFolders) {
+        
+        var this_folder = decodeURI(pFolders[f]);
+        var f_num = this_folder.lastIndexOf("/");
+        var f_name = this_folder.slice(f_num, this_folder.length);
+        sFolder = new Folder (fName+f_name);
+        files = sFolder.getFiles("*.jsx");
+        
+        for (var i in files) {
+            var this_folder = decodeURI(files[i]);
+            var f_num = this_folder.lastIndexOf("/");
+            var this_name = this_folder.slice(f_num, this_folder.length);
+            
+            if (this_name == "/templates.jsx") layout_files.push(fName+f_name+this_name);
+            else other_files.push(fName+f_name+this_name);
+            
+        }
+    }
+    
+    for (var x in layout_files) {
+        var inc_file = File(layout_files[x]);
+        if(inc_file.exists){
+            $.evalFile(inc_file);
+        }
+    }
+    for (var y in other_files) {
+        var inc_file = File(other_files[y]);
+        if(inc_file.exists){
+            $.evalFile(inc_file);
+        }
+    }
+
 }

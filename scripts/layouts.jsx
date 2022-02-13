@@ -1,6 +1,5 @@
 #include "es-class.js";
 #include "frame_logic.jsx";
-#include "constants.jsx";
 
 /* Helper functions */
 
@@ -125,6 +124,9 @@ var TransformLayout = Class({
 
         this.face = determine_card_face(this.scryfall, this.card_name_raw);
         this.other_face = -1 * (this.face - 1);
+		
+		if (this.face == 0 ) this.is_front = true;
+		else this.is_front = false;
 
         this.name = this.scryfall.card_faces[this.face].name;
         this.mana_cost = this.scryfall.card_faces[this.face].mana_cost;

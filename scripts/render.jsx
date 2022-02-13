@@ -1,8 +1,9 @@
+// Instantiate the template map
+var class_template_map = {};
+
 #include "json2.js";
-#include "layouts.jsx";
-#include "templates.jsx";
-#include "constants.jsx";
 #include "../settings.jsx";
+#include "layouts.jsx";
 
 function retrieve_card_name_and_artist(file) {
     /**
@@ -102,96 +103,8 @@ function call_python_set(card_set, file_path) {
 function select_template(layout, file, file_path, new_template) {
     /**
      * Instantiate a template object based on the card layout and user settings.
+     * List moved to constants
      */
-
-    // Map card classes to template classes
-    // (have to insert one at a time - otherwise the key will be the variable name)
-    var class_template_map = {};
-    class_template_map[normal_class] = {
-        default_: NormalTemplate,
-        other: [
-            NormalClassicTemplate,
-            NormalExtendedTemplate,
-            SilvanExtendedTemplate, //MY STUFF
-            WomensDayTemplate,
-            StargazingTemplate,
-            MasterpieceTemplate,
-            ExpeditionTemplate,
-			NormalFullArtTemplate, //MY STUFF
-			SketchTemplate,
-			MiracleTemplate, // MY STUFF
-			KaldheimTemplate,
-			CrimsonFangTemplate,
-			PhyrexianTemplate, // MY STUFF
-			SnowTemplate // MY STUFF
-        ],
-    };
-    class_template_map[transform_front_class] = {
-        default_: TransformFrontTemplate,
-        other: [
-			CrimsonFangTemplate
-		],
-    };
-    class_template_map[transform_back_class] = {
-        default_: TransformBackTemplate,
-        other: [
-			CrimsonFangTemplate
-		],
-    };
-    class_template_map[ixalan_class] = {
-        default_: IxalanTemplate,
-        other: [],
-    };
-    class_template_map[mdfc_front_class] = {
-        default_: MDFCFrontTemplate,
-        other: [],
-    };
-    class_template_map[mdfc_back_class] = {
-        default_: MDFCBackTemplate,
-        other: [],
-    };
-    class_template_map[mutate_class] = {
-        default_: MutateTemplate,
-        other: [],
-    };
-    class_template_map[adventure_class] = {
-        default_: AdventureTemplate,
-        other: [],
-    };
-    class_template_map[leveler_class] = {
-        default_: LevelerTemplate,
-        other: [],
-    };
-    class_template_map[saga_class] = {
-        default_: SagaTemplate,
-        other: [],
-    };
-    class_template_map[miracle_class] = {
-        default_: MiracleTemplate,
-        other: [],
-    };
-    class_template_map[planeswalker_class] = {
-        default_: PlaneswalkerTemplate,
-        other: [
-            PlaneswalkerExtendedTemplate,
-        ],
-    };
-    class_template_map[snow_class] = {
-        default_: SnowTemplate,
-        other: [],
-    };
-    class_template_map[basic_class] = {
-        default_: BasicLandTemplate,
-        other: [
-            BasicLandClassicTemplate,
-            BasicLandTherosTemplate,
-            BasicLandUnstableTemplate,
-        ],
-    };
-    class_template_map[planar_class] = {
-        default_: PlanarTemplate,
-        other: [],
-    };
 	
     var template_class = class_template_map[layout.card_class];
     var template = template_class.default_;

@@ -1,4 +1,3 @@
-#include "constants.jsx";
 #include "helpers.jsx";
 
 /* Locating symbols and italics in the input string */
@@ -157,7 +156,6 @@ function determine_symbol_colours(symbol, symbol_length) {
 
     throw new Error("Encountered a symbol that I don't know how to colour: " + symbol);
 }
-
 
 function format_symbol(primary_action_list, starting_layer_ref, symbol_index, symbol_colours, layer_font_size) {
     /**
