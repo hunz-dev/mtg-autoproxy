@@ -37,6 +37,51 @@ var SilvanExtendedTemplate = Class({
         }
 		
     },
+    enable_frame_layers: function () {
+        var docref = app.activeDocument;
+
+        // twins and pt box
+        var twins = docref.layers.getByName(LayerNames.TWINS);
+        twins.layers.getByName(this.layout.twins).visible = true;
+        if (this.is_creature) {
+            var pt_box = docref.layers.getByName(LayerNames.PT_BOX);
+            pt_box.layers.getByName(this.layout.twins).visible = true;
+        }
+
+        // pinlines
+        var pinlines = docref.layers.getByName(LayerNames.PINLINES_TEXTBOX);
+        if (this.is_land) pinlines = docref.layers.getByName(LayerNames.LAND_PINLINES_TEXTBOX);
+        pinlines.layers.getByName(this.layout.pinlines).visible = true;
+
+        // background
+        var background = docref.layers.getByName(LayerNames.BACKGROUND);
+        if (this.layout.is_nyx) background = docref.layers.getByName(LayerNames.NYX);
+        background.layers.getByName(this.layout.background).visible = true;
+
+        if (this.is_legendary) {
+            // legendary crown
+            var crown = docref.layers.getByName(LayerNames.LEGENDARY_CROWN);
+            crown.layers.getByName(this.layout.pinlines).visible = true;
+            border = docref.layers.getByName(LayerNames.BORDER);
+            border.layers.getByName(LayerNames.NORMAL_BORDER).visible = false;
+            border.layers.getByName(LayerNames.LEGENDARY_BORDER).visible = true;
+        }
+
+        if (this.is_companion) {
+            // enable companion texture
+            var companion = docref.layers.getByName(LayerNames.COMPANION);
+            companion.layers.getByName(this.layout.pinlines).visible = true;
+        }
+
+        if ((this.is_legendary && this.layout.is_nyx) || this.is_companion) {
+            // legendary crown on nyx background - enable the hollow crown shadow and layer mask on crown, pinlines, and shadows
+            this.enable_hollow_crown(crown, pinlines);
+        }
+
+        docref.activeLayer = this.art_layer;
+        content_fill_empty_area();
+        
+    },
 });
 
 var SilvanMDFCBackTemplate = Class({

@@ -1,14 +1,17 @@
 #include "scripts/templates.jsx";
 #include "scripts/constants.jsx";
 #include "scripts/helpers.jsx";
-includeFolder("scripts/plugins");
+#include "scripts/plugins/includes.jsx"
+
+// This feature needs more work
+//includeFolder("scripts/plugins");
 
 // Default expansion symbol - character copied from Keyrune cheatsheet
 var expansion_symbol_character = "";  // Cube symbol by default ()
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
-var specified_template = null;
-//var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
+//var specified_template = null;
+var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
 //var specified_template = SilvanMDFCFrontTemplate; // EXTENDED - WT proxies for mdfc
 //var specified_template = NormalExtendedTemplate; // EXTENDED - OG Chilli extended
 //var specified_template = WomensDayTemplate; // FULLART - 2XM Showcase

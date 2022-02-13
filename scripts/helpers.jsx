@@ -490,30 +490,30 @@ function includeFolder(fName) {
     for (var f in pFolders) {
         
         var this_folder = decodeURI(pFolders[f]);
-        var f_num = this_folder.lastIndexOf("/");
-        var f_name = this_folder.slice(f_num, this_folder.length);
-        sFolder = new Folder (fName+f_name);
+        sFolder = new Folder (this_folder);
         files = sFolder.getFiles("*.jsx");
         
         for (var i in files) {
-            var this_folder = decodeURI(files[i]);
-            var f_num = this_folder.lastIndexOf("/");
-            var this_name = this_folder.slice(f_num, this_folder.length);
             
-            if (this_name == "/templates.jsx") layout_files.push(fName+f_name+this_name);
-            else other_files.push(fName+f_name+this_name);
+            var this_file = decodeURI(files[i]);
+            var f_num = this_file.lastIndexOf("/");
+            var this_name = this_file.slice(f_num, this_file.length);
+            
+            if (this_name == "/templates.jsx") layout_files.push(this_file);
+            else other_files.push(this_file);
             
         }
     }
     
     for (var x in layout_files) {
-        var inc_file = File(layout_files[x]);
+        var inc_file = new File(layout_files[x]);
         if(inc_file.exists){
             $.evalFile(inc_file);
+            alert(inc_file.name);
         }
     }
     for (var y in other_files) {
-        var inc_file = File(other_files[y]);
+        var inc_file = new File(other_files[y]);
         if(inc_file.exists){
             $.evalFile(inc_file);
         }
