@@ -10,8 +10,8 @@
 var expansion_symbol_character = "";  // Cube symbol by default ()
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
-//var specified_template = null;
-var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
+var specified_template = null;
+//var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
 //var specified_template = SilvanMDFCFrontTemplate; // EXTENDED - WT proxies for mdfc
 //var specified_template = NormalExtendedTemplate; // EXTENDED - OG Chilli extended
 //var specified_template = WomensDayTemplate; // FULLART - 2XM Showcase
@@ -26,7 +26,7 @@ var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like Willie
 //var specified_template = KaldheimTemplate; // REGULAR - Kaldheim showcase
 //var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
 //var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
-//var specified_template = [NormalTemplate, KaldheimTemplate, SilvanExtendedTemplate, NormalClassicTemplate]; // Do multiple templates at a time
+//var specified_template = [NormalTemplate, SilvanExtendedTemplate, NormalClassicTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;

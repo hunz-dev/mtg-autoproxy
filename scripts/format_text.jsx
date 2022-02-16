@@ -128,6 +128,17 @@ function determine_symbol_colours(symbol, symbol_length) {
         return [hybrid_symbol_colour_map[phyrexian_match[1]], rgb_black()];
     }
 
+    var phyrexian_hybrid_regex = /^\{([W,U,B,R,G])\/([W,U,B,R,G])\/P\}$/;
+    var phyrexian_hybrid_match = symbol.match(phyrexian_hybrid_regex);
+    if (phyrexian_hybrid_match !== null) {
+        return [
+            symbol_colour_map[phyrexian_hybrid_match[2]],
+            symbol_colour_map[phyrexian_hybrid_match[1]],
+            rgb_black(),
+            rgb_black()
+        ];
+    }
+
     var hybrid_regex = /^\{([2,W,U,B,R,G])\/([W,U,B,R,G])\}$/;
     var hybrid_match = symbol.match(hybrid_regex);
     if (hybrid_match !== null) {

@@ -169,7 +169,8 @@ function render(file,current_template) {
 	// Get full set info from scrython -- MY STUFF
 	mtgset = call_python_set(layout.set, file_path)
 	if ( mtgset.printed_size ) layout.card_count = mtgset.printed_size;
-	else if ( mtgset.card_count ) layout.card_count = mtgset.card_count;
+    else if ( mtgset.card_count ) layout.card_count = mtgset.card_count;
+    else layout.card_count = "300";
 	
 	// Include creator -- MY STUFF
 	if (ret.creator) layout.creator = ret.creator;
