@@ -1,5 +1,17 @@
-# Autoproxy Reloaded - MTG Photoshop Automation
+# Autoproxy - MTG Photoshop Automation
 Photoshop scripting to generate high-quality Magic card renders, originally developed by Chilli-Axe, reloaded and updated by MrTeferi for use with developing new proxies by mpcfill.com contributors. If you need personal help with this app, join our discord: https://discord.gg/qdR2S4nQ6U
+
+<p align="center">
+  <a href="https://discord.gg/3kXw2qQwRH">
+    <img alt="Discord" src="https://img.shields.io/discord/889831317066358815?label=Discord&style=plastic">
+  </a>
+  <img alt="GitHub" src="https://img.shields.io/github/license/MrTeferi/MTG-Autoproxy?color=1082C2&style=plastic">
+  <a href="https://github.com/MrTeferi/MTG-Autoproxy/releases">
+    <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/MrTeferi/MTG-Autoproxy/total?style=plastic">
+  </a>
+  <img alt="Python" src="https://img.shields.io/badge/python-3.6%2B-yellow">
+  <img alt="Photoshop" src="https://img.shields.io/badge/photoshop-CS5--2022-informational?style=plastic">
+</p>
 
 ![img1](https://i.imgur.com/4TTvpND.png)
 
