@@ -11,7 +11,7 @@ Photoshop scripting to generate high-quality Magic card renders, originally deve
   <img alt="Python" src="https://img.shields.io/badge/python-3.6%2B-yellow?style=plastic">
 </p>
 
-![img1](https://i.imgur.com/4TTvpND.png)
+![img1](https://i.imgur.com/OJrXeqj.jpg)
 
 # Requirements
   * A copy of Photoshop. I tested the system using CS5 and CC 2015-2020, but other versions may work as well.
