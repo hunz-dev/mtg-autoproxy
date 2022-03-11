@@ -7,8 +7,8 @@ Photoshop scripting to generate high-quality Magic card renders, originally deve
   </a>
   <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-brightgreen?style=plastic"></a>
   <img alt="GitHub" src="https://img.shields.io/github/license/MrTeferi/MTG-Autoproxy?color=1082C2&style=plastic">
-  <img alt="Python" src="https://img.shields.io/badge/python-3.6%2B-yellow?style=plastic">
   <img alt="Photoshop" src="https://img.shields.io/badge/photoshop-CS5--2022-informational?style=plastic">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.6%2B-yellow?style=plastic">
 </p>
 
 ![img1](https://i.imgur.com/4TTvpND.png)
