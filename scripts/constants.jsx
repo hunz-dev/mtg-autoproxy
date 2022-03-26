@@ -461,6 +461,7 @@ class_template_map[normal_class] = {
     other: [
         NormalClassicTemplate,
         NormalExtendedTemplate,
+		NormalFullartTemplate,
         WomensDayTemplate,
         StargazingTemplate,
         MasterpieceTemplate,
@@ -773,6 +774,7 @@ function generate_set_symbol ( set ) {
     else if ( set == "NEO" ) var output = "";
     else if ( set == "UNF" ) var output = "";
     else if ( set == "Y22" ) var output = "";
+	else if ( set == "CC2" ) var output = "";
     else var output = expansion_symbol_character;
     return output;
     

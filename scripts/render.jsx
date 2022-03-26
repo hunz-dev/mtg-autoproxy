@@ -52,7 +52,7 @@ function call_python(card_name, file_path, set) {
      */
 
     // default to Windows command
-    var python_command = "python \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\"";
+    var python_command = "py \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\"";
     if ($.os.search(/windows/i) === -1) {
         // macOS
         python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\" >> " + file_path + "/scripts/debug.log 2>&1";
@@ -79,7 +79,7 @@ function call_python_set(card_set, file_path) {
      */
 
     // default to Windows command
-    var python_command = "python \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\"";
+    var python_command = "py \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\"";
     if ($.os.search(/windows/i) === -1) {
         // macOS
         python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\" >> " + file_path + "/scripts/debug.log 2>&1";
@@ -169,8 +169,8 @@ function render(file,current_template) {
 	// Get full set info from scrython -- MY STUFF
 	mtgset = call_python_set(layout.set, file_path)
 	if ( mtgset.printed_size ) layout.card_count = mtgset.printed_size;
-    else if ( mtgset.card_count ) layout.card_count = mtgset.card_count;
-    else layout.card_count = "300";
+	//else if ( mtgset.card_count ) layout.card_count = mtgset.card_count;
+	else layout.card_count = "302";
 	
 	// Include creator -- MY STUFF
 	if (ret.creator) layout.creator = ret.creator;

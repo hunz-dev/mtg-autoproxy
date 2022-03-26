@@ -4,6 +4,9 @@ class_template_map[normal_class].other.push(KaldheimTemplate);
 class_template_map[normal_class].other.push(PhyrexianTemplate);
 class_template_map[normal_class].other.push(JPMysticalArchiveTemplate);
 class_template_map[normal_class].other.push(CrimsonFangTemplate);
+class_template_map[normal_class].other.push(DoubleFeatureTemplate);
+class_template_map[normal_class].other.push(MaleMPCTemplate);
+class_template_map[normal_class].other.push(PromoNormalClassicTemplate);
 class_template_map[transform_front_class].other.push(CrimsonFangTemplate);
 class_template_map[transform_back_class].other.push(CrimsonFangTemplate);
 

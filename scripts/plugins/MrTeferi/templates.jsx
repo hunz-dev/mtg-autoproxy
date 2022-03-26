@@ -395,3 +395,261 @@ var JPMysticalArchiveTemplate = Class({
         
     }
 })
+
+/* Classic variant with the promo star enabled */
+
+var PromoNormalClassicTemplate = Class({
+    /**
+     * A template for 7th Edition frame. Each frame is flattened into its own singular layer.
+	 * Promo star added
+     */
+	
+    extends_: ChilliBaseTemplate,
+    template_file_name: function () {
+        return "normal-classic";
+    },
+    template_suffix: function () {
+        return "Classic Promo";
+    },
+    constructor: function (layout, file, file_path) {
+		
+		layout.is_classic = true;
+        this.super(layout, file, file_path);
+
+        var docref = app.activeDocument;
+        this.art_reference = docref.layers.getByName(LayerNames.ART_FRAME);
+
+        // artist
+        replace_text(docref.layers.getByName(LayerNames.LEGAL).layers.getByName(LayerNames.ARTIST), "Artist", this.layout.artist);
+        this.text_layers = [];
+
+        var text_and_icons = docref.layers.getByName(LayerNames.TEXT_AND_ICONS);
+        this.basic_text_layers(text_and_icons);
+		
+		// Add the promo star
+		text_and_icons.layers.getByName("Promo Star").visible = true;
+
+        // rules text
+        var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
+        var reference_layer = text_and_icons.layers.getByName(LayerNames.TEXTBOX_REFERENCE);
+        if (this.is_land) {
+            reference_layer = text_and_icons.layers.getByName(LayerNames.TEXTBOX_REFERENCE_LAND);
+        }
+        var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT);
+        this.text_layers.push(
+            new FormattedTextArea(
+                layer = rules_text,
+                text_contents = this.layout.oracle_text,
+                text_colour = get_text_layer_colour(rules_text),
+                flavour_text = this.layout.flavour_text,
+                is_centred = is_centred,
+                reference_layer = reference_layer,
+            ),
+        );
+
+        // pt
+        var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
+        if (this.is_creature) {
+            this.text_layers.push(
+                new TextField(
+                    layer = power_toughness,
+                    text_contents = this.layout.power.toString() + "/" + this.layout.toughness.toString(),
+                    text_colour = get_text_layer_colour(power_toughness),
+                ),
+            )
+        } else {
+            power_toughness.visible = false;
+        }
+    },
+    enable_frame_layers: function () {
+        var docref = app.activeDocument;
+		
+        var layers = docref.layers.getByName(LayerNames.NONLAND);
+        var selected_layer = this.layout.background;
+        if (this.is_land) {
+            layers = docref.layers.getByName(LayerNames.LAND);
+            selected_layer = this.layout.pinlines;
+        }
+
+        layers.layers.getByName(selected_layer).visible = true;
+    }
+});
+
+var DoubleFeatureTemplate = Class({
+    /**
+     * Midnight Hunt / Vow Double Feature Showcase
+     * Original assets from Warpdandy's Proximity Template
+     */
+
+    extends_: ChilliBaseTemplate,
+    template_file_name: function () {
+        return "MrTeferi/double-feature";
+    },
+    template_suffix: function () {
+        return "Double Feature";
+    },
+    rules_text_and_pt_layers: function (text_and_icons) {
+        
+        // centre the rules text if the card has no flavour text, text is all on one line, and that line is fairly short
+        var is_centred = this.layout.flavour_text.length <= 1 && this.layout.oracle_text.length <= 70 && this.layout.oracle_text.indexOf("\n") < 0;
+        
+        var power_toughness = text_and_icons.layers.getByName(LayerNames.POWER_TOUGHNESS);
+        if (this.is_creature) {
+            // creature card - set up creature layer for rules text and insert power & toughness
+            var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_CREATURE);
+            this.text_layers = this.text_layers.concat([
+                new TextField(
+                    layer = power_toughness,
+                    text_contents = this.layout.power.toString() + "/" + this.layout.toughness.toString(),
+                    text_colour = get_text_layer_colour(power_toughness),
+                ),
+                new CreatureFormattedTextArea(
+                    layer = rules_text,
+                    text_contents = this.layout.oracle_text,
+                    text_colour = get_text_layer_colour(rules_text),
+                    flavour_text = this.layout.flavour_text,
+                    is_centred = is_centred,
+                    reference_layer = text_and_icons.layers.getByName(LayerNames.TEXTBOX_REFERENCE),
+                    pt_reference_layer = text_and_icons.layers.getByName(LayerNames.PT_REFERENCE),
+                    pt_top_reference_layer = text_and_icons.layers.getByName(LayerNames.PT_TOP_REFERENCE),
+                ),
+            ]);
+
+        } else {
+            // noncreature card - use the normal rules text layer and disable the power/toughness layer
+            var rules_text = text_and_icons.layers.getByName(LayerNames.RULES_TEXT_NONCREATURE);
+            this.text_layers.push(
+                new FormattedTextArea(
+                    layer = rules_text,
+                    text_contents = this.layout.oracle_text,
+                    text_colour = get_text_layer_colour(rules_text),
+                    flavour_text = this.layout.flavour_text,
+                    is_centred = is_centred,
+                    reference_layer = text_and_icons.layers.getByName(LayerNames.TEXTBOX_REFERENCE),
+                ),
+            );
+            
+            power_toughness.visible = false;
+        }
+    },
+    constructor: function (layout, file, file_path) {
+        this.super(layout, file, file_path);
+
+        var docref = app.activeDocument;
+
+        this.art_reference = docref.layers.getByName(LayerNames.ART_FRAME);
+
+        this.name_shifted = this.layout.transform_icon !== null && this.layout.transform_icon !== undefined;
+        this.type_line_shifted = this.layout.colour_indicator !== null && this.layout.colour_indicator !== undefined;
+
+        var text_and_icons = docref.layers.getByName(LayerNames.TEXT_AND_ICONS);
+        this.basic_text_layers(text_and_icons);
+        this.rules_text_and_pt_layers(text_and_icons);
+    },
+    enable_frame_layers: function () {
+        var docref = app.activeDocument;
+        
+        // Transform stuff
+        if ( this.name_shifted ) {
+            docref.layers.getByName(LayerNames.TEXT_AND_ICONS).layers.getByName("Button").visible = true;
+            if (this.layout.face == 0 ) docref.layers.getByName(LayerNames.TEXT_AND_ICONS).layers.getByName(LayerNames.TF_FRONT).visible = true;
+            else docref.layers.getByName(LayerNames.TEXT_AND_ICONS).layers.getByName(LayerNames.TF_BACK).visible = true;
+        }
+        
+        if (this.is_creature) {
+            var pt_box = docref.layers.getByName(LayerNames.PT_BOX)
+            pt_box.layers.getByName(this.layout.twins).visible = true;
+        }
+
+        if ( this.name_shifted && this.layout.face == 1 ) app.activeDocument.layers.getByName(LayerNames.COLOUR_INDICATOR).layers.getByName(this.layout.pinlines).visible = true;
+
+        // background
+        docref.layers.getByName(LayerNames.BACKGROUND).layers.getByName(this.layout.pinlines).visible = true;
+
+        if (this.is_legendary) {
+            // legendary crown
+            var crown = docref.layers.getByName(LayerNames.LEGENDARY_CROWN);
+            crown.layers.getByName(this.layout.pinlines).visible = true;
+            border = docref.layers.getByName(LayerNames.BORDER);
+            border.layers.getByName(LayerNames.NORMAL_BORDER).visible = false;
+            border.layers.getByName(LayerNames.LEGENDARY_BORDER).visible = true;
+        }
+        
+    }
+});
+
+var MaleMPCTemplate = Class({
+    /**
+     * MaleMPC's extended black box template.
+     */
+
+    extends_: NormalTemplate,
+    template_file_name: function () {
+        return "MrTeferi/male-mpc";
+    },
+    template_suffix: function () {
+        return "Extended Black";
+    },
+    constructor: function (layout, file, file_path) {
+        // strip out reminder text for extended cards
+        if ( layout.oracle_text ) layout.oracle_text = strip_reminder_text(layout.oracle_text);
+        layout.is_silvan = true;
+        
+        this.super(layout, file, file_path);
+        var docref = app.activeDocument;
+        
+        // Which background?
+        var background = docref.layers.getByName(LayerNames.BACKGROUND);
+        if (this.layout.is_nyx) background = docref.layers.getByName(LayerNames.NYX);
+        
+    },
+    enable_frame_layers: function () {
+        var docref = app.activeDocument;
+
+        // twins and pt box
+        var twins = docref.layers.getByName(LayerNames.TWINS);
+        twins.layers.getByName(this.layout.twins).visible = true;
+        if (this.is_creature) {
+            var pt_box = docref.layers.getByName(LayerNames.PT_BOX);
+            pt_box.layers.getByName(this.layout.twins).visible = true;
+        }
+
+        // pinlines
+        var pinlines = docref.layers.getByName(LayerNames.PINLINES_TEXTBOX);
+        pinlines.layers.getByName(this.layout.pinlines).visible = true;
+
+        // background
+        var background = docref.layers.getByName(LayerNames.BACKGROUND);
+        if (this.layout.is_nyx) background = docref.layers.getByName(LayerNames.NYX);
+        background.layers.getByName(this.layout.background).visible = true;
+
+        if (this.is_legendary) {
+            // legendary crown
+            var crown = docref.layers.getByName(LayerNames.LEGENDARY_CROWN);
+            crown.layers.getByName(this.layout.pinlines).visible = true;
+            border = docref.layers.getByName(LayerNames.BORDER);
+            border.layers.getByName(LayerNames.NORMAL_BORDER).visible = false;
+            border.layers.getByName(LayerNames.LEGENDARY_BORDER).visible = true;
+        } else {
+            // Top pinlines if not legendary
+            var top_pinlines = docref.layers.getByName("Top Pinlines");
+            top_pinlines.visible = true;
+            top_pinlines.layers.getByName(this.layout.pinlines).visible = true;
+        }
+
+        if (this.is_companion) {
+            // enable companion texture
+            var companion = docref.layers.getByName(LayerNames.COMPANION);
+            companion.layers.getByName(this.layout.pinlines).visible = true;
+        }
+
+        if ((this.is_legendary && this.layout.is_nyx) || this.is_companion) {
+            // legendary crown on nyx background - enable the hollow crown shadow and layer mask on crown, pinlines, and shadows
+            this.enable_hollow_crown(crown, pinlines);
+        }
+
+        docref.activeLayer = this.art_layer;
+        content_fill_empty_area();
+        
+    },
+});

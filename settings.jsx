@@ -11,9 +11,12 @@ var expansion_symbol_character = "";  // Cube symbol by default ()
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
 var specified_template = null;
+
 //var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
 //var specified_template = SilvanMDFCFrontTemplate; // EXTENDED - WT proxies for mdfc
 //var specified_template = NormalExtendedTemplate; // EXTENDED - OG Chilli extended
+//var specified_template = MaleMPCTemplate; // EXTENDED - Male MPC's extended black box
+//var specified_template = NormalFullartTemplate; // FULLART - Originally Universes Beyond
 //var specified_template = WomensDayTemplate; // FULLART - 2XM Showcase
 //var specified_template = MasterpieceTemplate; // FULLART - Hour of devastation masterpiece
 //var specified_template = SnowTemplate; // REGULAR - Snow 
@@ -26,7 +29,8 @@ var specified_template = null;
 //var specified_template = KaldheimTemplate; // REGULAR - Kaldheim showcase
 //var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
 //var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
-//var specified_template = [NormalTemplate, SilvanExtendedTemplate, NormalClassicTemplate]; // Do multiple templates at a time
+//var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
+//var specified_template = [NormalTemplate, SilvanExtendedTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
@@ -34,7 +38,7 @@ var exit_early = false;
 // Automatically input and size set symbol, change outline thickness
 var automatic_set_symbol = true;
 var automatic_set_symbol_size = true;
-var expansion_symbol_stroke_weight = 6; // 4-6 generally, 6 is default
+var expansion_symbol_stroke_weight = 5; // 4-6 generally, 6 is default
 
 // Remove the flavour or reminder text
 var remove_flavour_text = false;

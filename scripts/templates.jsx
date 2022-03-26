@@ -514,6 +514,25 @@ var NormalExtendedTemplate = Class({
 
 /* Templates similar to NormalTemplate but with aesthetic differences */
 
+var NormalFullartTemplate = Class({
+    /**
+     * Normal full art template (previously "Universes Beyond")
+     * Original template by Chilli (?)
+     */
+
+    extends_: NormalTemplate,
+    template_file_name: function () {
+        return "normal-fullart";
+    },
+    template_suffix: function () {
+        return "Fullart";
+    },
+    constructor: function (layout, file, file_path) {
+        this.super(layout, file, file_path);
+        
+    },
+});
+
 var WomensDayTemplate = Class({
     /**
      * The showcase template first used on the Women's Day Secret Lair. The layer structure of this template and NormalTemplate are
@@ -1425,6 +1444,9 @@ var BasicLandTherosTemplate = Class({
     extends_: BasicLandTemplate,
     template_file_name: function () {
         return "basic-theros";
+    },
+	template_suffix: function () {
+        return "Theros - "+this.layout.artist;
     }
 });
 
@@ -1437,6 +1459,9 @@ var BasicLandUnstableTemplate = Class({
     template_file_name: function () {
         return "basic-unstable";
     },
+	template_suffix: function () {
+        return "Unstable - "+this.layout.artist;
+    }
 });
 
 var BasicLandClassicTemplate = Class({
@@ -1447,5 +1472,8 @@ var BasicLandClassicTemplate = Class({
     extends_: BasicLandTemplate,
     template_file_name: function () {
         return "basic-classic";
+    },
+	template_suffix: function () {
+        return "Classic - "+this.layout.artist;
     }
 });
