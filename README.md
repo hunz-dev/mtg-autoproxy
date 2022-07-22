@@ -5,7 +5,7 @@ Photoshop scripting to generate high-quality Magic card renders, originally deve
   <a href="https://discord.gg/3kXw2qQwRH">
     <img alt="Discord" src="https://img.shields.io/discord/889831317066358815?label=Discord&style=plastic">
   </a>
-  <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-no-brightred?style=plastic"></a>
+  <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-no-red?style=plastic"></a>
   <img alt="GitHub" src="https://img.shields.io/github/license/MrTeferi/MTG-Autoproxy?color=1082C2&style=plastic">
   <img alt="Photoshop" src="https://img.shields.io/badge/photoshop-CS5--2022-informational?style=plastic">
   <img alt="Python" src="https://img.shields.io/badge/python-3.6%2B-yellow?style=plastic">
