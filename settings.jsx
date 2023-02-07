@@ -7,7 +7,7 @@
 //includeFolder("scripts/plugins");
 
 // Default expansion symbol - character copied from Keyrune cheatsheet
-var expansion_symbol_character = "";  // Cube symbol by default ()
+var expansion_symbol_character = "";  // Duels of the Planeswalker
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
 var specified_template = null;
