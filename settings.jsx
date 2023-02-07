@@ -40,6 +40,14 @@ var automatic_set_symbol = true;
 var automatic_set_symbol_size = true;
 var expansion_symbol_stroke_weight = 5; // 4-6 generally, 6 is default
 
+// Set expansion symbol stroke to black by default, adjust for retro frame
+var expansion_symbol_stroke_color = null;
+if (specified_template === NormalClassicTemplate) {
+    expansion_symbol_stroke_color = rgb_white();
+} else {
+    expansion_symbol_stroke_color = rgb_black();
+}
+
 // Remove the flavour or reminder text
 var remove_flavour_text = false;
 var remove_reminder_text = false;

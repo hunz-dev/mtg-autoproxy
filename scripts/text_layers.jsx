@@ -189,7 +189,7 @@ var ExpansionSymbolField = Class({
         } else {
             var mask_layer = this.layer.parent.layers.getByName(this.rarity);
             mask_layer.visible = true;
-            apply_stroke(expansion_symbol_stroke_weight, rgb_black());
+            apply_stroke(expansion_symbol_stroke_weight, expansion_symbol_stroke_color);
         }
 		
     }
