@@ -775,6 +775,18 @@ function generate_set_symbol ( set ) {
     else if ( set == "UNF" ) var output = "";
     else if ( set == "Y22" ) var output = "";
 	else if ( set == "CC2" ) var output = "";
+	else if ( set == "40K" ) var output = "";
+	else if ( set == "SNC" ) var output = "";
+	else if ( set == "DMU" ) var output = "";
+	else if ( set == "BRO" ) var output = "";
+	else if ( set == "ONE" ) var output = "";
+	else if ( set == "DMR" ) var output = "";
+	else if ( set == "2X2" ) var output = "";
+	else if ( set == "J22" ) var output = "";
+	else if ( set == "NEC" ) var output = "";
+	else if ( set == "40K" ) var output = "";
+	else if ( set == "CLB" ) var output = "";
+	else if ( set == "BRC" ) var output = "";
     else var output = expansion_symbol_character;
     return output;
     
