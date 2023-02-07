@@ -45,7 +45,7 @@ var remove_flavour_text = false;
 var remove_reminder_text = false;
 
 // Realistic collector info? (requires the LATEST PSD files
-var real_collector_info = true;
+var real_collector_info = false;
 
 // Enable fast saving? Results in much large file sizes
 var fast_saving = false;
