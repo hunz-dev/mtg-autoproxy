@@ -444,6 +444,9 @@ var ability_words = [
     
     // Midnight Hunt words
     "Coven",
+
+    // CLB abilities
+    "Mold Earth",
 ];
 
 // Card rarities
@@ -787,6 +790,7 @@ function generate_set_symbol ( set ) {
 	else if ( set == "40K" ) var output = "";
 	else if ( set == "CLB" ) var output = "";
 	else if ( set == "BRC" ) var output = "";
+	else if ( set == "DMC" ) var output = "";
     else var output = expansion_symbol_character;
     return output;
     
