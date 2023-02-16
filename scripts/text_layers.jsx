@@ -184,12 +184,12 @@ var ExpansionSymbolField = Class({
 		
         app.activeDocument.activeLayer = this.layer;
 
-        if (this.rarity === rarity_common) {
+        if (this.rarity === rarity_common || force_common) {
             apply_stroke(expansion_symbol_stroke_weight, rgb_white());
         } else {
             var mask_layer = this.layer.parent.layers.getByName(this.rarity);
             mask_layer.visible = true;
-            apply_stroke(expansion_symbol_stroke_weight, rgb_black());
+            apply_stroke(expansion_symbol_stroke_weight, expansion_symbol_stroke_color);
         }
 		
     }

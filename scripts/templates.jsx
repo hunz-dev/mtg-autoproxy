@@ -98,6 +98,10 @@ var BaseTemplate = Class({
             // Fill set info
             this.legal.layers.getByName("Set").textItem.contents = this.layout.set.toUpperCase() + this.legal.layers.getByName("Set").textItem.contents;
 
+            try {
+                this.legal.layers.getByName("Proxy").textItem.contents = this.layout.set.toUpperCase() + this.legal.layers.getByName("Proxy").textItem.contents;
+            } catch (e) { /* Do nothing */ }
+
             // Add Artist name
             this.text_layers = [
                 new TextField(

@@ -10,3 +10,10 @@ scripts/package-lock.json
 scripts/Scoots Actions.atn
 scripts/custom_card.json
 scripts/card.jpg
+scripts/config.py
+templates-*.zip
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
