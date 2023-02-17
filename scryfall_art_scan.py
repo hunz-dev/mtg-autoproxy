@@ -6,6 +6,14 @@ import requests
 from os import path
 
 
+# Specify a list of cards to fetch instead of using stdin
+CARD_NAMES = [
+    # "Green Slime",
+    # "Black Market Connections",
+    # "Shadow in the Warp",
+]
+
+
 def process_scan(card_name, artist, image_url):
     # todo: rewrite to only rely on urllib
     r = requests.post(
@@ -32,32 +40,37 @@ def get_card_art_url(card_name, card_json) -> str:
 
 
 if __name__ == "__main__":
-    card_name = input("Card name (exact): ")
+    # Initialize list of cards to iterate through
+    cards = None
+    if len(CARD_NAMES) > 0:
+        cards = CARD_NAMES
+    else:
+        cards = [input("Card name (exact): ")]
+
     # Use Scryfall to search for this card
-    card = None
+    for card_name in cards:
+        # If the card specifies which set to retrieve the scan from, do that
+        try:
+            pipe_idx = card_name.index("$")
+            card_set = card_name[pipe_idx + 1:]
+            card_name = card_name[0:pipe_idx]
+            print(f"Searching Scryfall for: {card_name}, set: {card_set}...", end="", flush=True)
+            card = request.urlopen(
+                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
+            ).read()
 
-    # If the card specifies which set to retrieve the scan from, do that
-    try:
-        pipe_idx = card_name.index("$")
-        card_set = card_name[pipe_idx + 1:]
-        card_name = card_name[0:pipe_idx]
-        print(f"Searching Scryfall for: {card_name}, set: {card_set}...", end="", flush=True)
-        card = request.urlopen(
-            f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
-        ).read()
+        except ValueError:
+            print(f"Searching Scryfall for: {card_name}...", end="", flush=True)
+            card = request.urlopen(
+                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}"
+            ).read()
+        except error.HTTPError:
+            input("\nError occurred while attempting to query Scryfall. Press enter to exit.")
 
-    except ValueError:
-        print(f"Searching Scryfall for: {card_name}...", end="", flush=True)
-        card = request.urlopen(
-            f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}"
-        ).read()
-    except error.HTTPError:
-        input("\nError occurred while attempting to query Scryfall. Press enter to exit.")
+        print(" and done! Waifu2x'ing...", end="", flush=True)
 
-    print(" and done! Waifu2x'ing...", end="", flush=True)
-
-    card_json = json.loads(card)
-    image_url = get_card_art_url(card_name, card_json)
-    process_scan(card_name, card_json["artist"], image_url)
-    print(" and done!", flush=True)
-    time.sleep(0.1)
+        card_json = json.loads(card)
+        image_url = get_card_art_url(card_name, card_json)
+        process_scan(card_name, card_json["artist"], image_url)
+        print(" and done!", flush=True)
+        time.sleep(0.1)
