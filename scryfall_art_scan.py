@@ -14,7 +14,7 @@ CARD_NAMES = [
 ]
 
 
-def process_scan(card_name, artist, image_url):
+def process_scan(card_name, artist, set_name, image_url):
     # todo: rewrite to only rely on urllib
     r = requests.post(
         "https://api.deepai.org/api/waifu2x",
@@ -23,8 +23,9 @@ def process_scan(card_name, artist, image_url):
     )
     try:
         output_url = r.json()['output_url']
+        output_file = f"{card_name} ({artist}) [{set_name.upper()}].jpg"
         request.urlretrieve(
-            output_url, path.join(path.dirname(path.realpath(__file__)), "art", f"{card_name} ({artist}).jpg")
+            output_url, path.join(path.dirname(path.realpath(__file__)), "art", output_file)
         )
     except KeyError:
         raise Exception("whoops")
@@ -71,6 +72,6 @@ if __name__ == "__main__":
 
         card_json = json.loads(card)
         image_url = get_card_art_url(card_name, card_json)
-        process_scan(card_name, card_json["artist"], image_url)
+        process_scan(card_json["name"], card_json["artist"], card_json["set"], image_url)
         print(" and done!", flush=True)
         time.sleep(0.1)
