@@ -1,21 +1,20 @@
 import time
 import json
-from urllib import request, parse, error
+import urllib
 from scripts import config
 import requests
 from os import path
 
 
-# Specify a list of cards to fetch instead of using stdin
-CARD_NAMES = [
-    # "Green Slime",
-    # "Black Market Connections",
-    # "Shadow in the Warp",
+# Specify a list of queries for Scryfall
+QUERIES = [
+    # "",
+    # ex. "arbor elf set:wwk",
 ]
 
 
 def process_scan(card_name, artist, set_name, image_url):
-    # todo: rewrite to only rely on urllib
+    # TODO: Rewrite to use urllib for uniformity
     r = requests.post(
         "https://api.deepai.org/api/waifu2x",
         data={'image': image_url},
@@ -23,10 +22,9 @@ def process_scan(card_name, artist, set_name, image_url):
     )
     try:
         output_url = r.json()['output_url']
+        output_path = path.dirname(path.realpath(__file__))
         output_file = f"{card_name} ({artist}) [{set_name.upper()}].jpg"
-        request.urlretrieve(
-            output_url, path.join(path.dirname(path.realpath(__file__)), "art", output_file)
-        )
+        urllib.request.urlretrieve(output_url, path.join(output_path, "art", output_file))
     except KeyError:
         raise Exception("whoops")
 
@@ -41,37 +39,24 @@ def get_card_art_url(card_name, card_json) -> str:
 
 
 if __name__ == "__main__":
-    # Initialize list of cards to iterate through
-    cards = None
-    if len(CARD_NAMES) > 0:
-        cards = CARD_NAMES
-    else:
-        cards = [input("Card name (exact): ")]
+    # TODO: Add support for entering multiple queries before executing them all
+    queries = QUERIES if len(QUERIES) > 0 else [input("Scryfall query: ")]
 
-    # Use Scryfall to search for this card
-    for card_name in cards:
-        # If the card specifies which set to retrieve the scan from, do that
+    for query in queries:
+        query_string = f"q={urllib.parse.quote_plus(query)}"
+        url = f"https://api.scryfall.com/cards/search?{query_string}"
+        print(f"Searching Scryfall: \"{query_string}\"...", end="", flush=True)
         try:
-            pipe_idx = card_name.index("$")
-            card_set = card_name[pipe_idx + 1:]
-            card_name = card_name[0:pipe_idx]
-            print(f"Searching Scryfall for: {card_name}, set: {card_set}...", end="", flush=True)
-            card = request.urlopen(
-                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
-            ).read()
+            response = urllib.request.urlopen(url).read()
+        except urllib.error.HTTPError as e:
+            print(f"\nError occurred while querying Scryfall:\n\t{e}")
+            continue
 
-        except ValueError:
-            print(f"Searching Scryfall for: {card_name}...", end="", flush=True)
-            card = request.urlopen(
-                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}"
-            ).read()
-        except error.HTTPError:
-            input("\nError occurred while attempting to query Scryfall. Press enter to exit.")
+        card_json = json.loads(response)['data'][0]  # TODO: Handle more cases
+        image_url = get_card_art_url(card_json["name"], card_json)
 
-        print(" and done! Waifu2x'ing...", end="", flush=True)
-
-        card_json = json.loads(card)
-        image_url = get_card_art_url(card_name, card_json)
+        print(f" and done! Found [{card_json['name']}]. Putting image through Waifu2x...", end="", flush=True)
         process_scan(card_json["name"], card_json["artist"], card_json["set"], image_url)
+
         print(" and done!", flush=True)
         time.sleep(0.1)
