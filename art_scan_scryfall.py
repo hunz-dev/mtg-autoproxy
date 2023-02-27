@@ -1,9 +1,8 @@
 import time
 import json
 import urllib
-from scripts import config
 import requests
-from os import path
+import os
 
 
 # Specify a list of queries for Scryfall
@@ -18,13 +17,13 @@ def process_scan(card_name, artist, set_name, image_url):
     r = requests.post(
         "https://api.deepai.org/api/waifu2x",
         data={'image': image_url},
-        headers={'api-key': config.TOKEN}
+        headers={'api-key': os.environ['DEEPAI_KEY']}
     )
     try:
         output_url = r.json()['output_url']
-        output_path = path.dirname(path.realpath(__file__))
+        output_path = os.path.dirname(os.path.realpath(__file__))
         output_file = f"{card_name} ({artist}) [{set_name.upper()}].jpg"
-        urllib.request.urlretrieve(output_url, path.join(output_path, "art", output_file))
+        urllib.request.urlretrieve(output_url, os.path.join(output_path, "art", output_file))
     except KeyError:
         raise Exception("whoops")
 
