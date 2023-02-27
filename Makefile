@@ -5,8 +5,11 @@ venv:
 	python3 -m venv env
 	$(PIP) install --no-cache-dir -r requirements.txt
 
+load-config:
+	env $$(cat .env | xargs)
+
 scan-mtgpics:
-	env $$(cat .env | xargs) $(PYTHON) art_scan_mtgpics.py
+	$(load_config) $(PYTHON) art_scan_mtgpics.py
 
 scan-scryfall:
-	env $$(cat .env | xargs) $(PYTHON) art_scan_scryfall.py
+	$(load_config) $(PYTHON) art_scan_scryfall.py
