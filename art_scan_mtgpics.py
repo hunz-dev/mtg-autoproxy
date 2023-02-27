@@ -51,20 +51,18 @@ class ScryfallCard:
         return f"{self.name} ({self.artist}) [{self.set.upper()}]"
 
 
-def get_scryfall_card(card_name, set_code) -> ScryfallCard:
-    print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="", flush=True)
+def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
+    # Fetch a card from Scryfall based on a name and (optional)
     params = dict(fuzzy=card_name, set=set_code)
     response = requests.get(SCRYFALL_URL, params=params)
-    card = ScryfallCard(response.json())
-    print(f"Found: \"{card}\"")
+    card = ScryfallCard(response.json())  # TODO: Check if anything is here
     return card
 
 
 def get_mtgpics_landing_page(card: ScryfallCard) -> str:
-    print(f"Finding card on MTGPICS... ", end="", flush=True)
+    # Fetch the landing page of a card from MTGPICS
     params = dict(ref=f"{card.set}{card.collector_number}")
     response = requests.get(MTGPICS_URL, params=params)
-    print("Found!")
     return response.text
 
 
@@ -85,22 +83,23 @@ def process_query(query: str) -> None:
     try:
         set_locator = query.index("[")
         card_name = query[:set_locator-1]
-        card_set = query[set_locator+1:-1]
+        set_code = query[set_locator+1:-1]
     except ValueError:
         card_name = query
-        card_set = ""
+        set_code = ""
 
     # Fetch card information from Scryfall
-    card = get_scryfall_card(card_name, card_set)
+    print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
+    card = get_scryfall_card(card_name, set_code)
+    print(f"Found: \"{card}\"")
 
     # Fetch HTML from MTGPICS with card info
+    print(f"Finding card on MTGPICS... ", end="")
     landing_soup = BeautifulSoup(get_mtgpics_landing_page(card), "html.parser")
     print(landing_soup)
-
     ## <div><a href=reprints?gid=fut159>See all prints of this cards</a></div>
 
 
 if __name__ == "__main__":
     queries = QUERIES if len(QUERIES) > 0 else read_stdin()
-    for query in queries:
-        process_query(query)
+    [process_query(query) for query in queries]
