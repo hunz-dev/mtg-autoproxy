@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import requests
-# from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 
 
 QUERIES = [
@@ -59,10 +59,12 @@ def get_scryfall_card(card_name, set_code) -> ScryfallCard:
     return card
 
 
-def get_scryfall_card(query):
-    print(f"Searching Scryfall: \"{query}\"...", end="", flush=True)
-    response = requests.get(SCRYFALL_URL, params={'q': query})
-    return response.json()
+def get_mtgpics_landing_page(card: ScryfallCard) -> str:
+    print(f"Finding card on MTGPICS... ", end="", flush=True)
+    params = dict(ref=f"{card.set}{card.collector_number}")
+    response = requests.get(MTGPICS_URL, params=params)
+    print("Found!")
+    return response.text
 
 
 if __name__ == "__main__":
@@ -79,5 +81,8 @@ if __name__ == "__main__":
             card_set = ""
 
         card = get_scryfall_card(card_name, card_set)
+
+        landing_soup = BeautifulSoup(get_mtgpics_landing_page(card), "html.parser")
+        print(landing_soup)
 
         ## <div><a href=reprints?gid=fut159>See all prints of this cards</a></div>
