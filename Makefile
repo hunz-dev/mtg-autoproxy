@@ -1,6 +1,9 @@
-create-venv:
+PIP := env/bin/pip
+PYTHON := env/bin/python
+
+virtual-env:
 	python3 -m venv env
-	env/bin/pip install -r requirements.txt
+	$(PIP) install -r requirements.txt
 
 run-scryfall-scan:
-	env $$(cat .env | xargs) python art_scan_scryfall.py
+	env $$(cat .env | xargs) $(PYTHON) art_scan_scryfall.py
