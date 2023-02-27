@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 import requests
 from bs4 import BeautifulSoup
 
@@ -67,22 +68,39 @@ def get_mtgpics_landing_page(card: ScryfallCard) -> str:
     return response.text
 
 
+def read_stdin(prompt="> ") -> List[str]:
+    # Read text input and append to list until nothing is entered
+    queries = list()
+    while True:
+        input_query = input(prompt)
+        if len(input_query) > 0:
+            queries.append(input_query)
+        else:
+            break
+    return queries
+
+
+def process_query(query: str) -> None:
+    # Parse query for card name and set code (if provided)
+    try:
+        set_locator = query.index("[")
+        card_name = query[:set_locator-1]
+        card_set = query[set_locator+1:-1]
+    except ValueError:
+        card_name = query
+        card_set = ""
+
+    # Fetch card information from Scryfall
+    card = get_scryfall_card(card_name, card_set)
+
+    # Fetch HTML from MTGPICS with card info
+    landing_soup = BeautifulSoup(get_mtgpics_landing_page(card), "html.parser")
+    print(landing_soup)
+
+    ## <div><a href=reprints?gid=fut159>See all prints of this cards</a></div>
+
+
 if __name__ == "__main__":
-    # TODO: Add support for entering multiple queries before executing them all
-    queries = QUERIES if len(QUERIES) > 0 else [input("> ")]
-
+    queries = QUERIES if len(QUERIES) > 0 else read_stdin()
     for query in queries:
-        try:
-            set_locator = query.index("[")
-            card_name = query[:set_locator-1]
-            card_set = query[set_locator+1:-1]
-        except ValueError:
-            card_name = query
-            card_set = ""
-
-        card = get_scryfall_card(card_name, card_set)
-
-        landing_soup = BeautifulSoup(get_mtgpics_landing_page(card), "html.parser")
-        print(landing_soup)
-
-        ## <div><a href=reprints?gid=fut159>See all prints of this cards</a></div>
+        process_query(query)
