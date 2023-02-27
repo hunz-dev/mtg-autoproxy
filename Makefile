@@ -1,9 +1,12 @@
 PIP := env/bin/pip
 PYTHON := env/bin/python
 
-virtual-env:
+venv:
 	python3 -m venv env
-	$(PIP) install -r requirements.txt
+	$(PIP) install --no-cache-dir -r requirements.txt
 
-run-scryfall-scan:
+scan-mtgpics:
+	env $$(cat .env | xargs) $(PYTHON) art_scan_mtgpics.py
+
+scan-scryfall:
 	env $$(cat .env | xargs) $(PYTHON) art_scan_scryfall.py
