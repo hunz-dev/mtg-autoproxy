@@ -11,13 +11,16 @@ QUERIES = [
     # ex. "arbor elf set:wwk",
 ]
 
+# DeepAI API key to use for upscaling models, should be placed in `/.env` file
+DEEPAI_KEY = os.environ['DEEPAI_KEY'].replace("\r", "")
+
 
 def process_scan(card_name, artist, set_name, image_url):
     # TODO: Rewrite to use urllib for uniformity
     r = requests.post(
         "https://api.deepai.org/api/waifu2x",
         data={'image': image_url},
-        headers={'api-key': os.environ['DEEPAI_KEY']}
+        headers={'api-key': DEEPAI_KEY}
     )
     try:
         output_url = r.json()['output_url']
