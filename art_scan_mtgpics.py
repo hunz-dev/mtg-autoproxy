@@ -4,7 +4,7 @@ import requests
 
 
 QUERIES = [
-    # ex. "arbor elf set:wwk",
+    # ex. "arbor elf [wwk]",
     # "",
 ]
 MTGPICS_URL = "https://mtgpics.com"
@@ -51,7 +51,7 @@ class ScryfallCard:
 
 
 def get_scryfall_card(card_name, set_code) -> ScryfallCard:
-    print(f"Searching Scryfall: \"{card_name} [{set_code}]\"... ", end="", flush=True)
+    print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="", flush=True)
     params = dict(fuzzy=card_name, set=set_code)
     response = requests.get(SCRYFALL_URL, params=params)
     card = ScryfallCard(response.json())
@@ -67,11 +67,17 @@ def get_scryfall_card(query):
 
 if __name__ == "__main__":
     # TODO: Add support for entering multiple queries before executing them all
-    queries = QUERIES if len(QUERIES) > 0 else [input("Scryfall query: ")]
+    queries = QUERIES if len(QUERIES) > 0 else [input("> ")]
 
     for query in queries:
-        card = get_scryfall_card(query)
-        print(card)
-        # page = requests.get(MTGPICS_URL)
-        # soup = BeautifulSoup(page.content, "html.parser")
+        try:
+            set_locator = query.index("[")
+            card_name = query[:set_locator-1]
+            card_set = query[set_locator+1:-1]
+        except ValueError:
+            card_name = query
+            card_set = ""
+
+        card = get_scryfall_card(card_name, card_set)
+
         ## <div><a href=reprints?gid=fut159>See all prints of this cards</a></div>
