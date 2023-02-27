@@ -8,7 +8,7 @@ QUERIES = [
     # "",
 ]
 MTGPICS_URL = "https://mtgpics.com"
-SCRYFALL_URL = "https://api.scryfall.com/cards/search"
+SCRYFALL_URL = "https://api.scryfall.com/cards/named"
 
 
 @dataclass
