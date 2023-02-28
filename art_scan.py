@@ -1,16 +1,14 @@
 from dataclasses import dataclass
 from typing import List
 import requests
-from bs4 import BeautifulSoup
 
 
+MTGPICS_URL = "https://mtgpics.com/pics/art/{set}/{collector_number}.jpg"
+SCRYFALL_URL = "https://api.scryfall.com/cards/"
 QUERIES = [
     # ex. "arbor elf [wwk]",
     # "",
 ]
-MTGPICS_URL = "https://mtgpics.com/pics/art/{set}/{collector_number}.jpg"
-SCRYFALL_URL = "https://api.scryfall.com/cards/named"
-
 
 @dataclass
 class ScryfallCard:
@@ -59,6 +57,14 @@ def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
     return card
 
 
+# def get_scryfall_cards(query) -> ScryfallCard:
+#     # Fetch a card from Scryfall based on a name and (optional)
+#     params = dict(fuzzy=card_name, set=set_code)
+#     response = requests.get(SCRYFALL_URL, params=params)
+#     card = ScryfallCard(response.json())  # TODO: Check if anything is here
+#     return card
+
+
 def save_mtgpics_image(card: ScryfallCard) -> bool:
     # Save the image from MTGPICS using set and collector number
     url = MTGPICS_URL.format(set=card.set, collector_number=card.collector_number.rjust(3, '0'))
@@ -93,7 +99,7 @@ def process_query(query: str) -> None:
         card_name = query
         set_code = ""
 
-    # Fetch card information from Scryfall
+    # Fetch specific card information from Scryfall
     print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
     card = get_scryfall_card(card_name, set_code)
     print(f"Found: \"{card}\"... ", end="")
