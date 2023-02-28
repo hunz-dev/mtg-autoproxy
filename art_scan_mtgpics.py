@@ -8,7 +8,7 @@ QUERIES = [
     # ex. "arbor elf [wwk]",
     # "",
 ]
-MTGPICS_URL = "https://mtgpics.com"
+MTGPICS_URL = "https://mtgpics.com/pics/art/{set}/{collector_number}.jpg"
 SCRYFALL_URL = "https://api.scryfall.com/cards/named"
 
 
@@ -59,11 +59,16 @@ def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
     return card
 
 
-def get_mtgpics_landing_page(card: ScryfallCard) -> str:
-    # Fetch the landing page of a card from MTGPICS
-    params = dict(ref=f"{card.set}{card.collector_number}")
-    response = requests.get(MTGPICS_URL, params=params)
-    return response.text
+def save_mtgpics_image(card: ScryfallCard) -> bool:
+    # Save the image from MTGPICS using set and collector number
+    url = MTGPICS_URL.format(set=card.set, collector_number=card.collector_number.rjust(3, '0'))
+    response = requests.get(url, allow_redirects=True)
+    if len(response.content) <= 0 or "There's nothing here" in response.text:
+        return False
+    else:
+        with open(f"art/{card}.jpg", "wb") as f:
+            f.write(response.content)
+        return True
 
 
 def read_stdin(prompt="> ") -> List[str]:
@@ -91,13 +96,13 @@ def process_query(query: str) -> None:
     # Fetch card information from Scryfall
     print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
     card = get_scryfall_card(card_name, set_code)
-    print(f"Found: \"{card}\"")
+    print(f"Found: \"{card}\"... ", end="")
 
     # Fetch HTML from MTGPICS with card info
-    print(f"Finding card on MTGPICS... ", end="")
-    landing_soup = BeautifulSoup(get_mtgpics_landing_page(card), "html.parser")
-    print(landing_soup)
-    ## <div><a href=reprints?gid=fut159>See all prints of this cards</a></div>
+    print(f"Finding image on MTGPICS... ", end="")
+    result = save_mtgpics_image(card)
+    print("Found!" if result else "Unable to find!")
+    return
 
 
 if __name__ == "__main__":
