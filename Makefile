@@ -9,7 +9,7 @@ load-config:
 	env $$(cat .env | xargs)
 
 scan-mtgpics:
-	$(load_config) $(PYTHON) art_scan_mtgpics.py
+	$(load_config) $(PYTHON) -u art_scan_mtgpics.py
 
 scan-scryfall:
-	$(load_config) $(PYTHON) art_scan_scryfall.py
+	$(load_config) $(PYTHON) -u art_scan_scryfall.py
