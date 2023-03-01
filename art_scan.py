@@ -4,10 +4,12 @@ import requests
 
 
 MTGPICS_URL = "https://mtgpics.com/pics/art/{set}/{collector_number}.jpg"
-SCRYFALL_URL = "https://api.scryfall.com/cards/"
-QUERIES = [
-    # ex. "arbor elf [wwk]",
+SCRYFALL_BASE_URL = "https://api.scryfall.com"
+
+# Specify a list of queries for Scryfall
+queries = [
     # "",
+    # ex. "arbor elf set:wwk",
 ]
 
 @dataclass
@@ -50,10 +52,21 @@ class ScryfallCard:
 
 
 def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
-    # Fetch a card from Scryfall based on a name and (optional)
+    # Fetch a single card from Scryfall based on a name and (optional) set code
+    print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
+
     params = dict(fuzzy=card_name, set=set_code)
-    response = requests.get(SCRYFALL_URL, params=params)
-    card = ScryfallCard(response.json())  # TODO: Check if anything is here
+    r = requests.get(f"{SCRYFALL_BASE_URL}/cards/named", params=params)
+
+    try:
+        response = r.json()
+    except Exception as e:
+        print(f"Unable to parse response from Scryfall: {e}")
+        raise e
+
+    card = ScryfallCard(response)  # TODO: Check if anything is here
+    print(f"Found: \"{card}\"!")
+
     return card
 
 
