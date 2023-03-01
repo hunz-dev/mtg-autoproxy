@@ -89,16 +89,18 @@ def get_scryfall_cards(query) -> List[ScryfallCard]:
     return cards
 
 
-def save_mtgpics_image(card: ScryfallCard) -> bool:
+def save_mtgpics_image(card: ScryfallCard) -> None:
     # Save the image from MTGPICS using set and collector number
+    print(f"Looking up {card} on MTGPICS...")
+
     url = MTGPICS_URL.format(set=card.set, collector_number=card.collector_number.rjust(3, '0'))
     response = requests.get(url, allow_redirects=True)
     if len(response.content) <= 0 or "There's nothing here" in response.text:
-        return False
+        print(f"Not found.")
     else:
         with open(f"art/{card}.jpg", "wb") as f:
             f.write(response.content)
-        return True
+        print(f"Found!")
 
 
 def read_stdin(prompt="> ") -> List[str]:
@@ -124,17 +126,17 @@ def process_query(query: str) -> None:
         set_code = ""
 
     # Fetch specific card information from Scryfall
-    print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
-    card = get_scryfall_card(card_name, set_code)
-    print(f"Found: \"{card}\"... ", end="")
+    # card = get_scryfall_card(card_name, set_code)
+
+    # Fetch all cards for a given query
+    cards = get_scryfall_cards(card_name)
+    print(f"Found {len(cards)} cards. Fetching art...")
 
     # Fetch HTML from MTGPICS with card info
-    print(f"Finding image on MTGPICS... ", end="")
-    result = save_mtgpics_image(card)
-    print("Found!" if result else "Unable to find!")
-    return
+    print(f"Finding images on MTGPICS... ", end="")
+    [save_mtgpics_image(card) for card in cards]
 
 
 if __name__ == "__main__":
-    queries = QUERIES if len(QUERIES) > 0 else read_stdin()
+    queries = queries if len(queries) > 0 else read_stdin()
     [process_query(query) for query in queries]
