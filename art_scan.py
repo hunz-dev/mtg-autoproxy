@@ -70,12 +70,23 @@ def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
     return card
 
 
-# def get_scryfall_cards(query) -> ScryfallCard:
-#     # Fetch a card from Scryfall based on a name and (optional)
-#     params = dict(fuzzy=card_name, set=set_code)
-#     response = requests.get(SCRYFALL_URL, params=params)
-#     card = ScryfallCard(response.json())  # TODO: Check if anything is here
-#     return card
+def get_scryfall_cards(query) -> List[ScryfallCard]:
+    # Fetch multiple cards/prints from Scryfall based on a (Scryfall syntax) query
+    print(f"Searching Scryfall: \"{query}\"... ", end="")
+
+    params = dict(q=query, unique="prints")
+    r = requests.get(f"{SCRYFALL_BASE_URL}/cards/search/", params=params)
+    try:
+        response = r.json()
+    except Exception as e:
+        print(f"Unable to parse response from Scryfall: {e}")
+        raise e
+
+    assert response["object"] == "list", "Unexpected data type returned"
+
+    cards = [ScryfallCard(c) for c in response["data"]]  # TODO: Check if anything is here
+    print(f"Found: \"{cards}\"!")
+    return cards
 
 
 def save_mtgpics_image(card: ScryfallCard) -> bool:
