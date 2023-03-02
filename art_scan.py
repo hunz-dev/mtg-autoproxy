@@ -70,11 +70,11 @@ def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
     return card
 
 
-def get_scryfall_cards(query) -> List[ScryfallCard]:
+def get_scryfall_cards(query, unique="art") -> List[ScryfallCard]:
     # Fetch multiple cards/prints from Scryfall based on a (Scryfall syntax) query
     print(f"Searching Scryfall: \"{query}\"... ", end="")
 
-    params = dict(q=query, unique="prints")
+    params = dict(q=query, unique=unique)
     r = requests.get(f"{SCRYFALL_BASE_URL}/cards/search/", params=params)
     try:
         response = r.json()
@@ -85,7 +85,7 @@ def get_scryfall_cards(query) -> List[ScryfallCard]:
     assert response["object"] == "list", "Unexpected data type returned"
 
     cards = [ScryfallCard(c) for c in response["data"]]  # TODO: Check if anything is here
-    print(f"Found: \"{cards}\"!")
+    print(f"Found {len(cards)} cards.")
     return cards
 
 
