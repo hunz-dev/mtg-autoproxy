@@ -13,7 +13,7 @@ queries = [
 ]
 
 @dataclass
-class ScryfallCard:
+class Card:
     # Pull needed attributes from here: https://scryfall.com/docs/api/cards
     artist: str
     collector_number: str
@@ -44,14 +44,18 @@ class ScryfallCard:
     def __init__(self, _json=None):
         if _json is None:
             raise ValueError("JSON-like dictionary from Scryfall API is required")
-        [setattr(self, attribute, _json[attribute]) for attribute in ScryfallCard.ATTRIBUTES]
+        [setattr(self, attribute, _json[attribute]) for attribute in Card.ATTRIBUTES]
 
 
     def __str__(self):
         return f"{self.name} ({self.artist}) [{self.set.upper()}]"
 
+    @property
+    def mtgpics_id(self) -> str:
+        return f"{self.set}{self.collector_number.rjust(3, '0')}"
 
-def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
+
+def get_scryfall_card(card_name, set_code="") -> Card:
     # Fetch a single card from Scryfall based on a name and (optional) set code
     print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
 
@@ -64,13 +68,13 @@ def get_scryfall_card(card_name, set_code="") -> ScryfallCard:
         print(f"Unable to parse response from Scryfall: {e}")
         raise e
 
-    card = ScryfallCard(response)  # TODO: Check if anything is here
+    card = Card(response)  # TODO: Check if anything is here
     print(f"Found: \"{card}\"!")
 
     return card
 
 
-def get_scryfall_cards(query, unique="art") -> List[ScryfallCard]:
+def get_scryfall_cards(query, unique="art") -> List[Card]:
     # Fetch multiple cards/prints from Scryfall based on a (Scryfall syntax) query
     print(f"Searching Scryfall: \"{query}\"... ", end="")
 
@@ -84,7 +88,7 @@ def get_scryfall_cards(query, unique="art") -> List[ScryfallCard]:
 
     assert response["object"] == "list", "Unexpected data type returned"
 
-    cards = [ScryfallCard(c) for c in response["data"]]  # TODO: Check if anything is here
+    cards = [Card(c) for c in response["data"]]  # TODO: Check if anything is here
     print(f"Found {len(cards)} cards.")
     return cards
 
