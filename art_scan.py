@@ -1,16 +1,25 @@
+from collections import namedtuple
 from dataclasses import dataclass
 from typing import List
+import re
+
+from bs4 import BeautifulSoup
 import requests
+import tinycss2 as tinycss
 
 
-MTGPICS_URL = "https://mtgpics.com/pics/art/{set}/{collector_number}.jpg"
+MTGPICS_BASE_URL = "https://mtgpics.com"
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
+RATE_LIMIT_WAIT_S = 2
 
 # Specify a list of queries for Scryfall
 queries = [
     # "",
     # ex. "arbor elf set:wwk",
 ]
+
+# Stores identifiers used to grab images from MTGPICS
+MtgPicsId = namedtuple("MtgPicsId", ["set_id", "image_id"])
 
 @dataclass
 class Card:
@@ -93,18 +102,54 @@ def get_scryfall_cards(query, unique="art") -> List[Card]:
     return cards
 
 
-def save_mtgpics_image(card: ScryfallCard) -> None:
-    # Save the image from MTGPICS using set and collector number
-    print(f"Looking up {card} on MTGPICS...")
+def get_mtgpics_art_uris(cards: List[Card]) -> List[MtgPicsId]:
+    # Find the page with all available art for a given card based on set & collector number
+    uris = list()
+    for card in cards:
+        import time; time.sleep(RATE_LIMIT_WAIT_S)  # TODO: Use a rate limit wrapper
+        print(f"Searching \"{card.mtgpics_id}\" on MTGPICS...", end="")
 
-    url = MTGPICS_URL.format(set=card.set, collector_number=card.collector_number.rjust(3, '0'))
-    response = requests.get(url, allow_redirects=True)
+        params = dict(gamerid=card.mtgpics_id)
+        response = requests.get(f"{MTGPICS_BASE_URL}/art", params=params)
+        soup = BeautifulSoup(response.content, "html.parser")
+        image_results = soup.find_all("div", class_="Card12")  # Good for finding results, doesn't contain URLs
+
+        # If no images were found, move on to next card
+        if len(image_results) < 0:
+            print("Nothing found.")
+            continue
+
+        print(f"Found! Extracting URLs...", end="")  # TODO: Pluralize
+
+        # Look back in HTML where image URLs can be obtained
+        image_url_block = soup.find("div", style="position:relative;")
+        for element in image_url_block.children:
+            # Parse inline div styles in this block to get URLs
+            try:
+                image_div_style = element["style"]
+            except TypeError:
+                continue  # If it can't be parsed out, move to next element
+
+            css_tokens = tinycss.parse_component_value_list(image_div_style)
+            url = css_tokens[-2].value  # ex. pics/art_th_big/dci/106_1.jpg
+            url_tokens = re.split("/|\.", url)
+            uris.append(MtgPicsId(url_tokens[-3], url_tokens[-2]))
+
+    print(f"Done! Found the following URIs: {uris}")
+    return uris
+
+def save_mtgpics_image(card: Card, set_id: str, image_id: str) -> None:
+    # Save the image from MTGPICS using set and collector number
+    import time; time.sleep(RATE_LIMIT_WAIT_S)  # TODO: Use a rate limit wrapper
+
+    print(f"Saving \"{set_id}/{image_id}.jpg\" on MTGPICS...", end="")
+    response = requests.get(f"{MTGPICS_BASE_URL}/pics/art/{set_id}/{image_id}.jpg")
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
     else:
         with open(f"art/{card}.jpg", "wb") as f:
             f.write(response.content)
-        print(f"Found!")
+        print(f"Done!")
 
 
 def read_stdin(prompt="> ") -> List[str]:
@@ -120,25 +165,12 @@ def read_stdin(prompt="> ") -> List[str]:
 
 
 def process_query(query: str) -> None:
-    # Parse query for card name and set code (if provided)
-    try:
-        set_locator = query.index("[")
-        card_name = query[:set_locator-1]
-        set_code = query[set_locator+1:-1]
-    except ValueError:
-        card_name = query
-        set_code = ""
-
-    # Fetch specific card information from Scryfall
-    # card = get_scryfall_card(card_name, set_code)
-
     # Fetch all cards for a given query
-    cards = get_scryfall_cards(card_name)
-    print(f"Found {len(cards)} cards. Fetching art...")
+    cards = get_scryfall_cards(query)
 
-    # Fetch HTML from MTGPICS with card info
-    print(f"Finding images on MTGPICS... ", end="")
-    [save_mtgpics_image(card) for card in cards]
+    # Fetch HTML from MTGPICS with card info and save images
+    for uri in get_mtgpics_art_uris(cards):
+        save_mtgpics_image(cards[0], uri.set_id, uri.image_id)
 
 
 if __name__ == "__main__":
