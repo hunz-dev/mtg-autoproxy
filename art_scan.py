@@ -188,7 +188,7 @@ def save_mtgpics_image(ids: MtgPicsId) -> None:
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
     else:
-        with open(f"art/{ids}].jpg", "wb") as f:
+        with open(f"art/{ids}.jpg", "wb") as f:
             f.write(response.content)
         print(f"Done!")
 
