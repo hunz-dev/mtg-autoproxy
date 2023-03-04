@@ -26,8 +26,8 @@ RATE_LIMIT_RANGE_S = (1, 3)
 
 # Specify a list of queries for Scryfall
 queries = [
-    # "",
     # ex. "arbor elf set:wwk",
+    # "",
 ]
 
 
