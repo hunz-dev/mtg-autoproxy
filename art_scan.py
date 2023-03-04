@@ -123,9 +123,12 @@ def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> Lis
         print(f"Unable to parse response from Scryfall: {e}")
         raise e
 
-    assert response["object"] == "list", "Unexpected data type returned"
+    try:
+        cards = [Card(c) for c in response["data"]]
+    except Exception as e:
+        print(f"Unable to find anything! (Error: {repr(e)})")
+        return []
 
-    cards = [Card(c) for c in response["data"]]  # TODO: Check if anything is here
     print(f"Found {len(cards)} cards.")  # TODO: Pluralize
     return cards
 
