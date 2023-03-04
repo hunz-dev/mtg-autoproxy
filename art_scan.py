@@ -193,7 +193,7 @@ def save_mtgpics_image(ids: MtgPicsId) -> bool:
     # Save the image from MTGPICS using set and collector number
     import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
-    print(f"Finding and saving \"{ids.uri}.jpg\" on MTGPICS... ", end="")
+    print(f"Finding \"{ids.uri}.jpg\" on MTGPICS... ", end="")
     url = f"{MTGPICS_BASE_URL}/pics/art/{ids.uri}.jpg"
     response = requests.get(url)
 
@@ -201,8 +201,9 @@ def save_mtgpics_image(ids: MtgPicsId) -> bool:
         print(f"Not found.")
         return False
     else:
-        safe_ids = str(ids).replace("/", "")
-        with open(f"art/{safe_ids}.jpg", "wb") as f:
+        file_name = f"art/{str(ids).replace('/', '')}.jpg"
+        print(f"Saving as \"{file_name}\"... ", end="")
+        with open(file_name, "wb") as f:
             f.write(response.content)
         print(f"Done!")
         return True
