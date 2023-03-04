@@ -1,8 +1,9 @@
 from collections import namedtuple
 from dataclasses import dataclass
+import os
 import random
 import re
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from bs4 import BeautifulSoup
 import requests
@@ -13,9 +14,14 @@ import tinycss2 as tinycss
 # TODO: https://pypi.org/project/inflect/
 # TODO: https://pypi.org/project/rich/
 
-
+DEEPAI_BASE_URL = "https://api.deepai.org/api"
 MTGPICS_BASE_URL = "https://mtgpics.com"
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
+
+# DeepAI API key to use for upscaling models, should be placed in `/.env` file
+DEEPAI_KEY = os.environ['DEEPAI_KEY'].replace("\r", "")
+
+# The range for a random amount of time (seconds) to wait before sending a request
 RATE_LIMIT_RANGE_S = (1, 3)
 
 # Specify a list of queries for Scryfall
@@ -51,6 +57,7 @@ class Card:
     collector_number: str
     full_art: bool
     id: str
+    image_uris: Dict
     layout: str
     name: str
     oracle_id: str
@@ -64,6 +71,7 @@ class Card:
         "collector_number",
         "full_art",
         "id",
+        "image_uris",
         "layout",
         "name",
         "oracle_id",
@@ -85,6 +93,10 @@ class Card:
     @property
     def mtgpics_id(self) -> str:
         return f"{self.set}{self.collector_number.rjust(3, '0')}"
+
+    @property
+    def art_url(self) -> str:
+        return self.image_uris["art_crop"]
 
 
 def get_rate_limit_wait() -> float:
@@ -180,8 +192,8 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
 def save_mtgpics_image(ids: MtgPicsId) -> None:
     # Save the image from MTGPICS using set and collector number
     import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-    print(f"Finding and saving \"{ids.uri}.jpg\" on MTGPICS... ", end="")
 
+    print(f"Finding and saving \"{ids.uri}.jpg\" on MTGPICS... ", end="")
     url = f"{MTGPICS_BASE_URL}/pics/art/{ids.uri}.jpg"
     response = requests.get(url)
     if len(response.content) <= 0 or "There's nothing here" in response.text:
@@ -191,6 +203,23 @@ def save_mtgpics_image(ids: MtgPicsId) -> None:
         with open(f"art/{safe_ids}.jpg", "wb") as f:
             f.write(response.content)
         print(f"Done!")
+
+
+def save_deepai_image(card: Card, model_name="waifu2x") -> None:
+    import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
+
+    print(f"Upscaling art for: {card}... ", end="")
+    url = f"{DEEPAI_BASE_URL}/{model_name}"
+    data = { "image": card.art_url }
+    headers = { 'api-key': DEEPAI_KEY }
+    response = requests.post(url, data=data, headers=headers).json()
+
+    print("Saving... ", end="")
+    import urllib  # TODO: Don't use urllib
+    output_file = f"{card} - {model_name}.jpg"
+    output_path =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "art", output_file)
+    urllib.request.urlretrieve(response["output_url"], output_path)
+    print("Done!")
 
 
 def read_stdin(prompt="> ") -> List[str]:
@@ -213,7 +242,10 @@ def process_query(query: str) -> None:
     for ids in get_mtgpics_art_ids(cards):
         save_mtgpics_image(ids)
 
-    # TODO: If nothing is found, use Scryfall art w/ AI upscale
+    # If nothing is found, use Scryfall art w/ AI upscale
+    for card in cards:
+        save_deepai_image(card, model_name="waifu2x")
+        save_deepai_image(card, model_name="torch-srgan")
 
 
 if __name__ == "__main__":
