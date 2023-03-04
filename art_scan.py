@@ -10,6 +10,9 @@ import tinycss2 as tinycss
 
 
 # TODO: Docstrings
+# TODO: https://pypi.org/project/inflect/
+# TODO: https://pypi.org/project/rich/
+
 
 MTGPICS_BASE_URL = "https://mtgpics.com"
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
