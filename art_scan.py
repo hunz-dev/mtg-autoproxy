@@ -1,3 +1,7 @@
+# TODO: Docstrings
+# TODO: https://pypi.org/project/inflect/
+# TODO: https://pypi.org/project/rich/
+
 from collections import namedtuple
 from dataclasses import dataclass
 import os
@@ -9,10 +13,6 @@ from bs4 import BeautifulSoup
 import requests
 import tinycss2 as tinycss
 
-
-# TODO: Docstrings
-# TODO: https://pypi.org/project/inflect/
-# TODO: https://pypi.org/project/rich/
 
 DEEPAI_BASE_URL = "https://api.deepai.org/api"
 MTGPICS_BASE_URL = "https://mtgpics.com"
@@ -211,7 +211,7 @@ def save_mtgpics_image(ids: MtgPicsId) -> bool:
 def save_deepai_image(card: Card, model_name="waifu2x") -> None:
     import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
-    print(f"Upscaling art for: {card}... ", end="")
+    print(f"Using [{model_name}] to upscale art for: {card}... ", end="")
     url = f"{DEEPAI_BASE_URL}/{model_name}"
     data = { "image": card.art_url }
     headers = { 'api-key': DEEPAI_KEY }
@@ -219,7 +219,7 @@ def save_deepai_image(card: Card, model_name="waifu2x") -> None:
 
     print("Saving... ", end="")
     import urllib  # TODO: Don't use urllib
-    output_file = f"{card} - {model_name}.jpg"
+    output_file = f"{card} - {model_name}.jpg".replace("/", "")
     output_path =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "art", output_file)
     urllib.request.urlretrieve(response["output_url"], output_path)
     print("Done!")
