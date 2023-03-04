@@ -1,6 +1,6 @@
 from collections import namedtuple
 from dataclasses import dataclass
-from typing import List
+import random
 import re
 
 from bs4 import BeautifulSoup
@@ -10,7 +10,7 @@ import tinycss2 as tinycss
 
 MTGPICS_BASE_URL = "https://mtgpics.com"
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
-RATE_LIMIT_WAIT_S = 2
+RATE_LIMIT_RANGE_S = (1, 3)
 
 # Specify a list of queries for Scryfall
 queries = [
@@ -64,6 +64,11 @@ class Card:
         return f"{self.set}{self.collector_number.rjust(3, '0')}"
 
 
+def get_rate_limit_wait() -> float:
+    # Return a random float to use as a rate limit
+    return random.uniform(*RATE_LIMIT_RANGE_S)
+
+
 def get_scryfall_card(card_name, set_code="") -> Card:
     # Fetch a single card from Scryfall based on a name and (optional) set code
     print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
@@ -106,7 +111,7 @@ def get_mtgpics_art_uris(cards: List[Card]) -> List[MtgPicsId]:
     # Find the page with all available art for a given card based on set & collector number
     uris = list()
     for card in cards:
-        import time; time.sleep(RATE_LIMIT_WAIT_S)  # TODO: Use a rate limit wrapper
+        import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
         print(f"Searching \"{card.mtgpics_id}\" on MTGPICS...", end="")
 
         params = dict(gamerid=card.mtgpics_id)
@@ -140,7 +145,7 @@ def get_mtgpics_art_uris(cards: List[Card]) -> List[MtgPicsId]:
 
 def save_mtgpics_image(card: Card, set_id: str, image_id: str) -> None:
     # Save the image from MTGPICS using set and collector number
-    import time; time.sleep(RATE_LIMIT_WAIT_S)  # TODO: Use a rate limit wrapper
+    import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     print(f"Saving \"{set_id}/{image_id}.jpg\" on MTGPICS...", end="")
     response = requests.get(f"{MTGPICS_BASE_URL}/pics/art/{set_id}/{image_id}.jpg")
