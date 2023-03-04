@@ -9,6 +9,7 @@ templates/
 
 .env
 templates-*.zip
+scratchpad.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
