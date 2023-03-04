@@ -189,20 +189,23 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
     return ids
 
 
-def save_mtgpics_image(ids: MtgPicsId) -> None:
+def save_mtgpics_image(ids: MtgPicsId) -> bool:
     # Save the image from MTGPICS using set and collector number
     import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     print(f"Finding and saving \"{ids.uri}.jpg\" on MTGPICS... ", end="")
     url = f"{MTGPICS_BASE_URL}/pics/art/{ids.uri}.jpg"
     response = requests.get(url)
+
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
+        return False
     else:
         safe_ids = str(ids).replace("/", "")
         with open(f"art/{safe_ids}.jpg", "wb") as f:
             f.write(response.content)
         print(f"Done!")
+        return True
 
 
 def save_deepai_image(card: Card, model_name="waifu2x") -> None:
@@ -239,13 +242,15 @@ def process_query(query: str) -> None:
     cards = get_scryfall_cards(query)
 
     # Fetch HTML from MTGPICS with card info and save images
+    results = list()
     for ids in get_mtgpics_art_ids(cards):
-        save_mtgpics_image(ids)
+        results.append(save_mtgpics_image(ids))
 
     # If nothing is found, use Scryfall art w/ AI upscale
-    for card in cards:
-        save_deepai_image(card, model_name="waifu2x")
-        save_deepai_image(card, model_name="torch-srgan")
+    if not any(results):
+        for card in cards:
+            save_deepai_image(card, model_name="waifu2x")
+            save_deepai_image(card, model_name="torch-srgan")
 
 
 if __name__ == "__main__":
