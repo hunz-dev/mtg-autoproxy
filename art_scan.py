@@ -130,23 +130,16 @@ def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> Lis
 def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
     # Find the page with all available art for a given card based on set & collector number
     ids = list()
+    print("Searching on MTGPICS for: ", end="")
     for card in cards:
         import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-        print(f"Searching \"{card.mtgpics_id}\" on MTGPICS... ", end="")
+        print(f"\"{card.mtgpics_id}\"... ", end="")
 
         params = dict(gamerid=card.mtgpics_id)
         response = requests.get(f"{MTGPICS_BASE_URL}/art", params=params)
         soup = BeautifulSoup(response.content, "html.parser")
-        image_results = soup.find_all("div", class_="Card12")  # Good for finding results, doesn't contain URLs
 
-        # If no images were found, move on to next card
-        if len(image_results) < 0:
-            print("Nothing found.")
-            continue
-
-        print(f"Found! Extracting URLs...")  # TODO: Pluralize
-
-        # Look back in HTML where image URLs, set id, and artist can be obtained
+        # Look in HTML for image URLs, set id, and artist
         image_url_block = soup.find("div", style="position:relative;")
         for element in image_url_block.children:
             # Parse inline div styles in this block to get URLs
