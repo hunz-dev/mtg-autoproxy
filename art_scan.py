@@ -132,7 +132,7 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
     ids = list()
     for card in cards:
         import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-        print(f"Searching \"{card.mtgpics_id}\" on MTGPICS...", end="")
+        print(f"Searching \"{card.mtgpics_id}\" on MTGPICS... ", end="")
 
         params = dict(gamerid=card.mtgpics_id)
         response = requests.get(f"{MTGPICS_BASE_URL}/art", params=params)
@@ -181,7 +181,7 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
 def save_mtgpics_image(ids: MtgPicsId) -> None:
     # Save the image from MTGPICS using set and collector number
     import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-    print(f"Finding and saving \"{ids.uri}.jpg\" on MTGPICS...", end="")
+    print(f"Finding and saving \"{ids.uri}.jpg\" on MTGPICS... ", end="")
 
     url = f"{MTGPICS_BASE_URL}/pics/art/{ids.uri}.jpg"
     response = requests.get(url)
