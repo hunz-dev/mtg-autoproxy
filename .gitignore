@@ -1,17 +1,15 @@
-/out
-/art
-/templates
-scripts/set.json
-scripts/card.json
-scripts/translation.json
-cover-all.jsx
-scripts/coverup.jsx
-scripts/package-lock.json
-scripts/Scoots Actions.atn
-scripts/custom_card.json
-scripts/card.jpg
-scripts/config.py
+.vscode/
+art/*
+!art/.keep
+env/
+out/
+scripts/*.jpg
+scripts/*.json
+templates/
+
+.env
 templates-*.zip
+scratchpad.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

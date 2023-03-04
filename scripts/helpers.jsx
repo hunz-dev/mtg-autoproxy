@@ -291,6 +291,9 @@ function strip_reminder_text(oracle_text) {
      * If this would empty the string, instead return the original string.
      */
 
+    // Guard clause for using constant to keep oracle text the same
+    if (force_reminder_text) return oracle_text
+
     var oracle_text_stripped = oracle_text;
     var parentheses_regex = /\(.*?\)/;
     oracle_text_stripped = oracle_text_stripped.replace(parentheses_regex, "");
