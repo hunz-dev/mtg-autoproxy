@@ -9,6 +9,8 @@ import requests
 import tinycss2 as tinycss
 
 
+# TODO: Docstrings
+
 MTGPICS_BASE_URL = "https://mtgpics.com"
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
 RATE_LIMIT_RANGE_S = (1, 3)
@@ -210,6 +212,8 @@ def process_query(query: str) -> None:
     # Fetch HTML from MTGPICS with card info and save images
     for ids in get_mtgpics_art_ids(cards):
         save_mtgpics_image(ids)
+
+    # TODO: If nothing is found, use Scryfall art w/ AI upscale
 
 
 if __name__ == "__main__":
