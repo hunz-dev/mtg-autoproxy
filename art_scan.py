@@ -238,7 +238,7 @@ def read_stdin(prompt="> ") -> List[str]:
     return queries
 
 
-def process_query(query: str) -> None:
+def process_query(query: str, force_scryfall=False) -> None:
     # Fetch all cards for a given query
     cards = get_scryfall_cards(query)
 
@@ -248,7 +248,7 @@ def process_query(query: str) -> None:
         results.append(save_mtgpics_image(ids))
 
     # If nothing is found, use Scryfall art w/ AI upscale
-    if not any(results):
+    if not any(results) or force_scryfall:
         for card in cards:
             save_deepai_image(card, model_name="waifu2x")
             save_deepai_image(card, model_name="torch-srgan")
@@ -256,4 +256,4 @@ def process_query(query: str) -> None:
 
 if __name__ == "__main__":
     queries = queries if len(queries) > 0 else read_stdin()
-    [process_query(query) for query in queries]
+    [process_query(q.replace("*", ""), force_scryfall=("*" in q)) for q in queries]
