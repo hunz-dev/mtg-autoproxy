@@ -7,7 +7,7 @@ from dataclasses import dataclass, fields
 import os
 import random
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Tuple, Optional
 
 from bs4 import BeautifulSoup
 import requests
@@ -54,6 +54,7 @@ class MtgPicsId:
 class Card:
     # Pull needed attributes from here: https://scryfall.com/docs/api/cards
     artist: str
+    card_faces: Optional[List[Dict]]
     collector_number: str
     full_art: bool
     id: str
@@ -77,15 +78,29 @@ class Card:
                 setattr(self, field.name, None)
 
     def __str__(self):
-        return f"{self.name} ({self.artist}) [{self.set.upper()}]"
+        return self.format_name(self.name, self.artist, self.set)
 
     @property
     def mtgpics_id(self) -> str:
         return f"{self.set}{self.collector_number.rjust(3, '0')}"
 
     @property
-    def art_url(self) -> str:
-        return self.image_uris["art_crop"]
+    def art_urls(self) -> List[Tuple[str, str]]:
+        if self.card_faces:
+            return [
+                (self.format_name(f["name"], f["artist"], self.set), f["image_uris"]["art_crop"])
+                for f in self.card_faces
+            ]
+        else:
+            return [(str(self), self.image_uris["art_crop"])]
+
+    @property
+    def multi_faced(self) -> bool:
+        return len(self.art_urls) > 1
+
+    @staticmethod
+    def format_name(name, artist, set) -> str:
+        return f"{name} ({artist}) [{set.upper()}]"
 
 
 def get_rate_limit_wait() -> float:
@@ -199,20 +214,21 @@ def save_mtgpics_image(ids: MtgPicsId) -> bool:
 
 
 def save_deepai_image(card: Card, model_name="waifu2x") -> None:
-    import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
+    for card_name, art_url in card.art_urls:
+        import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
-    print(f"Using [{model_name}] to upscale art for: {card}... ", end="")
-    url = f"{DEEPAI_BASE_URL}/{model_name}"
-    data = { "image": card.art_url }
-    headers = { 'api-key': DEEPAI_KEY }
-    response = requests.post(url, data=data, headers=headers).json()
+        print(f"Using [{model_name}] to upscale art for: {card_name}... ", end="")
+        url = f"{DEEPAI_BASE_URL}/{model_name}"
+        data = { "image": art_url }
+        headers = { 'api-key': DEEPAI_KEY }
+        response = requests.post(url, data=data, headers=headers).json()
 
-    print("Saving... ", end="")
-    import urllib  # TODO: Don't use urllib
-    output_file = f"{card} - {model_name}.jpg".replace("/", "")
-    output_path =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "art", output_file)
-    urllib.request.urlretrieve(response["output_url"], output_path)
-    print("Done!")
+        print("Saving... ", end="")
+        import urllib  # TODO: Don't use urllib
+        output_file = f"{card_name} - {model_name}.jpg".replace("/", "")
+        output_path =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "art", output_file)
+        urllib.request.urlretrieve(response["output_url"], output_path)
+        print("Done!")
 
 
 def read_stdin(prompt="> ") -> List[str]:
@@ -227,14 +243,15 @@ def read_stdin(prompt="> ") -> List[str]:
     return queries
 
 
-def process_query(query: str, force_scryfall=False) -> None:
+def process_query(query: str, force_scryfall=False, skip_mtgpics=True) -> None:
     # Fetch all cards for a given query
     cards = get_scryfall_cards(query)
 
     # Fetch HTML from MTGPICS with card info and save images
     results = list()
-    for ids in get_mtgpics_art_ids(cards):
-        results.append(save_mtgpics_image(ids))
+    if not skip_mtgpics:
+        for ids in get_mtgpics_art_ids(cards):
+            results.append(save_mtgpics_image(ids))
 
     # If nothing is found, use Scryfall art w/ AI upscale
     if not any(results) or force_scryfall:
