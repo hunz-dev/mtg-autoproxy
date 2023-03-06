@@ -243,7 +243,7 @@ def read_stdin(prompt="> ") -> List[str]:
     return queries
 
 
-def process_query(query: str, force_scryfall=False, skip_mtgpics=True) -> None:
+def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
     # Fetch all cards for a given query
     cards = get_scryfall_cards(query)
 
@@ -262,4 +262,5 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=True) -> None:
 
 if __name__ == "__main__":
     queries = queries if len(queries) > 0 else read_stdin()
+    # Parse out asterisk to force scryfall image search
     [process_query(q.replace("*", ""), force_scryfall=("*" in q)) for q in queries]
