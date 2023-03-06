@@ -3,7 +3,7 @@
 # TODO: https://pypi.org/project/rich/
 
 from collections import namedtuple
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 import os
 import random
 import re
@@ -66,26 +66,15 @@ class Card:
     set: str
     set_name: str
 
-    ATTRIBUTES = [
-        "artist",
-        "collector_number",
-        "full_art",
-        "id",
-        "image_uris",
-        "layout",
-        "name",
-        "oracle_id",
-        "rarity",
-        "scryfall_uri",
-        "set",
-        "set_name",
-    ]
-
     def __init__(self, _json=None):
         if _json is None:
             raise ValueError("JSON-like dictionary from Scryfall API is required")
-        [setattr(self, attribute, _json[attribute]) for attribute in Card.ATTRIBUTES]
 
+        for field in fields(Card):
+            try:
+                setattr(self, field.name, _json[field.name])
+            except KeyError:
+                setattr(self, field.name, None)
 
     def __str__(self):
         return f"{self.name} ({self.artist}) [{self.set.upper()}]"
