@@ -1,4 +1,4 @@
-// TODO: consistency between camelcase and snakecase
+﻿// TODO: consistency between camelcase and snakecase
 
 var json_file_path = "/scripts/card.json";
 var json_set_file_path = "/scripts/set.json"; // MY STUFF
@@ -76,7 +76,7 @@ var LayerNames = {
     COLLECTOR: "Collector",
     TOP_LINE: "Top",
     BOTTOM_LINE: "Bottom",
-    
+
     // text and icons
     TEXT_AND_ICONS: "Text and Icons",
     NAME: "Card Name",
@@ -442,7 +442,7 @@ var ability_words = [
     "Charge Them",
     "Befriend Them",
     "Negative Energy Cone",
-    
+
     // Midnight Hunt words
     "Coven",
 
@@ -538,10 +538,11 @@ class_template_map[planar_class] = {
 };
 
 // Function to automatically choose set symbol
+// TODO: Use dictionary
 function generate_set_symbol ( set ) {
-    
+
     set = set.toUpperCase();
-    
+
     if ( set == "LEA" ) var output = "";
     else if ( set == "LEB" ) var output = "";
     else if ( set == "2ED" ) var output = "";
@@ -772,7 +773,7 @@ function generate_set_symbol ( set ) {
     else if ( set == "J21" ) var output = "";
     else if ( set == "MID" ) var output = "";
     else if ( set == "MIC" ) var output = "";
-    else if ( set == "DCI" ) var output = ""; //Judge Promo
+    else if ( set == "DCI" ) var output = ""; // Judge Promo
     else if ( set == "VOW" ) var output = "";
     else if ( set == "VOC" ) var output = "";
     else if ( set == "NEO" ) var output = "";
@@ -792,7 +793,8 @@ function generate_set_symbol ( set ) {
 	else if ( set == "CLB" ) var output = "";
 	else if ( set == "BRC" ) var output = "";
 	else if ( set == "DMC" ) var output = "";
+	else if ( set == "MOM" ) var output = "";
     else var output = expansion_symbol_character;
     return output;
-    
+
 }
