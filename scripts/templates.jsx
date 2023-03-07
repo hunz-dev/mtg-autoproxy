@@ -113,6 +113,12 @@ var BaseTemplate = Class({
             
         }
 
+        // Check if set symbol needs to be modified based on existence of helper
+        try {
+            var text_and_icons = app.activeDocument.layers.getByName(LayerNames.TEXT_AND_ICONS)
+            var expansion_symbol_extras = text_and_icons.layers.getByName(LayerNames.EXPANSION_SYMBOL_EXTRAS);
+            expansion_symbol_extras.layers.getByName(this.layout.set.toUpperCase()).visible = true;
+        } catch (e) { /* Do nothing */ }
     },
     template_file_name: function () {
         /**

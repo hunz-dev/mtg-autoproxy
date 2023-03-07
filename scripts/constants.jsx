@@ -1,4 +1,4 @@
-﻿// TODO: consistency between camelcase and snakecase
+// TODO: consistency between camelcase and snakecase
 
 var json_file_path = "/scripts/card.json";
 var json_set_file_path = "/scripts/set.json"; // MY STUFF
@@ -89,6 +89,7 @@ var LayerNames = {
     MANA_COST_ADVENTURE: "Mana Cost - Adventure",
     EXPANSION_SYMBOL: "Expansion Symbol",
     EXPANSION_REFERENCE: "Expansion Reference",
+    EXPANSION_SYMBOL_EXTRAS: "Expansion Symbol Extras",
     COLOUR_INDICATOR: "Colour Indicator",
     POWER_TOUGHNESS: "Power / Toughness",
     FLIPSIDE_POWER_TOUGHNESS: "Flipside Power / Toughness",
