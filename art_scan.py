@@ -256,7 +256,6 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
     # If nothing is found, use Scryfall art w/ AI upscale
     if not any(results) or force_scryfall:
         for card in cards:
-            save_deepai_image(card, model_name="waifu2x")
             save_deepai_image(card, model_name="torch-srgan")
 
 
