@@ -5,6 +5,8 @@ env/
 out/
 scripts/*.jpg
 scripts/*.json
+secrets/*
+!secrets/.keep
 templates/
 
 .env
