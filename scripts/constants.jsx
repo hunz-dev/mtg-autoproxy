@@ -515,7 +515,7 @@ class_template_map[miracle_class] = {
     other: [],
 };
 class_template_map[planeswalker_class] = {
-    default_: PlaneswalkerTemplate,
+    default_: PlaneswalkerExtendedTemplate,
     other: [
         PlaneswalkerExtendedTemplate,
     ],
@@ -525,10 +525,10 @@ class_template_map[snow_class] = {
     other: [],
 };
 class_template_map[basic_class] = {
-    default_: BasicLandTemplate,
+    default_: BasicLandTherosTemplate,
     other: [
+        BasicLandTemplate,
         BasicLandClassicTemplate,
-        BasicLandTherosTemplate,
         BasicLandUnstableTemplate,
     ],
 };
