@@ -56,8 +56,8 @@ def find_missing_files(file_path: str, file_names: List[str]) -> List[str]:
         List[str]: Missing file names
     """
     files = os.listdir(file_path)
-    missing_files = list()
 
+    missing_files = []
     for file_name in file_names:
         found = False
         for file in files:
@@ -79,12 +79,17 @@ def split_files(source_path, destination_path, folder_size, prefix="output_{numb
         folder_size (_type_): Size of directories
         prefix (str, optional): Formatted string with a `number` attribute used to name
             split directories. Defaults to "output_{number:02d}".
+
+    Returns:
+        List[str]: Created file names
     """
     current_folder = 0
+    output_folders = []
     while len(os.listdir(source_path)) > 0:
         # Create prefixed folder
         output_folder = os.path.join(destination_path, prefix.format(number=current_folder))
         os.mkdir(output_folder)
+        output_folders.append(output_folder)
 
         # Move a number of files up to the configured folder size
         for file in os.listdir(source_path)[:folder_size]:
@@ -93,3 +98,5 @@ def split_files(source_path, destination_path, folder_size, prefix="output_{numb
             os.rename(source_file, output_file)
 
         current_folder += 1
+
+    return output_folders
