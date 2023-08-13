@@ -56,6 +56,7 @@ class Card:
     artist: str
     card_faces: Optional[List[Dict]]
     collector_number: str
+    frame: str
     full_art: bool
     id: str
     image_uris: Dict
@@ -93,6 +94,10 @@ class Card:
             ]
         else:
             return [(str(self), self.image_uris["art_crop"])]
+
+    @property
+    def is_classic(self) -> bool:
+        return self.frame in ["1993", "1997"]
 
     @property
     def is_multi_faced(self) -> bool:
