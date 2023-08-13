@@ -95,7 +95,7 @@ class Card:
             return [(str(self), self.image_uris["art_crop"])]
 
     @property
-    def multi_faced(self) -> bool:
+    def is_multi_faced(self) -> bool:
         return len(self.art_urls) > 1
 
     @staticmethod
