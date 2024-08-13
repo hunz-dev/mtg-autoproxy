@@ -209,6 +209,11 @@ def save_deepai_image(card: Card, model_name="waifu2x") -> None:
         headers = { 'api-key': DEEPAI_KEY }
         response = requests.post(url, data=data, headers=headers).json()
 
+        if "output_url" not in response:
+            print("No output URL specified in DeepAI response.")
+            print(response)
+            continue
+
         print("Saving... ", end="")
         import urllib  # TODO: Don't use urllib
         output_file = f"{card_name} - {model_name}.jpg".replace("/", "")
