@@ -1,6 +1,4 @@
-# TODO: Docstrings
-# TODO: https://pypi.org/project/inflect/
-# TODO: https://pypi.org/project/rich/
+
 
 from collections import namedtuple
 from dataclasses import dataclass, fields
@@ -33,6 +31,15 @@ queries = [
 
 @dataclass
 class MtgPicsId:
+    """Represents the attributes of the main identifier used on MTGPICS.com.
+
+    Attributes:
+        artist_name (str): Name of the artist
+        card_name (str): Name of the card
+        image_id (str): Identifier number of image
+        set_id (str): Set identifier
+        alt_image_num (Optional[str]): Alternate image number
+    """
     # Stores identifiers used to grab images from MTGPICS
     artist_name: str
     card_name: str
@@ -52,6 +59,29 @@ class MtgPicsId:
 
 @dataclass
 class Card:
+    """Represents a Scryfall card object, pulling attributes from the following
+    API documentation: https://scryfall.com/docs/api/cards.
+
+    Attributes:
+        artist (str): Artist name
+        card_faces (Optional[List[Dict]]): Array of card face objects (https://scryfall.com/docs/api/cards#card-face-objects)
+        collector_number (str): Collector number
+        frame (str): Frame type
+        full_art (bool): Full art flag
+        id (str): Scryfall card identifier
+        image_uris (Dict): URLs of multiple sizes of card image, indexed on sizes (ex. `large`)
+        layout (str): Layout of the card, if it's reversible
+        name (str): Card name
+        oracle_id (str): Oracle ID of the card
+        rarity (str): Rarity of the card
+        scryfall_uri (str): URL to the card in Scryfall
+        set (str): Set code (pulled from: https://en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_sets)
+        set_name (str): Name of the set
+
+    Raises:
+        ValueError: When constructor receives an unsubscriptable object
+        KeyError: When constructor attempts to parse a field that doesn't exist in the card payload
+    """
     # Pull needed attributes from here: https://scryfall.com/docs/api/cards
     artist: str
     card_faces: Optional[List[Dict]]
@@ -109,12 +139,32 @@ class Card:
 
 
 def get_rate_limit_wait() -> float:
-    # Return a random float to use as a rate limit
+    """Return a random float to use as a rate limit.
+
+    Returns:
+        float: Random float between the range defined in `RATE_LIMIT_RANGE_S`
+    """
     return random.uniform(*RATE_LIMIT_RANGE_S)
 
 
 def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> List[Card]:
-    # Fetch multiple cards/prints from Scryfall based on a (Scryfall syntax) query
+    """Fetch multiple cards/prints from Scryfall based on a (Scryfall syntax) query, for
+    more details see: https://scryfall.com/docs/api/cards/search.
+
+    Args:
+        query (str): Scryfall syntax query (see: https://scryfall.com/docs/syntax)
+        unique (str, optional): Strategy for omitting similar cards. Defaults to "art".
+        order (str, optional): Method used to sort results. Defaults to "released".
+        dir (str, optional): Direction of sort. Defaults to "desc".
+
+    Raises:
+        ValueError: When either:
+            1) Scryfall response is not JSON-serializable
+            2) Card object was not able to be instantiated properly
+
+    Returns:
+        List[Card]: Array of Scryfall-based Card objects
+    """
     print(f"Searching Scryfall: \"{query}\"... ", end="")
 
     params = dict(q=query, unique=unique, order=order, dir=dir)
@@ -136,19 +186,32 @@ def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> Lis
 
 
 def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
-    # Find the page with all available art for a given card based on set & collector number
+    """Find the MTGPICS.com page with all available art for a given card based
+    on set & collector number.
+
+    Args:
+        cards (List[Card]): Array of Card objects
+
+    Returns:
+        List[MtgPicsId]: Array of identifiers for MTGPICS.com
+    """
     ids = list()
-    print("Searching on MTGPICS for: ", end="")
+    print("Searching on MTGPICS for:")
     for card in cards:
         import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-        print(f"\"{card.mtgpics_id}\"... ", end="")
+        print(f"\t\"{card.mtgpics_id}\"... ", end="")
 
-        params = dict(gamerid=card.mtgpics_id)
+        params = dict(ref=card.mtgpics_id, gamerid=card.mtgpics_id)
         response = requests.get(f"{MTGPICS_BASE_URL}/art", params=params)
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Look in HTML for image URLs, set id, and artist
         image_url_block = soup.find("div", style="position:relative;")
+
+        if image_url_block is None:
+            print("No image block found.")
+            continue
+
         for element in image_url_block.children:
             # Parse inline div styles in this block to get URLs
             try:
@@ -180,7 +243,14 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
 
 
 def save_mtgpics_image(ids: MtgPicsId) -> bool:
-    # Save the image from MTGPICS using set and collector number
+    """Save an image from MTGPICS.com using set and collector number.
+
+    Args:
+        ids (MtgPicsId): MTGPICS.com identifier object
+
+    Returns:
+        bool: Success flag
+    """
     import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     print(f"Finding \"{ids.uri}.jpg\" on MTGPICS... ", end="")
@@ -200,6 +270,12 @@ def save_mtgpics_image(ids: MtgPicsId) -> bool:
 
 
 def save_deepai_image(card: Card, model_name="waifu2x") -> None:
+    """Save a DeepAI generated image upscaled from Scryfall image.
+
+    Args:
+        card (Card): Scryfall Card object
+        model_name (str, optional): DeepAI model name to use. Defaults to "waifu2x".
+    """
     for card_name, art_url in card.art_urls:
         import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
@@ -218,12 +294,20 @@ def save_deepai_image(card: Card, model_name="waifu2x") -> None:
         import urllib  # TODO: Don't use urllib
         output_file = f"{card_name} - {model_name}.jpg".replace("/", "")
         output_path =  os.path.join(os.path.dirname(os.path.realpath(__file__)), "art", output_file)
+
         urllib.request.urlretrieve(response["output_url"], output_path)
         print("Done!")
 
 
 def read_stdin(prompt="> ") -> List[str]:
-    # Read text input and append to list until nothing is entered
+    """Read text input and append to list until nothing is entered
+
+    Args:
+        prompt (str, optional): System prompt to use. Defaults to "> ".
+
+    Returns:
+        List[str]: Array of all entered queries
+    """
     queries = list()
     while True:
         input_query = input(prompt)
@@ -235,6 +319,18 @@ def read_stdin(prompt="> ") -> List[str]:
 
 
 def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
+    """Main entry function to process a query and save card images based on arguments.
+
+    By default, the function will:
+        1) Fetch card objects provided by Scryfall API
+        2) Find assets on MTGPICS.com based on card information
+        3) If nothing was found on MTGPICS.com, upscale original card image provided by Scryfall
+
+    Args:
+        query (str): Scryfall search query
+        force_scryfall (bool, optional): Flag to force scryfall image generation. Defaults to False.
+        skip_mtgpics (bool, optional): Flag to skip MTGPICS.com fetch. Defaults to False.
+    """
     # Fetch all cards for a given query
     cards = get_scryfall_cards(query)
 
