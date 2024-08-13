@@ -113,25 +113,6 @@ def get_rate_limit_wait() -> float:
     return random.uniform(*RATE_LIMIT_RANGE_S)
 
 
-def get_scryfall_card(card_name, set_code="") -> Card:
-    # Fetch a single card from Scryfall based on a name and (optional) set code
-    print(f"Searching Scryfall: \"{card_name} [{set_code if len(set_code) else 'N/A'}]\"... ", end="")
-
-    params = dict(fuzzy=card_name, set=set_code)
-    r = requests.get(f"{SCRYFALL_BASE_URL}/cards/named", params=params)
-
-    try:
-        response = r.json()
-    except Exception as e:
-        print(f"Unable to parse response from Scryfall: {e}")
-        raise e
-
-    card = Card(response)  # TODO: Check if anything is here
-    print(f"Found: \"{card}\"!")
-
-    return card
-
-
 def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> List[Card]:
     # Fetch multiple cards/prints from Scryfall based on a (Scryfall syntax) query
     print(f"Searching Scryfall: \"{query}\"... ", end="")
