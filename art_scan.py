@@ -116,6 +116,10 @@ class Card:
         return f"{self.set}{self.collector_number.rjust(3, '0')}"
 
     @property
+    def mtgpics_image_path(self) -> str:
+        return f"{MTGPICS_BASE_URL}/pics/art/{self.set}/{self.collector_number.rjust(3, '0')}.jpg"
+
+    @property
     def art_urls(self) -> List[Tuple[str, str]]:
         if self.card_faces:
             return [
@@ -243,7 +247,7 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
 
 
 def save_mtgpics_image(ids: MtgPicsId) -> bool:
-    """Save an image from MTGPICS.com using set and collector number.
+    """Save an image from MTGPICS.com using site identifier.
 
     Args:
         ids (MtgPicsId): MTGPICS.com identifier object
@@ -268,6 +272,31 @@ def save_mtgpics_image(ids: MtgPicsId) -> bool:
         print(f"Done!")
         return True
 
+
+def save_mtgpics_image_alt(card: Card) -> bool:
+    """Save an image from MTGPICS.com using set and collector number.
+
+    Args:
+        card (Card): Scryfall card object
+
+    Returns:
+        bool: Success flag
+    """
+    import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
+
+    print(f"Finding \"{card.mtgpics_id}.jpg\" on MTGPICS... ", end="")
+    response = requests.get(card.mtgpics_image_path)
+
+    if len(response.content) <= 0 or "There's nothing here" in response.text:
+        print(f"Not found.")
+        return False
+    else:
+        file_name = f"art/{str(card).replace('/', '')}.jpg"
+        print(f"Saving as \"{file_name}\"... ", end="")
+        with open(file_name, "wb") as f:
+            f.write(response.content)
+        print(f"Done!")
+        return True
 
 def save_deepai_image(card: Card, model_name="waifu2x") -> None:
     """Save a DeepAI generated image upscaled from Scryfall image.
@@ -339,6 +368,11 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
     if not skip_mtgpics:
         for ids in get_mtgpics_art_ids(cards):
             results.append(save_mtgpics_image(ids))
+
+        # If nothing was found using main approach, use alternate
+        if not any(results):
+            for card in cards:
+                results.append(save_mtgpics_image_alt(card))
 
     # If nothing is found, use Scryfall art w/ AI upscale
     if not any(results) or force_scryfall:
