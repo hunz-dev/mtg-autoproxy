@@ -794,6 +794,14 @@ function generate_set_symbol ( set ) {
 	else if ( set == "BRC" ) var output = "";
 	else if ( set == "DMC" ) var output = "";
 	else if ( set == "MOM" ) var output = "";
+	else if ( set == "PTG" ) var output = "";
+	else if ( set == "WHO" ) var output = "";
+	else if ( set == "PTG" ) var output = "";
+	else if ( set == "MKC" ) var output = "";
+	else if ( set == "MAT" ) var output = "";
+	else if ( set == "LCI" ) var output = "";
+	else if ( set == "WOC" ) var output = "";
+	else if ( set == "MKM" ) var output = "";
     else var output = expansion_symbol_character;
     return output;
 
