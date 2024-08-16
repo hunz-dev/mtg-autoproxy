@@ -347,7 +347,7 @@ def read_stdin(prompt="> ") -> List[str]:
     return queries
 
 
-def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
+def process_query(query: str, force_scryfall=False, skip_mtgpics=False, skip_scryfall=False) -> None:
     """Main entry function to process a query and save card images based on arguments.
 
     By default, the function will:
@@ -359,6 +359,7 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
         query (str): Scryfall search query
         force_scryfall (bool, optional): Flag to force scryfall image generation. Defaults to False.
         skip_mtgpics (bool, optional): Flag to skip MTGPICS.com fetch. Defaults to False.
+        skip_scryfall (bool, optional): Flag to skip Scryfall image fetch. Defaults to False.
     """
     # Fetch all cards for a given query
     cards = get_scryfall_cards(query)
@@ -375,7 +376,7 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False) -> None:
                 results.append(save_mtgpics_image_alt(card))
 
     # If nothing is found, use Scryfall art w/ AI upscale
-    if not any(results) or force_scryfall:
+    if not skip_scryfall and (not any(results) or force_scryfall):
         for card in cards:
             save_deepai_image(card, model_name="torch-srgan")
 
