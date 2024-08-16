@@ -802,6 +802,7 @@ function generate_set_symbol ( set ) {
 	else if ( set == "LCI" ) var output = "";
 	else if ( set == "WOC" ) var output = "";
 	else if ( set == "MKM" ) var output = "";
+	else if ( set == "LTR" ) var output = "";
     else var output = default_expansion_symbol_character;
     return output;
 
