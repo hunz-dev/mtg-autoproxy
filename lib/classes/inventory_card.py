@@ -27,5 +27,8 @@ class InventoryCard:
     def tsv(self):
         return self.as_seperated_value(separator="\t")
 
+    def __getitem__(self, x):
+        return getattr(self, x)
+
     def __str__(self):
         return self.csv
