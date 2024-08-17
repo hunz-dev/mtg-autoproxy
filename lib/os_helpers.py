@@ -1,3 +1,4 @@
+import datetime
 import os
 from typing import List, Tuple
 
@@ -100,3 +101,17 @@ def split_files(source_path, destination_path, folder_size, prefix="output_{numb
         current_folder += 1
 
     return output_folders
+
+def get_modified_date(file_path: str, format_str="%Y-%m-%d"):
+    """Return a date string of the last modified timestamp of a given file.
+
+    Args:
+        file_path (str): Full path to desired file
+        format_str (str, optional): Date format string to use. Defaults to "%Y-%m-%d".
+
+    Returns:
+        str: Date string
+    """
+    modified_timestamp_ms = os.path.getmtime(file_path)
+    modified_timestamp_dt = datetime.datetime.fromtimestamp(modified_timestamp_ms)
+    return modified_timestamp_dt.strftime(format_str)
