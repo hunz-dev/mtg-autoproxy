@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Use rate limiter decorator
 * https://pypi.org/project/inflect/
 * https://pypi.org/project/rich/
+* Version number and zip templates named alongside
 
 ### Update
 
