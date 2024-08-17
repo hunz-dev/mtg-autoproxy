@@ -31,8 +31,10 @@ var specified_template = null;
 // var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
 
-var specified_template = NormalTemplate
-// var specified_template = NormalClassicTemplate
+var specified_template = NormalTemplate;
+// var specified_template = NormalExtendedTemplate;
+// var specified_template = NormalClassicTemplate;
+
 // var specified_template = [NormalTemplate, NormalExtendedTemplate]; // Do multiple templates at a time
 // var specified_template = [NormalTemplate, NormalClassicTemplate]; // Do multiple templates at a time
 
