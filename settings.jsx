@@ -30,10 +30,15 @@ var specified_template = null;
 // var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
 // var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
+
+var specified_template = NormalTemplate
+// var specified_template = NormalClassicTemplate
 // var specified_template = [NormalTemplate, NormalExtendedTemplate]; // Do multiple templates at a time
+// var specified_template = [NormalTemplate, NormalClassicTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
+// var exit_early = true;
 
 // Automatically input and size set symbol, change outline thickness
 var automatic_set_symbol = true;
