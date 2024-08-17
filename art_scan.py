@@ -1,4 +1,4 @@
-
+# TODO: Move into structured scripts directory for Python-based scripts and use helper libs
 
 from collections import namedtuple
 from dataclasses import dataclass, fields
@@ -28,7 +28,7 @@ queries = [
     # "",
 ]
 
-
+# TODO: Move into lib.classes
 @dataclass
 class MtgPicsId:
     """Represents the attributes of the main identifier used on MTGPICS.com.
@@ -57,6 +57,7 @@ class MtgPicsId:
         return base_uri if not self.alt_image_num else f"{base_uri}_{self.alt_image_num}"
 
 
+# TODO: Move into lib.classes and merge with existing
 @dataclass
 class Card:
     """Represents a Scryfall card object, pulling attributes from the following
