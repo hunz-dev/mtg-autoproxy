@@ -71,6 +71,19 @@ def find_missing_files(file_path: str, file_names: List[str]) -> List[str]:
     return missing_files
 
 
+def list_files(source_path: str, ignore: List[str] = None) -> List[str]:
+    """List all files in a directory from a given path with an option to ignore a list of names.
+
+    Args:
+        source_path (str): Path to directory
+        ignore (List[str], optional): List of names to ignore. Defaults to None.
+
+    Returns:
+        List[str]: File names within `source_path`
+    """
+    return [f for f in os.listdir(source_path) if not ignore or f not in ignore]
+
+
 def split_files(source_path, destination_path, folder_size, prefix="output_{number:02d}"):
     """Partition files into prefixed directories of a given size.
 
