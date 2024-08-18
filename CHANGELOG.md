@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * https://pypi.org/project/rich/
 * Version number and zip templates named alongside
 * Support for fast-saving (not closing template file in between render_all.jsx)
+* Script to fetch missing set symbols
 
 ### Update
 
