@@ -458,6 +458,270 @@ rarity_mythic = "mythic";
 rarity_special = "special";
 rarity_bonus = "bonus";
 
+// Set symbols
+var set_symbols = {
+	"2X2": "",
+	"40K": "",
+	"40K": "",
+	"BRC": "",
+	"BRO": "",
+	"CC2": "",
+	"CLB": "",
+	"DMC": "",
+	"DMR": "",
+	"DMU": "",
+	"J22": "",
+	"LCI": "",
+	"LTR": "",
+	"MAT": "",
+	"MKC": "",
+	"MKM": "",
+	"MOC": "",
+	"MOM": "",
+	"NEC": "",
+	"ONE": "",
+	"PTG": "",
+	"PTG": "",
+	"SNC": "",
+	"WHO": "",
+	"WOC": "",
+    "10E": "",
+    "2ED": "",
+    "2XM": "",
+    "3ED": "",
+    "4ED": "",
+    "5DN": "",
+    "5ED": "",
+    "6ED": "",
+    "7ED": "",
+    "8ED": "",
+    "9ED": "",
+    "A25": "",
+    "AER": "",
+    "AFC": "",
+    "AFR": "",
+    "AKH": "",
+    "AKR": "",
+    "ALA": "",
+    "ALL": "",
+    "APC": "",
+    "ARB": "",
+    "ARC": "",
+    "ARN": "",
+    "ATH": "",
+    "ATQ": "",
+    "AVR": "",
+    "BBD": "",
+    "BFZ": "",
+    "BNG": "",
+    "BOK": "",
+    "BRB": "",
+    "BTD": "",
+    "C13": "",
+    "C14": "",
+    "C15": "",
+    "C16": "",
+    "C17": "",
+    "C18": "",
+    "C19": "",
+    "C20": "",
+    "C21": "",
+    "CC1": "",
+    "CHK": "",
+    "CHR": "",
+    "CM1": "",
+    "CM2": "",
+    "CMA": "",
+    "CMC": "",
+    "CMD": "",
+    "CMR": "",
+    "CN2": "",
+    "CNS": "",
+    "CON": "",
+    "CSP": "",
+    "DCI": "", // Judge Promo
+    "DD2": "",
+    "DDC": "",
+    "DDD": "",
+    "DDE": "",
+    "DDF": "",
+    "DDG": "",
+    "DDH": "",
+    "DDI": "",
+    "DDJ": "",
+    "DDK": "",
+    "DDL": "",
+    "DDM": "",
+    "DDN": "",
+    "DDO": "",
+    "DDP": "",
+    "DDQ": "",
+    "DDR": "",
+    "DDS": "",
+    "DDT": "",
+    "DDU": "",
+    "DGM": "",
+    "DIS": "",
+    "DKA": "",
+    "DKM": "",
+    "DOM": "",
+    "DPA": "",
+    "DRB": "",
+    "DRK": "",
+    "DST": "",
+    "DTK": "",
+    "E01": "",
+    "E02": "",
+    "ELD": "",
+    "EMA": "",
+    "EMN": "",
+    "EVE": "",
+    "EVG": "",
+    "EXO": "",
+    "EXP": "",
+    "FEM": "",
+    "FRF": "",
+    "FUT": "",
+    "GN2": "",
+    "GNT": "",
+    "GPT": "",
+    "GRN": "",
+    "GS1": "",
+    "GTC": "",
+    "H09": "",
+    "HML": "",
+    "HOP": "",
+    "HOU": "",
+    "ICE": "",
+    "IKO": "",
+    "IMA": "",
+    "INV": "",
+    "ISD": "",
+    "J21": "",
+    "JMP": "",
+    "JOU": "",
+    "JUD": "",
+    "KHC": "",
+    "KHM": "",
+    "KLD": "",
+    "KLR": "",
+    "KTK": "",
+    "LEA": "",
+    "LEB": "",
+    "LEG": "",
+    "LGN": "",
+    "LRW": "",
+    "M10": "",
+    "M11": "",
+    "M12": "",
+    "M13": "",
+    "M14": "",
+    "M15": "",
+    "M19": "",
+    "M20": "",
+    "M21": "",
+    "MBS": "",
+    "MD1": "",
+    "ME2": "",
+    "ME3": "",
+    "ME4": "",
+    "MED": "",
+    "MED": "",
+    "MED": "",
+    "MH1": "",
+    "MH2": "",
+    "MIC": "",
+    "MID": "",
+    "MIR": "",
+    "MM2": "",
+    "MM3": "",
+    "MMA": "",
+    "MMQ": "",
+    "MOR": "",
+    "MP2": "",
+    "MPS": "",
+    "MRD": "",
+    "NEM": "",
+    "NEO": "",
+    "NPH": "",
+    "ODY": "",
+    "OGW": "",
+    "ONS": "",
+    "ORI": "",
+    "P02": "",
+    "PC2": "",
+    "PCA": "",
+    "PCY": "",
+    "PD2": "",
+    "PD3": "",
+    "PLC": "",
+    "PLS": "",
+    "POR": "",
+    "PTK": "",
+    "PZ1": "",
+    "PZ2": "",
+    "RAV": "",
+    "RIX": "",
+    "RNA": "",
+    "ROE": "",
+    "RTR": "",
+    "S00": "",
+    "S99": "",
+    "SCG": "",
+    "SHM": "",
+    "SLD": "",
+    "SOI": "",
+    "SOK": "",
+    "SOM": "",
+    "SS1": "",
+    "SS2": "",
+    "SS3": "",
+    "STA": "",
+    "STH": "",
+    "STX": "",
+    "TD2": "",
+    "THB": "",
+    "THS": "",
+    "TMP": "",
+    "TOR": "",
+    "TPR": "",
+    "TSP": "",
+    "TSR": "",
+    "UDS": "",
+    "UGL": "",
+    "ULG": "",
+    "UMA": "",
+    "UND": "",
+    "UNF": "",
+    "UNH": "",
+    "USG": "",
+    "UST": "",
+    "V09": "",
+    "V10": "",
+    "V11": "",
+    "V12": "",
+    "V13": "",
+    "V14": "",
+    "V15": "",
+    "V16": "",
+    "V17": "",
+    "VIS": "",
+    "VMA": "",
+    "VOC": "",
+    "VOW": "",
+    "W16": "",
+    "W17": "",
+    "WAR": "",
+    "WTH": "",
+    "WWK": "",
+    "XLN": "",
+    "Y22": "",
+    "ZEN": "",
+    "ZNC": "",
+    "ZNE": "",
+    "ZNR": "",
+}
+
 // Map card classes to template classes
 // (have to insert one at a time - otherwise the key will be the variable name)
 class_template_map[normal_class] = {
@@ -537,274 +801,7 @@ class_template_map[planar_class] = {
     other: [],
 };
 
-// Function to automatically choose set symbol
-// TODO: Use dictionary
-function generate_set_symbol ( set ) {
-
+function generate_set_symbol(set) {
     set = set.toUpperCase();
-
-    if ( set == "LEA" ) var output = "";
-    else if ( set == "LEB" ) var output = "";
-    else if ( set == "2ED" ) var output = "";
-    else if ( set == "ARN" ) var output = "";
-    else if ( set == "ATQ" ) var output = "";
-    else if ( set == "3ED" ) var output = "";
-    else if ( set == "LEG" ) var output = "";
-    else if ( set == "DRK" ) var output = "";
-    else if ( set == "FEM" ) var output = "";
-    else if ( set == "4ED" ) var output = "";
-    else if ( set == "ICE" ) var output = "";
-    else if ( set == "CHR" ) var output = "";
-    else if ( set == "HML" ) var output = "";
-    else if ( set == "ALL" ) var output = "";
-    else if ( set == "MIR" ) var output = "";
-    else if ( set == "VIS" ) var output = "";
-    else if ( set == "5ED" ) var output = "";
-    else if ( set == "POR" ) var output = "";
-    else if ( set == "WTH" ) var output = "";
-    else if ( set == "TMP" ) var output = "";
-    else if ( set == "STH" ) var output = "";
-    else if ( set == "EXO" ) var output = "";
-    else if ( set == "P02" ) var output = "";
-    else if ( set == "UGL" ) var output = "";
-    else if ( set == "USG" ) var output = "";
-    else if ( set == "ATH" ) var output = "";
-    else if ( set == "ULG" ) var output = "";
-    else if ( set == "6ED" ) var output = "";
-    else if ( set == "PTK" ) var output = "";
-    else if ( set == "UDS" ) var output = "";
-    else if ( set == "S99" ) var output = "";
-    else if ( set == "MMQ" ) var output = "";
-    else if ( set == "BRB" ) var output = "";
-    else if ( set == "NEM" ) var output = "";
-    else if ( set == "S00" ) var output = "";
-    else if ( set == "PCY" ) var output = "";
-    else if ( set == "INV" ) var output = "";
-    else if ( set == "BTD" ) var output = "";
-    else if ( set == "PLS" ) var output = "";
-    else if ( set == "7ED" ) var output = "";
-    else if ( set == "APC" ) var output = "";
-    else if ( set == "ODY" ) var output = "";
-    else if ( set == "DKM" ) var output = "";
-    else if ( set == "TOR" ) var output = "";
-    else if ( set == "JUD" ) var output = "";
-    else if ( set == "ONS" ) var output = "";
-    else if ( set == "LGN" ) var output = "";
-    else if ( set == "SCG" ) var output = "";
-    else if ( set == "8ED" ) var output = "";
-    else if ( set == "MRD" ) var output = "";
-    else if ( set == "DST" ) var output = "";
-    else if ( set == "5DN" ) var output = "";
-    else if ( set == "CHK" ) var output = "";
-    else if ( set == "UNH" ) var output = "";
-    else if ( set == "BOK" ) var output = "";
-    else if ( set == "SOK" ) var output = "";
-    else if ( set == "9ED" ) var output = "";
-    else if ( set == "RAV" ) var output = "";
-    else if ( set == "GPT" ) var output = "";
-    else if ( set == "DIS" ) var output = "";
-    else if ( set == "CSP" ) var output = "";
-    else if ( set == "TSP" ) var output = "";
-    else if ( set == "PLC" ) var output = "";
-    else if ( set == "FUT" ) var output = "";
-    else if ( set == "10E" ) var output = "";
-    else if ( set == "MED" ) var output = "";
-    else if ( set == "LRW" ) var output = "";
-    else if ( set == "EVG" ) var output = "";
-    else if ( set == "MOR" ) var output = "";
-    else if ( set == "SHM" ) var output = "";
-    else if ( set == "EVE" ) var output = "";
-    else if ( set == "DRB" ) var output = "";
-    else if ( set == "ME2" ) var output = "";
-    else if ( set == "ALA" ) var output = "";
-    else if ( set == "DD2" ) var output = "";
-    else if ( set == "CON" ) var output = "";
-    else if ( set == "DDC" ) var output = "";
-    else if ( set == "ARB" ) var output = "";
-    else if ( set == "M10" ) var output = "";
-    else if ( set == "V09" ) var output = "";
-    else if ( set == "HOP" ) var output = "";
-    else if ( set == "ME3" ) var output = "";
-    else if ( set == "ZEN" ) var output = "";
-    else if ( set == "DDD" ) var output = "";
-    else if ( set == "H09" ) var output = "";
-    else if ( set == "WWK" ) var output = "";
-    else if ( set == "DDE" ) var output = "";
-    else if ( set == "ROE" ) var output = "";
-    else if ( set == "DPA" ) var output = "";
-    else if ( set == "ARC" ) var output = "";
-    else if ( set == "M11" ) var output = "";
-    else if ( set == "V10" ) var output = "";
-    else if ( set == "DDF" ) var output = "";
-    else if ( set == "SOM" ) var output = "";
-    //else if ( set == "TD0" ) var output = ""; MTGO
-    else if ( set == "PD2" ) var output = "";
-    else if ( set == "ME4" ) var output = "";
-    else if ( set == "MBS" ) var output = "";
-    else if ( set == "DDG" ) var output = "";
-    else if ( set == "NPH" ) var output = "";
-    else if ( set == "CMD" ) var output = "";
-    else if ( set == "M12" ) var output = "";
-    else if ( set == "V11" ) var output = "";
-    else if ( set == "DDH" ) var output = "";
-    else if ( set == "ISD" ) var output = "";
-    else if ( set == "PD3" ) var output = "";
-    else if ( set == "DKA" ) var output = "";
-    else if ( set == "DDI" ) var output = "";
-    else if ( set == "AVR" ) var output = "";
-    else if ( set == "PC2" ) var output = "";
-    else if ( set == "M13" ) var output = "";
-    else if ( set == "V12" ) var output = "";
-    else if ( set == "DDJ" ) var output = "";
-    else if ( set == "RTR" ) var output = "";
-    else if ( set == "CM1" ) var output = "";
-    else if ( set == "TD2" ) var output = "";
-    else if ( set == "GTC" ) var output = "";
-    else if ( set == "DDK" ) var output = "";
-    else if ( set == "DGM" ) var output = "";
-    else if ( set == "MMA" ) var output = "";
-    else if ( set == "M14" ) var output = "";
-    else if ( set == "V13" ) var output = "";
-    else if ( set == "DDL" ) var output = "";
-    else if ( set == "THS" ) var output = "";
-    else if ( set == "C13" ) var output = "";
-    else if ( set == "BNG" ) var output = "";
-    else if ( set == "DDM" ) var output = "";
-    else if ( set == "JOU" ) var output = "";
-    else if ( set == "MD1" ) var output = "";
-    else if ( set == "CNS" ) var output = "";
-    else if ( set == "VMA" ) var output = "";
-    else if ( set == "M15" ) var output = "";
-    else if ( set == "V14" ) var output = "";
-    else if ( set == "DDN" ) var output = "";
-    else if ( set == "KTK" ) var output = "";
-    else if ( set == "C14" ) var output = "";
-    else if ( set == "FRF" ) var output = "";
-    else if ( set == "DDO" ) var output = "";
-    else if ( set == "DTK" ) var output = "";
-    else if ( set == "TPR" ) var output = "";
-    else if ( set == "MM2" ) var output = "";
-    else if ( set == "ORI" ) var output = "";
-    else if ( set == "V15" ) var output = "";
-    else if ( set == "DDP" ) var output = "";
-    else if ( set == "BFZ" ) var output = "";
-    else if ( set == "EXP" ) var output = "";
-    else if ( set == "C15" ) var output = "";
-    else if ( set == "PZ1" ) var output = "";
-    else if ( set == "OGW" ) var output = "";
-    else if ( set == "DDQ" ) var output = "";
-    else if ( set == "W16" ) var output = "";
-    else if ( set == "SOI" ) var output = "";
-    else if ( set == "EMA" ) var output = "";
-    else if ( set == "EMN" ) var output = "";
-    else if ( set == "V16" ) var output = "";
-    else if ( set == "CN2" ) var output = "";
-    else if ( set == "DDR" ) var output = "";
-    else if ( set == "KLD" ) var output = "";
-    else if ( set == "MPS" ) var output = "";
-    else if ( set == "PZ2" ) var output = "";
-    else if ( set == "C16" ) var output = "";
-    else if ( set == "PCA" ) var output = "";
-    else if ( set == "AER" ) var output = "";
-    else if ( set == "MM3" ) var output = "";
-    else if ( set == "DDS" ) var output = "";
-    else if ( set == "W17" ) var output = "";
-    else if ( set == "AKH" ) var output = "";
-    else if ( set == "MP2" ) var output = "";
-    else if ( set == "CMA" ) var output = "";
-    else if ( set == "E01" ) var output = "";
-    else if ( set == "HOU" ) var output = "";
-    else if ( set == "C17" ) var output = "";
-    else if ( set == "XLN" ) var output = "";
-    else if ( set == "DDT" ) var output = "";
-    else if ( set == "IMA" ) var output = "";
-    else if ( set == "E02" ) var output = "";
-    else if ( set == "V17" ) var output = "";
-    else if ( set == "UST" ) var output = "";
-    else if ( set == "RIX" ) var output = "";
-    else if ( set == "A25" ) var output = "";
-    else if ( set == "DDU" ) var output = "";
-    else if ( set == "DOM" ) var output = "";
-    else if ( set == "CM2" ) var output = "";
-    else if ( set == "BBD" ) var output = "";
-    else if ( set == "SS1" ) var output = "";
-    else if ( set == "GS1" ) var output = "";
-    else if ( set == "M19" ) var output = "";
-    else if ( set == "C18" ) var output = "";
-    else if ( set == "MED" ) var output = "";
-    else if ( set == "GRN" ) var output = "";
-    else if ( set == "GNT" ) var output = "";
-    else if ( set == "UMA" ) var output = "";
-    else if ( set == "MED" ) var output = "";
-    else if ( set == "RNA" ) var output = "";
-    else if ( set == "WAR" ) var output = "";
-    else if ( set == "MH1" ) var output = "";
-    else if ( set == "SS2" ) var output = "";
-    else if ( set == "M20" ) var output = "";
-    else if ( set == "C19" ) var output = "";
-    else if ( set == "ELD" ) var output = "";
-    else if ( set == "GN2" ) var output = "";
-    else if ( set == "THB" ) var output = "";
-    else if ( set == "UND" ) var output = "";
-    else if ( set == "IKO" ) var output = "";
-    else if ( set == "C20" ) var output = "";
-    else if ( set == "SS3" ) var output = "";
-    else if ( set == "M21" ) var output = "";
-    else if ( set == "JMP" ) var output = "";
-    else if ( set == "2XM" ) var output = "";
-    else if ( set == "AKR" ) var output = "";
-    else if ( set == "ZNR" ) var output = "";
-    else if ( set == "ZNE" ) var output = "";
-    else if ( set == "ZNC" ) var output = "";
-    else if ( set == "KLR" ) var output = "";
-    else if ( set == "CMR" ) var output = "";
-    else if ( set == "CMC" ) var output = "";
-    else if ( set == "CC1" ) var output = "";
-    else if ( set == "KHM" ) var output = "";
-    else if ( set == "KHC" ) var output = "";
-    else if ( set == "TSR" ) var output = "";
-    else if ( set == "STX" ) var output = "";
-    else if ( set == "STA" ) var output = "";
-    else if ( set == "C21" ) var output = "";
-    else if ( set == "MH2" ) var output = "";
-    else if ( set == "AFR" ) var output = "";
-    else if ( set == "AFC" ) var output = "";
-    else if ( set == "SLD" ) var output = "";
-    else if ( set == "J21" ) var output = "";
-    else if ( set == "MID" ) var output = "";
-    else if ( set == "MIC" ) var output = "";
-    else if ( set == "DCI" ) var output = ""; // Judge Promo
-    else if ( set == "VOW" ) var output = "";
-    else if ( set == "VOC" ) var output = "";
-    else if ( set == "NEO" ) var output = "";
-    else if ( set == "UNF" ) var output = "";
-    else if ( set == "Y22" ) var output = "";
-	else if ( set == "CC2" ) var output = "";
-	else if ( set == "40K" ) var output = "";
-	else if ( set == "SNC" ) var output = "";
-	else if ( set == "DMU" ) var output = "";
-	else if ( set == "BRO" ) var output = "";
-	else if ( set == "ONE" ) var output = "";
-	else if ( set == "DMR" ) var output = "";
-	else if ( set == "2X2" ) var output = "";
-	else if ( set == "J22" ) var output = "";
-	else if ( set == "NEC" ) var output = "";
-	else if ( set == "40K" ) var output = "";
-	else if ( set == "CLB" ) var output = "";
-	else if ( set == "BRC" ) var output = "";
-	else if ( set == "DMC" ) var output = "";
-	else if ( set == "MOM" ) var output = "";
-	else if ( set == "PTG" ) var output = "";
-	else if ( set == "WHO" ) var output = "";
-	else if ( set == "PTG" ) var output = "";
-	else if ( set == "MKC" ) var output = "";
-	else if ( set == "MAT" ) var output = "";
-	else if ( set == "LCI" ) var output = "";
-	else if ( set == "WOC" ) var output = "";
-	else if ( set == "MKM" ) var output = "";
-	else if ( set == "LTR" ) var output = "";
-	else if ( set == "MOC" ) var output = "";
-    else var output = default_expansion_symbol_character;
-    return output;
-
+    return set in set_symbols ? set_symbols[set] : default_expansion_symbol_character;
 }
