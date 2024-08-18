@@ -47,3 +47,6 @@ class Proxy:
         except IndexError as e:
             print(f"Error parsing: {row}")
             raise e
+        except ValueError as e:
+            print(f"Invalid value: {row}")
+            raise e
