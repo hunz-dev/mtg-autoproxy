@@ -9,6 +9,7 @@ def create_unique_proxies(
     proxies: List[Proxy],
     proxy_folder: str,
     destination_folder: str,
+    duplicate: bool = True,
 ) -> Tuple[List[Proxy], List[Proxy]]:
     """Traverse folder of proxies and create unique proxy images.
 
@@ -16,6 +17,7 @@ def create_unique_proxies(
         proxies (List[Proxy]): List of proxies to create files for
         proxy_folder (str): Folder of source proxies
         destination_folder (str): Folder to write unique files for
+        duplicate (bool): Flag to duplicate file based on proxy count. Defaults to True.
 
     Returns:
         Tuple[List[Proxy], List[Proxy]]: List of missing files and duplicate files respectively
@@ -34,6 +36,6 @@ def create_unique_proxies(
             continue
 
         proxy_path = f"{proxy_folder}/{proxy.type}/{file_names[0]}"
-        duplicate_file(proxy_path, destination_folder, proxy.order_count)
+        duplicate_file(proxy_path, destination_folder, proxy.order_count if duplicate else 1)
 
     return errors["missing"], errors["duplicates"]
