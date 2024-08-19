@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Add
 
-* Nested log statements when running art scan
+* Version number and zip templates named alongside
+* Script to fetch missing set symbols
+* Support for fast-saving (not closing template file in between render_all.jsx)
 * Make MTGPICS search more reliable by determining `gamerid` before image scrape
+* Nested log statements when running art scan
 * Use rate limiter decorator
 * https://pypi.org/project/inflect/
 * https://pypi.org/project/rich/
-* Version number and zip templates named alongside
-* Support for fast-saving (not closing template file in between render_all.jsx)
-* Script to fetch missing set symbols
 
 ### Update
 
