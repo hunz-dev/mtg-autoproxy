@@ -170,9 +170,9 @@ def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> Lis
     Returns:
         List[Card]: Array of Scryfall-based Card objects
     """
-    print(f"Searching Scryfall: \"{query}\"... ", end="")
-
     params = dict(q=query, unique=unique, order=order, dir=dir)
+
+    print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]: ... ", end="")
     r = requests.get(f"{SCRYFALL_BASE_URL}/cards/search/", params=params)
     try:
         response = r.json()
@@ -184,9 +184,10 @@ def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> Lis
     try:
         cards = [Card(c) for c in response["data"]]
     except KeyError as e:
+        print(f"Found 0 cards.")  # TODO: Pluralize
         return []
 
-    print(f"Found {len(cards)} cards.")  # TODO: Pluralize
+    print(f"Found {len(cards)} unique result{'s' if len(cards) > 1 else ''}.")  # TODO: Pluralize
     return cards
 
 
