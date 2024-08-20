@@ -1,12 +1,12 @@
 import requests
-from lib.classes import Card
+from lib.classes import ScryfallCard
 
 
 RATE_LIMIT_RANGE_S = (0.05, 0.1)
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
 
 
-def get_named_card(query: str) -> Card:
+def get_named_card(query: str) -> ScryfallCard:
     """Fetch single card from Scryfall based on a (Scryfall syntax) query, for
     more details see: https://scryfall.com/docs/api/cards/named.
 
@@ -36,4 +36,4 @@ def get_named_card(query: str) -> Card:
         print(f"Unable to parse response from Scryfall: {e}")
         raise e
 
-    return Card(response)
+    return ScryfallCard(response)

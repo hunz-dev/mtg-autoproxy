@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple, Optional
 
 
 @dataclass
-class Card:
+class ScryfallCard:
     """Represents a Scryfall card object, pulling attributes from the following
     API documentation: https://scryfall.com/docs/api/cards.
 
@@ -51,7 +51,7 @@ class Card:
         if _json is None:
             raise ValueError("JSON-like dictionary from Scryfall API is required")
 
-        for field in fields(Card):
+        for field in fields(ScryfallCard):
             try:
                 setattr(self, field.name, _json[field.name])
             except KeyError:
