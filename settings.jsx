@@ -45,7 +45,7 @@ var exit_early = false;
 // Automatically input and size set symbol, change outline thickness
 var automatic_set_symbol = true;
 var automatic_set_symbol_size = true;
-var expansion_symbol_stroke_weight = 5; // 4-6 generally, 6 is default
+var expansion_symbol_stroke_weight = 6; // 4-6 generally, 6 is default
 var force_common = false;  // override rarity to be use common symbol
 
 // Override function to strip remainder text (ie. default behavior on full arts)
