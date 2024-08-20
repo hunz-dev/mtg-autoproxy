@@ -2,7 +2,7 @@ import requests
 from lib.classes import Card
 
 
-RATE_LIMIT_RANGE_S = (1, 2)
+RATE_LIMIT_RANGE_S = (0.05, 0.1)
 SCRYFALL_BASE_URL = "https://api.scryfall.com"
 
 
