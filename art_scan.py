@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 import requests
 import tinycss2 as tinycss
 
+from lib.classes import MtgPicsCard
+
 
 DEEPAI_BASE_URL = "https://api.deepai.org/api"
 MTGPICS_BASE_URL = "https://mtgpics.com"
@@ -27,34 +29,6 @@ queries = [
     # ex. "arbor elf set:wwk",
     # "",
 ]
-
-# TODO: Move into lib.classes
-@dataclass
-class MtgPicsId:
-    """Represents the attributes of the main identifier used on MTGPICS.com.
-
-    Attributes:
-        artist_name (str): Name of the artist
-        card_name (str): Name of the card
-        image_id (str): Identifier number of image
-        set_id (str): Set identifier
-        alt_image_num (Optional[str]): Alternate image number
-    """
-    # Stores identifiers used to grab images from MTGPICS
-    artist_name: str
-    card_name: str
-    image_id: str
-    set_id: str
-    alt_image_num: Optional[str] = None
-
-    def __str__(self):
-        base_str = f"{self.card_name} ({self.artist_name}) [{self.set_id.upper()}]"
-        return base_str if not self.alt_image_num else f"{base_str} ({self.alt_image_num})"
-
-    @property
-    def uri(self) -> str:
-        base_uri = f"{self.set_id}/{self.image_id}"
-        return base_uri if not self.alt_image_num else f"{base_uri}_{self.alt_image_num}"
 
 
 # TODO: Move into lib.classes and merge with existing
@@ -187,11 +161,11 @@ def get_scryfall_cards(query, unique="art", order="released", dir="desc") -> Lis
         print(f"Found 0 cards.")  # TODO: Pluralize
         return []
 
-    print(f"Found {len(cards)} unique result{'s' if len(cards) > 1 else ''}.")  # TODO: Pluralize
+    print(f"Found {len(cards)} result{'s' if len(cards) > 1 else ''}.")
     return cards
 
 
-def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
+def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsCard]:
     """Find the MTGPICS.com page with all available art for a given card based
     on set & collector number.
 
@@ -199,7 +173,7 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
         cards (List[Card]): Array of Card objects
 
     Returns:
-        List[MtgPicsId]: Array of identifiers for MTGPICS.com
+        List[MtgPicsCard]: Array of identifiers for MTGPICS.com
     """
     ids = list()
     print("Searching on MTGPICS for:")
@@ -239,20 +213,20 @@ def get_mtgpics_art_ids(cards: List[Card]) -> List[MtgPicsId]:
                 pass
 
             # Obtain artist name
-            artist_name = element.select_one('div[class="S10"] a').get_text()
+            artist = element.select_one('div[class="S10"] a').get_text()
 
             # Add tuple with all needed identifiers
-            ids.append(MtgPicsId(artist_name, card.name, image_id, set_id, alt_num))
+            ids.append(MtgPicsCard(card, artist, image_id, set_id, alt_num))
 
     print(f"Done! Found {len(ids)} IDs.")
     return ids
 
 
-def save_mtgpics_image(ids: MtgPicsId) -> bool:
+def save_mtgpics_image(ids: MtgPicsCard) -> bool:
     """Save an image from MTGPICS.com using site identifier.
 
     Args:
-        ids (MtgPicsId): MTGPICS.com identifier object
+        ids (MtgPicsCard): MTGPICS.com identifier object
 
     Returns:
         bool: Success flag
