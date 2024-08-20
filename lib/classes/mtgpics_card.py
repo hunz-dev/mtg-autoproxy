@@ -3,6 +3,10 @@ from dataclasses import dataclass
 from typing import List
 from .scryfall_card import ScryfallCard
 
+# Maps Scryfall set codes to MTGPICS
+SET_CODE_MAP = {
+    "5dn": "fda",
+}
 
 @dataclass
 class MtgPicsCardVersion:
@@ -57,7 +61,7 @@ class MtgPicsCard:
         version = MtgPicsCardVersion(
             name=self.base_card.name,
             artist=artist,
-            set=set,
+            set=set if set not in SET_CODE_MAP else SET_CODE_MAP[set],
             image_id=image_id,
             alt_image_num=alt_image_num,
         )
@@ -68,7 +72,7 @@ class MtgPicsCard:
         return MtgPicsCardVersion(
             name=self.base_card.name,
             artist=self.base_card.artist,
-            set=self.base_card.set,
+            set=self.base_card.set if self.base_card.set not in SET_CODE_MAP else SET_CODE_MAP[self.base_card.set],
             image_id=self.base_card.collector_number.rjust(3, '0'),
             alt_image_num=None)
 

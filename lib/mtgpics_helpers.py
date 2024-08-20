@@ -38,11 +38,13 @@ def get_all_versions(cards: List[ScryfallCard]) -> List[MtgPicsCardVersion]:
         image_url_block = soup.find("div", style="position:relative;")
 
         if image_url_block is None:
-            print("No image block found.")
+            print("No images found.")
             continue
 
         # Add all detected versions of the card
-        for element in image_url_block.children:
+        image_elements = list(image_url_block.children)
+        print(f"Found {len(image_elements)} images!")
+        for element in image_elements:
             # Parse inline div styles in this block to get URLs
             try:
                 image_div_style = element["style"]
@@ -69,11 +71,11 @@ def get_all_versions(cards: List[ScryfallCard]) -> List[MtgPicsCardVersion]:
             mtgpics_card.add_version(artist, set_id, image_id, alt_image_num)
 
         # Only add card to return payload if it detected versions
-        if mtgpics_card.versions > 1:
+        if len(mtgpics_card.versions) > 1:
             mtgpics_cards.append(mtgpics_card)
 
     versions = flatten_list([c.versions for c in mtgpics_cards])
-    print(f"Done! Found {len(versions)} IDs.")
+    print(f"Done! Found {len(versions)} versions.")
     return versions
 
 
