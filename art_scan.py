@@ -91,7 +91,7 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False, skip_scr
     # Fetch HTML from MTGPICS with card info and save images
     results = list()
     if not skip_mtgpics:
-        for version in mtgpics_helpers.get_all_versions(cards):
+        for version in mtgpics_helpers.get_all_versions(cards, dir="asc"):
             results.append(mtgpics_helpers.save_image(version))
 
         # If nothing was found using main approach, use alternate
