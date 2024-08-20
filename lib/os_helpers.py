@@ -128,3 +128,14 @@ def get_modified_date(file_path: str, format_str="%Y-%m-%d"):
     modified_timestamp_ms = os.path.getmtime(file_path)
     modified_timestamp_dt = datetime.datetime.fromtimestamp(modified_timestamp_ms)
     return modified_timestamp_dt.strftime(format_str)
+
+def get_modified_date_utc(file_path: str):
+    """Return a UTC-based timestamp string of the last modified timestamp of a given file.
+
+    Args:
+        file_path (str): Full path to desired file
+
+    Returns:
+        str: UTC-based timestamp string
+    """
+    return get_modified_date(file_path=file_path, format_str='%Y-%m-%dT%H:%M:%SZ')
