@@ -1,5 +1,6 @@
 import csv
 import requests
+import random
 from typing import List
 
 
@@ -21,3 +22,24 @@ def load_csv(url: str, encoding="utf-8", delimiter=",") -> List[List[str]]:
         result = list(csv.reader(decoded_content.splitlines(), delimiter=delimiter))
 
     return result
+
+
+def flatten_list(_list: List[List]) -> List:
+    """Flatten 2D list.
+
+    Args:
+        _list (List[List]): 2D list to flatten
+
+    Returns:
+        List: Flattened list
+    """
+    return [v for sublist in _list for v in sublist]
+
+
+def get_rate_limit_wait(min=1.0, max=3.0) -> float:
+    """Return a random float to use as a rate limit.
+
+    Returns:
+        float: Random float between the range defined in `RATE_LIMIT_RANGE_S`
+    """
+    return random.uniform(min, max)
