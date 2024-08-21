@@ -31,9 +31,10 @@ var specified_template = null;
 // var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
 
-var specified_template = NormalTemplate;
-// var specified_template = NormalExtendedTemplate;
-// var specified_template = NormalClassicTemplate;
+var specified_template = NormalTemplate;             // NORMAL
+// var specified_template = NormalExtendedTemplate;     // EXTENDED
+// var specified_template = WomensDayTemplate;          // SHOWCASE
+// var specified_template = NormalClassicTemplate;      // RETRO
 
 // var specified_template = [NormalTemplate, NormalExtendedTemplate]; // Do multiple templates at a time
 // var specified_template = [NormalTemplate, NormalClassicTemplate]; // Do multiple templates at a time
@@ -50,6 +51,7 @@ var force_common = false;  // override rarity to be use common symbol
 
 // Override function to strip remainder text (ie. default behavior on full arts)
 var force_reminder_text = false;
+// var force_reminder_text = true;
 
 // Set expansion symbol stroke to black by default, adjust for retro frame
 var expansion_symbol_stroke_color = null;
