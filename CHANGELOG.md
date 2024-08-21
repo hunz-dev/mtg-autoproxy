@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Add
 
 * Version number and zip templates named alongside
-* Script to fetch missing set symbols
 * Support for fast-saving (not closing template file in between render_all.jsx)
 * Nested log statements when running art scan
 * Use rate limiter decorator
