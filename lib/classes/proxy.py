@@ -6,6 +6,8 @@ from datetime import datetime
 class Proxy:
     """Store proxy, file and order information.
 
+    TODO: Merge with InventoryCard (?)
+
     Attributes:
         name (str): Name of the proxy
         type (str): Supertype of card
