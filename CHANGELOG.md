@@ -24,6 +24,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Revise README.md
 - Convert set symbols from encoding instead of pasting symbol (easier to compare)
 
+## [1.1.4] - 2024-08-22
+
+### Added
+
+- Docstrings to missing functions/classes
+- Error handling for `Proxy` initialization (from CSV)
+- Additional method to download MTGPICS images
+- Capability to capture an TSV-based inventory for all generated proxies
+- Capability to download set icons from Keyrune
+- Structure to the `scratchpad.ipynb` notebook for common operations
+
+### Changed
+
+- Move objects and common functionality to helper modules/classes for scratchpad (located in `lib/`)
+    - Classes: `InventoryCard`, `ScryfallCard`, `MtgPicsCard`
+    - Modules: `common`, `mtg_helpers`, `os_helpers`, `scryfall_helpers`
+- File output structure to include artist name
+
+### Fixed
+
+- Changed fixed column number to look at last column instead of a hardcoded value (to be flexible with any number of users)
+
 ## [1.1.3] - 2023-07-23
 
 ### Added
