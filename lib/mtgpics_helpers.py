@@ -1,131 +1,149 @@
 import re
 import requests
-from typing import List
+from typing import List, Optional, Tuple
 
 from bs4 import BeautifulSoup
 import tinycss2 as tinycss
 
+from lib import scryfall_helpers
 from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
 from lib.common import flatten_list, get_rate_limit_wait
-
 
 BASE_URL = "https://mtgpics.com"
 THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``
 
 
-# TODO: Should accept list of ScryfallCards, check all, and return found ones as single return value (error on different ones)
-def get_gamerid(card_name: str, set_name: str, image_id: str) -> str:
-    ref = f"{set_name}{image_id.rjust(3, '0')}"
-    response = requests.get(f"{BASE_URL}/card", params=dict(ref=ref))
-    soup = BeautifulSoup(response.content, "html.parser")
-
-    print(f"Looking for gamerid with `ref`: {ref}...", end=" ")
-    try:
-        title = soup.find("title")
-        if title is None:
-            print(f"No title element found.")
-            return
-        found_card_name = soup.find("title").get_text().split(" - ")[0]
-        assert found_card_name == card_name
-    except IndexError as e:
-        print("Unable to parse card name.")
-        return None
-    except AssertionError as e:
-        print(f"Found card does not match. Found: \"{found_card_name}\"")
-        return None
-
-    image = soup.find("img", style=THUMBNAIL_STYLE)
-    if image is None:
-        print("No thumbnail found.")
-        return
-
-    try:
-        gamerid = "".join(re.split(r'/|\.', image.get("src"))[-3:-1])
-    except IndexError as e:
-        print("Unable to find `gamerid`.")
-        return None
-
-    print(f"Found `gamerid`: [{gamerid}]")
-    return gamerid
-
-
-def get_all_versions(cards: List[ScryfallCard]) -> List[MtgPicsCardVersion]:
-    """Find the MTGPICS.com page with all available art for a given card based
-    on set & collector number.
+def get_gamerid(query: str) -> Optional[Tuple[str, str]]:
+    """Obtain the unique identifier, `gamerid`, that MTGPICS uses as an individual card.
 
     Args:
-        cards (List[Card]): Array of Card objects
+        query (str): Scryfall-based query to look up card
+
+    Raises:
+        ValueError: If query returned too many cards.
 
     Returns:
-        List[MtgPicsCard]: Array of identifiers for MTGPICS.com
+        Optional[Tuple[str, str]]: Tuple containing card name with associated gamerid, None if not found
     """
-    print("Searching on MTGPICS for:")
+    print(f"Finding `gamerid` for query: {query}...")
+    cards = scryfall_helpers.get_matched_cards(query, unique="prints", dir="asc")  # Get all prints
+    if len(cards) == 0:
+        print("No cards were found")
+        return None
 
-    mtgpics_cards: List[MtgPicsCard] = []
-    for scryfall_card in cards:
-        mtgpics_card = MtgPicsCard(scryfall_card)
+    unique = cards[0].name
+    if not (all([c.name == unique for c in cards])):
+        raise ValueError("Multiple cards returned, Scryfall query should return a single card.")
 
-        import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-        print(f"\t\"{mtgpics_card.base_version.id}\"... ", end="")
-
-        params = dict(gamerid=mtgpics_card.base_version.id)  # TODO: Investigate
-        response = requests.get(f"{BASE_URL}/art", params=params)
+    gamerids = []
+    for card in cards:
+        ref = f"{card.set}{card.collector_number.rjust(3, '0')}"
+        response = requests.get(f"{BASE_URL}/card", params=dict(ref=ref))
         soup = BeautifulSoup(response.content, "html.parser")
 
-        # Look in HTML for image URLs, set id, and artist
-        image_url_block = soup.find("div", style="position:relative;")
-
-        if image_url_block is None:
-            print("No images found.")
+        # Look at title element of the webpage to check card name first
+        print(f"\tLooking for gamerid with `ref`: {ref}...", end=" ")
+        try:
+            title = soup.find("title")
+            if title is None:
+                print(f"No title element found.")
+                continue
+            found_card_name = soup.find("title").get_text().split(" - ")[0]
+            assert found_card_name == card.name
+        except IndexError as e:
+            print("Unable to parse card name.")
+            continue
+        except AssertionError as e:
+            print(f"Found card does not match. Found: \"{found_card_name}\"")
             continue
 
-        # Add all detected versions of the card
-        image_elements = list(image_url_block.children)
-        print(f"Found {len(image_elements)} images!")
-        for element in image_elements:
-            # Parse inline div styles in this block to get URLs
-            try:
-                image_div_style = element["style"]
-            except TypeError:
-                continue  # If it can't be parsed out, move to next element
+        # Find a specific thumbnail image that has desired style tag (should only have one)
+        image = soup.find("img", style=THUMBNAIL_STYLE)
+        if image is None:
+            print("No thumbnail found.")
+            continue
 
-            # Obtain set code and image id
-            css_tokens = tinycss.parse_component_value_list(image_div_style)
-            url = css_tokens[-2].value  # ex. pics/art_th_big/dci/106_1.jpg
-            url_tokens = re.split("/|\.", url)
-            set_id, image_id = url_tokens[-3], url_tokens[-2]
+        # Inspect element to grab the `gamerid` from the image URL
+        try:
+            gamerid = "".join(re.split(r'/|\.', image.get("src"))[-3:-1])
+        except IndexError as e:
+            print("Unable to find `gamerid`.")
+            continue
 
-            # Check if image has alternates
-            alt_image_num = None
-            try:
-                image_id, alt_image_num = image_id.split("_")
-            except ValueError:
-                pass
+        print(f"Found `gamerid`: [{gamerid}]")
+        gamerids.append((card.name, gamerid))
 
-            # Extract artist (may differ from base card)
-            artist = element.select_one('div[class="S10"] a').get_text()
-
-            # Add version with all needed identifiers
-            mtgpics_card.add_version(artist, set_id, image_id, alt_image_num)
-
-        # Only add card to return payload if it detected versions
-        if len(mtgpics_card.versions) > 1:
-            mtgpics_cards.append(mtgpics_card)
-
-    versions = flatten_list([c.versions for c in mtgpics_cards])
-
-    # TODO: Check if version exists prior to saving
-    if len(versions) < 1:
-        print(f"Unable to find images using default method, using alternative that may result in incorrect images...")
-        versions = [save_image_alt(card) for card in cards]
-        versions = [v for v in versions if v is not None]
-
-    print(f"Done! Found {len(versions)} version{'' if len(versions) == 1 else 's'}.")
-
-    return versions
+    if len(gamerids) == 0:
+        print("No `gamerid` detected.")
+        return None
+    elif len(gamerids) > 1:
+        most_frequent_gamerid = max(set(gamerids), key=gamerids.count)
+        print(f"Multiple versions of `gamerid` found: [{gamerids}], using [{most_frequent_gamerid}]")
+        return most_frequent_gamerid
+    else:
+        found_gamer_id = gamerids[0]
+        print(f"Found unique `gamerid`: {found_gamer_id}.")
+        return found_gamer_id
 
 
-# TODO: Overload function with a "gamerid" parameter
+def find_all_art_versions(card_name: str, gamerid: str) -> List[MtgPicsCardVersion]:
+    """Find all unique art versions on MTGPICS.
+
+    TODO: Check if `card_name` could be eliminated as a param.
+
+    Args:
+        card_name (str): Card name associated with gamerid
+        gamerid (str): Unique identifier for MTGPICS
+
+    Returns:
+        List[MtgPicsCardVersion]: List of unique MTGPICS image versions
+    """
+    params = dict(gamerid=gamerid)
+    response = requests.get(f"{BASE_URL}/art", params=params)
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    # Look in HTML for image URLs, set id, and artist
+    image_url_block = soup.find("div", style="position:relative;")
+
+    if image_url_block is None:
+        print("No images found.")
+        return []
+
+    # Add all detected versions of the card
+    image_elements = list(image_url_block.children)
+    print(f"Verifying {len(image_elements)} potential images...", end=" ")
+
+    payload = []
+    for element in image_elements:
+        # Parse inline div styles in this block to get URLs
+        try:
+            image_div_style = element["style"]
+        except TypeError:
+            continue  # If it can't be parsed out, move to next element
+
+        # Obtain set code and image id
+        css_tokens = tinycss.parse_component_value_list(image_div_style)
+        url = css_tokens[-2].value  # ex. pics/art_th_big/dci/106_1.jpg
+        url_tokens = re.split("/|\.", url)
+        set_id, image_id = url_tokens[-3], url_tokens[-2]
+
+        # Check if image has alternates
+        alt_image_num = None
+        try:
+            image_id, alt_image_num = image_id.split("_")
+        except ValueError:
+            pass
+
+        # Extract artist (may differ from base card)
+        artist = element.select_one('div[class="S10"] a').get_text()
+
+        # Add version with all needed identifiers
+        payload.append(MtgPicsCardVersion(card_name, artist, set_id, image_id, alt_image_num))
+
+    print(f"{len(payload)} unique version{'s' if len(payload) != 1 else ''} found: {payload}")
+    return payload
+
+
 def save_image(image_version: MtgPicsCardVersion) -> bool:
     """Save an image from MTGPICS.com using site identifier.
 
