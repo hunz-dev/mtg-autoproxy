@@ -13,28 +13,36 @@ BASE_URL = "https://mtgpics.com"
 THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``
 
 
-def get_gamerid(query: str) -> Optional[Tuple[str, str]]:
+def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str] = None) -> Optional[Tuple[str, str]]:
     """Obtain the unique identifier, `gamerid`, that MTGPICS uses as an individual card.
 
     Args:
-        query (str): Scryfall-based query to look up card
+        cards (Optional[ScryfallCard], optional): List of Scryfall cards. Defaults to None.
+        query (Optional[str], optional): Scryfall-based query to look up card. Defaults to None.
 
     Raises:
-        ValueError: If query returned too many cards.
+        ValueError: If both `cards` and `query` were set
+        ValueError: If query method was used and returned multiple cards
 
     Returns:
-        Optional[Tuple[str, str]]: Tuple containing card name with associated gamerid, None if not found
+        Optional[Tuple[str, str]]: Tuple containing card name and associated `gamerid`
     """
-    print(f"Finding `gamerid` for query: {query}...")
-    cards = scryfall_helpers.get_matched_cards(query, unique="prints", dir="asc")  # Get all prints
-    if len(cards) == 0:
-        print("No cards were found")
-        return None
+    if (cards and len(cards)) and (query and len(query)):
+        raise ValueError("Only one parameter should be set.")
 
-    unique = cards[0].name
-    if not (all([c.name == unique for c in cards])):
-        raise ValueError("Multiple cards returned, Scryfall query should return a single card.")
+    # Obtain list of ScryfallCard objects to use (if not provided as a parameter)
+    if query:
+        print(f"Finding `gamerid` for query: {query}...")
+        cards = scryfall_helpers.get_matched_cards(query, unique="prints", dir="asc")  # Get all prints
+        if len(cards) == 0:
+            print("No cards were found")
+            return None
 
+        unique = cards[0].name
+        if not (all([c.name == unique for c in cards])):
+            raise ValueError("Multiple cards returned, Scryfall query should return a single card.")
+
+    # Keep track of all versions of `gamerid` in the event some misfires occur
     gamerids = []
     for card in cards:
         ref = f"{card.set}{card.collector_number.rjust(3, '0')}"
