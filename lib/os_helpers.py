@@ -1,3 +1,4 @@
+import datetime
 import os
 from typing import List, Tuple
 
@@ -56,8 +57,8 @@ def find_missing_files(file_path: str, file_names: List[str]) -> List[str]:
         List[str]: Missing file names
     """
     files = os.listdir(file_path)
-    missing_files = list()
 
+    missing_files = []
     for file_name in file_names:
         found = False
         for file in files:
@@ -70,6 +71,19 @@ def find_missing_files(file_path: str, file_names: List[str]) -> List[str]:
     return missing_files
 
 
+def list_files(source_path: str, ignore: List[str] = None) -> List[str]:
+    """List all files in a directory from a given path with an option to ignore a list of names.
+
+    Args:
+        source_path (str): Path to directory
+        ignore (List[str], optional): List of names to ignore. Defaults to None.
+
+    Returns:
+        List[str]: File names within `source_path`
+    """
+    return [f for f in os.listdir(source_path) if not ignore or f not in ignore]
+
+
 def split_files(source_path, destination_path, folder_size, prefix="output_{number:02d}"):
     """Partition files into prefixed directories of a given size.
 
@@ -79,12 +93,17 @@ def split_files(source_path, destination_path, folder_size, prefix="output_{numb
         folder_size (_type_): Size of directories
         prefix (str, optional): Formatted string with a `number` attribute used to name
             split directories. Defaults to "output_{number:02d}".
+
+    Returns:
+        List[str]: Created file names
     """
     current_folder = 0
+    output_folders = []
     while len(os.listdir(source_path)) > 0:
         # Create prefixed folder
         output_folder = os.path.join(destination_path, prefix.format(number=current_folder))
         os.mkdir(output_folder)
+        output_folders.append(output_folder)
 
         # Move a number of files up to the configured folder size
         for file in os.listdir(source_path)[:folder_size]:
@@ -93,3 +112,30 @@ def split_files(source_path, destination_path, folder_size, prefix="output_{numb
             os.rename(source_file, output_file)
 
         current_folder += 1
+
+    return output_folders
+
+def get_modified_date(file_path: str, format_str="%Y-%m-%d"):
+    """Return a date string of the last modified timestamp of a given file.
+
+    Args:
+        file_path (str): Full path to desired file
+        format_str (str, optional): Date format string to use. Defaults to "%Y-%m-%d".
+
+    Returns:
+        str: Date string
+    """
+    modified_timestamp_ms = os.path.getmtime(file_path)
+    modified_timestamp_dt = datetime.datetime.fromtimestamp(modified_timestamp_ms)
+    return modified_timestamp_dt.strftime(format_str)
+
+def get_modified_date_utc(file_path: str):
+    """Return a UTC-based timestamp string of the last modified timestamp of a given file.
+
+    Args:
+        file_path (str): Full path to desired file
+
+    Returns:
+        str: UTC-based timestamp string
+    """
+    return get_modified_date(file_path=file_path, format_str='%Y-%m-%dT%H:%M:%SZ')

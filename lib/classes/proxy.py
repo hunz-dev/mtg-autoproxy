@@ -6,6 +6,8 @@ from datetime import datetime
 class Proxy:
     """Store proxy, file and order information.
 
+    TODO: Merge with InventoryCard (?)
+
     Attributes:
         name (str): Name of the proxy
         type (str): Supertype of card
@@ -22,7 +24,7 @@ class Proxy:
         "name": 0,
         "type": 1,
         "last_edited": 2,
-        "order_count": 11,
+        "order_count": -1,
     }
     DATE_FORMAT_STR = "%b %d %H:%M"
     
@@ -37,9 +39,16 @@ class Proxy:
         except ValueError:
             last_edited = datetime.min
 
-        return cls(
-            name=row[cls.COL_MAP['name']],
-            type=row[cls.COL_MAP['type']],
-            last_edited=last_edited,
-            order_count=int(row[cls.COL_MAP['order_count']])
-        )
+        try:
+            return cls(
+                name=row[cls.COL_MAP['name']],
+                type=row[cls.COL_MAP['type']],
+                last_edited=last_edited,
+                order_count=int(row[cls.COL_MAP['order_count']])
+            )
+        except IndexError as e:
+            print(f"Error parsing: {row}")
+            raise e
+        except ValueError as e:
+            print(f"Invalid value: {row}")
+            raise e

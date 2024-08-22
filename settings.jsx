@@ -7,7 +7,7 @@
 //includeFolder("scripts/plugins");
 
 // Default expansion symbol - character copied from Keyrune cheatsheet
-var expansion_symbol_character = "";  // Duels of the Planeswalker
+var default_expansion_symbol_character = "";  // Duels of the Planeswalker
 
 // Specify a template to use (if the card's layout is compatible) rather than the default template
 var specified_template = null;
@@ -30,19 +30,28 @@ var specified_template = null;
 // var specified_template = PhyrexianTemplate; // REGULAR - Secret lair praetor showcase
 // var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
+
+var specified_template = NormalTemplate;             // NORMAL
+// var specified_template = NormalExtendedTemplate;     // EXTENDED
+// var specified_template = WomensDayTemplate;          // SHOWCASE
+// var specified_template = NormalClassicTemplate;      // RETRO
+
 // var specified_template = [NormalTemplate, NormalExtendedTemplate]; // Do multiple templates at a time
+// var specified_template = [NormalTemplate, NormalClassicTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
+// var exit_early = true;
 
 // Automatically input and size set symbol, change outline thickness
 var automatic_set_symbol = true;
 var automatic_set_symbol_size = true;
-var expansion_symbol_stroke_weight = 5; // 4-6 generally, 6 is default
+var expansion_symbol_stroke_weight = 6; // 4-6 generally, 6 is default
 var force_common = false;  // override rarity to be use common symbol
 
 // Override function to strip remainder text (ie. default behavior on full arts)
 var force_reminder_text = false;
+// var force_reminder_text = true;
 
 // Set expansion symbol stroke to black by default, adjust for retro frame
 var expansion_symbol_stroke_color = null;

@@ -182,8 +182,14 @@ var BaseTemplate = Class({
         for (var i = 0; i < this.text_layers.length; i++) {
             this.text_layers[i].execute();
         }
+
         var file_name = this.layout.name;
         var suffix = this.template_suffix();
+
+        if (this.layout.artist !== "") {
+            file_name = file_name + " [" + this.layout.artist + "]";
+        }
+
         if (suffix !== "") {
             file_name = file_name + " (" + suffix + ")";
         }
