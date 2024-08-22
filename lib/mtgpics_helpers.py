@@ -8,7 +8,45 @@ import tinycss2 as tinycss
 from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
 from lib.common import flatten_list, get_rate_limit_wait
 
+
 BASE_URL = "https://mtgpics.com"
+THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``
+
+
+# TODO: Should accept list of ScryfallCards, check all, and return found ones as single return value (error on different ones)
+def get_gamerid(card_name: str, set_name: str, image_id: str) -> str:
+    ref = f"{set_name}{image_id.rjust(3, '0')}"
+    response = requests.get(f"{BASE_URL}/card", params=dict(ref=ref))
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    print(f"Looking for gamerid with `ref`: {ref}...", end=" ")
+    try:
+        title = soup.find("title")
+        if title is None:
+            print(f"No title element found.")
+            return
+        found_card_name = soup.find("title").get_text().split(" - ")[0]
+        assert found_card_name == card_name
+    except IndexError as e:
+        print("Unable to parse card name.")
+        return None
+    except AssertionError as e:
+        print(f"Found card does not match. Found: \"{found_card_name}\"")
+        return None
+
+    image = soup.find("img", style=THUMBNAIL_STYLE)
+    if image is None:
+        print("No thumbnail found.")
+        return
+
+    try:
+        gamerid = "".join(re.split(r'/|\.', image.get("src"))[-3:-1])
+    except IndexError as e:
+        print("Unable to find `gamerid`.")
+        return None
+
+    print(f"Found `gamerid`: [{gamerid}]")
+    return gamerid
 
 
 def get_all_versions(cards: List[ScryfallCard]) -> List[MtgPicsCardVersion]:
@@ -75,10 +113,19 @@ def get_all_versions(cards: List[ScryfallCard]) -> List[MtgPicsCardVersion]:
             mtgpics_cards.append(mtgpics_card)
 
     versions = flatten_list([c.versions for c in mtgpics_cards])
-    print(f"Done! Found {len(versions)} versions.")
+
+    # TODO: Check if version exists prior to saving
+    if len(versions) < 1:
+        print(f"Unable to find images using default method, using alternative that may result in incorrect images...")
+        versions = [save_image_alt(card) for card in cards]
+        versions = [v for v in versions if v is not None]
+
+    print(f"Done! Found {len(versions)} version{'' if len(versions) == 1 else 's'}.")
+
     return versions
 
 
+# TODO: Overload function with a "gamerid" parameter
 def save_image(image_version: MtgPicsCardVersion) -> bool:
     """Save an image from MTGPICS.com using site identifier.
 
@@ -106,7 +153,7 @@ def save_image(image_version: MtgPicsCardVersion) -> bool:
         return True
 
 
-def save_image_alt(scryfall_card: ScryfallCard) -> bool:
+def save_image_alt(scryfall_card: ScryfallCard) -> MtgPicsCardVersion:
     """Save an image from MTGPICS.com using set and collector number.
 
     Args:
@@ -125,11 +172,11 @@ def save_image_alt(scryfall_card: ScryfallCard) -> bool:
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
-        return False
+        return None
     else:
         file_name = f"art/{str(base_version).replace('/', '')}.jpg"
         print(f"Saving as \"{file_name}\"... ", end="")
         with open(file_name, "wb") as f:
             f.write(response.content)
         print(f"Done!")
-        return True
+        return base_version
