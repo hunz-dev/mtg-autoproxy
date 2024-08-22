@@ -10,7 +10,7 @@ secrets/*
 templates/
 
 .env
-templates-*.zip
+templates*.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
