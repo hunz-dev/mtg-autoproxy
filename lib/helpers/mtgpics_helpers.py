@@ -1,5 +1,6 @@
 import re
 import requests
+import time
 from typing import List, Optional, Tuple
 
 from bs4 import BeautifulSoup
@@ -60,6 +61,7 @@ def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str]
     for card in cards:
         ref = f"{convert_set_code(card.set)}{card.collector_number.rjust(3, '0')}"
         response = requests.get(f"{BASE_URL}/card", params=dict(ref=ref))
+        time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Look at title element of the webpage to check card name first
@@ -121,6 +123,7 @@ def find_all_art_versions(card_name: str, gamerid: str) -> List[MtgPicsCardVersi
     """
     params = dict(gamerid=gamerid)
     response = requests.get(f"{BASE_URL}/art", params=params)
+    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     soup = BeautifulSoup(response.content, "html.parser")
 
     # Look in HTML for image URLs, set id, and artist
@@ -174,11 +177,10 @@ def save_image(image_version: MtgPicsCardVersion) -> bool:
     Returns:
         bool: Success flag
     """
-    import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-
     print(f"Finding \"{image_version.image_subpath}\" on MTGPICS... ", end="")
     url = f"{BASE_URL}/pics/art/{image_version.image_subpath}"
     response = requests.get(url)
+    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
@@ -201,13 +203,12 @@ def save_image_alt(scryfall_card: ScryfallCard) -> MtgPicsCardVersion:
     Returns:
         bool: Success flag
     """
-    import time; time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
-
     base_version = MtgPicsCard(scryfall_card).base_version
 
     print(f"Finding \"{base_version.image_subpath}\" on MTGPICS... ", end="")
     url = f"{BASE_URL}/pics/art/{base_version.image_subpath}"
     response = requests.get(url)
+    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
