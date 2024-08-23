@@ -5,12 +5,24 @@ from typing import List, Optional, Tuple
 from bs4 import BeautifulSoup
 import tinycss2 as tinycss
 
-from lib import scryfall_helpers
+from lib import scryfall_helpers, MTGPICS_SET_CODE_MAP
 from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
 from lib.common import flatten_list, get_rate_limit_wait
 
 BASE_URL = "https://mtgpics.com"
 THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``
+
+
+def convert_set_code(set_code: str) -> str:
+    """Translate MTGPICS set codes (unconventional) to Scryall/Oracle set codes.
+
+    Args:
+        set_code (str): MTGPICS set code
+
+    Returns:
+        str: Scryfall set code
+    """
+    return MTGPICS_SET_CODE_MAP[set_code] if set_code in MTGPICS_SET_CODE_MAP else set_code
 
 
 def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str] = None) -> Optional[Tuple[str, str]]:
@@ -45,7 +57,7 @@ def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str]
     # Keep track of all versions of `gamerid` in the event some misfires occur
     gamerids = []
     for card in cards:
-        ref = f"{card.set}{card.collector_number.rjust(3, '0')}"
+        ref = f"{convert_set_code(card.set)}{card.collector_number.rjust(3, '0')}"
         response = requests.get(f"{BASE_URL}/card", params=dict(ref=ref))
         soup = BeautifulSoup(response.content, "html.parser")
 
