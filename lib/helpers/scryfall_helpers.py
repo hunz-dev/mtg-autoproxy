@@ -26,18 +26,20 @@ def get_named_card(query: str) -> ScryfallCard:
     Returns:
         List[Card]: Array of Scryfall-based Card objects
     """
-    print(f"Searching Scryfall: \"{query}\"... ")  # TODO: Make log single line after search
+    print(f"Searching Scryfall: \"{query}\"... ", end=" ")  # TODO: Make log single line after search
 
     params = dict(fuzzy=query)
     response = requests.get(f"{BASE_URL}/cards/named/", params=params)
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
+        card = ScryfallCard(response)
     except ValueError as e:
         print(f"Unable to parse response from Scryfall: {e}")
         raise e
 
-    return ScryfallCard(response)
+    print(f"Found: {card}")
+    return card
 
 
 def get_matched_cards(query, unique="art", order="released", dir="desc") -> List[ScryfallCard]:
@@ -60,7 +62,7 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
     """
     params = dict(q=query, unique=unique, order=order, dir=dir)
 
-    print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end="")
+    print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end=" ")
     response = requests.get(f"{BASE_URL}/cards/search/", params=params)
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     try:
