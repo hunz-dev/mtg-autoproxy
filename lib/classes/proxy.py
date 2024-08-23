@@ -52,3 +52,6 @@ class Proxy:
         except ValueError as e:
             print(f"Invalid value: {row}")
             raise e
+
+    def add_to_order(self, count: int) -> None:
+        self.order_count = self.order_count + count
