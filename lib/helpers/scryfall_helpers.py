@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import time
 import requests
 from lib.classes import ScryfallCard
@@ -8,7 +8,7 @@ from lib.common import get_rate_limit_wait
 BASE_URL = "https://api.scryfall.com"
 
 
-def get_named_card(query: str) -> ScryfallCard:
+def get_named_card(query: str) -> Optional[ScryfallCard]:
     """Fetch single card from Scryfall based on a (Scryfall syntax) query, for
     more details see: https://scryfall.com/docs/api/cards/named.
 
@@ -24,7 +24,7 @@ def get_named_card(query: str) -> ScryfallCard:
             2) Card object was not able to be instantiated properly
 
     Returns:
-        List[Card]: Array of Scryfall-based Card objects
+        Optional[ScryfallCard]: ScryfallCard object if card was found, None otherwise
     """
     print(f"Searching Scryfall: \"{query}\"... ", end=" ")  # TODO: Make log single line after search
 
@@ -33,7 +33,11 @@ def get_named_card(query: str) -> ScryfallCard:
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
-        card = ScryfallCard(response)
+        if response["status"] == 404:
+            print(f"Unable to find unique result.")
+            return None
+        else:
+            card = ScryfallCard(response)
     except ValueError as e:
         print(f"Unable to parse response from Scryfall: {e}")
         raise e
