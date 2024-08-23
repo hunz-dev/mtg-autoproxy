@@ -33,7 +33,7 @@ def get_named_card(query: str) -> Optional[ScryfallCard]:
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
-        if response["status"] == 404:
+        if response.get("status") == 404:
             print(f"Unable to find unique result.")
             return None
         else:
