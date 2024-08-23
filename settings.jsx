@@ -15,7 +15,7 @@ var specified_template = null;
 // var specified_template = SilvanExtendedTemplate; // EXTENDED - Looks like WillieTanner proxies
 // var specified_template = SilvanMDFCFrontTemplate; // EXTENDED - WT proxies for mdfc
 // var specified_template = NormalExtendedTemplate; // EXTENDED - OG Chilli extended
-// var specified_template = MaleMPCTemplate; // EXTENDED - Male MPC's extended black box
+// var specified_template = MaleMPCTemplate; // EXTENDED - Male MPC's extended black box (for text)
 // var specified_template = NormalFullartTemplate; // FULLART - Originally Universes Beyond
 // var specified_template = WomensDayTemplate; // FULLART - 2XM Showcase
 // var specified_template = MasterpieceTemplate; // FULLART - Hour of devastation masterpiece
@@ -32,12 +32,11 @@ var specified_template = null;
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
 
 var specified_template = NormalTemplate;             // NORMAL
-// var specified_template = NormalExtendedTemplate;     // EXTENDED
+// var specified_template = SilvanExtendedTemplate;     // EXTENDED
 // var specified_template = WomensDayTemplate;          // SHOWCASE
 // var specified_template = NormalClassicTemplate;      // RETRO
 
-// var specified_template = [NormalTemplate, NormalExtendedTemplate]; // Do multiple templates at a time
-// var specified_template = [NormalTemplate, NormalClassicTemplate]; // Do multiple templates at a time
+// var specified_template = [NormalTemplate, SilvanExtendedTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
