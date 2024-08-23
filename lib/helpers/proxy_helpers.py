@@ -1,8 +1,8 @@
 import os
 from typing import Dict, List, Tuple
 
-from .classes import Proxy
-from .os_helpers import duplicate_file
+from lib.classes import Proxy
+from lib.helpers import os_helpers
 
 
 def create_unique_proxies(
@@ -36,6 +36,7 @@ def create_unique_proxies(
             continue
 
         proxy_path = f"{proxy_folder}/{proxy.type}/{file_names[0]}"
-        duplicate_file(proxy_path, destination_folder, proxy.order_count if duplicate else 1)
+        order_count = proxy.order_count if duplicate else 1
+        os_helpers.duplicate_file(proxy_path, destination_folder, order_count)
 
     return errors["missing"], errors["duplicates"]

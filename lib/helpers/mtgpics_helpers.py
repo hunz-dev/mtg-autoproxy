@@ -5,9 +5,10 @@ from typing import List, Optional, Tuple
 from bs4 import BeautifulSoup
 import tinycss2 as tinycss
 
-from lib import scryfall_helpers, MTGPICS_SET_CODE_MAP
+from lib import MTGPICS_SET_CODE_MAP
 from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
-from lib.common import flatten_list, get_rate_limit_wait
+from lib.common import get_rate_limit_wait
+from lib.helpers import scryfall_helpers
 
 BASE_URL = "https://mtgpics.com"
 THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``

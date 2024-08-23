@@ -5,9 +5,9 @@ from typing import List
 
 import requests
 
-from lib import mtgpics_helpers, scryfall_helpers
 from lib.classes import ScryfallCard
 from lib.common import get_rate_limit_wait
+from lib.helpers import mtgpics_helpers, scryfall_helpers
 
 
 DEEPAI_BASE_URL = "https://api.deepai.org/api"
