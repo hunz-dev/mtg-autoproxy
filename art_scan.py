@@ -78,9 +78,6 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False, skip_scr
         skip_mtgpics (bool, optional): Flag to skip MTGPICS.com fetch. Defaults to False.
         skip_scryfall (bool, optional): Flag to skip Scryfall image fetch. Defaults to False.
     """
-    # Fetch all cards for a given query
-    cards = scryfall_helpers.get_matched_cards(query)
-
     # Fetch HTML from MTGPICS with card info and save images
     results = list()
     if not skip_mtgpics:
@@ -93,7 +90,7 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False, skip_scr
 
     # If nothing is found, use Scryfall art w/ AI upscale
     if not skip_scryfall and (not any(results) or force_scryfall):
-        for card in cards:
+        for card in scryfall_helpers.get_matched_cards(query):
             save_deepai_image(card)
 
 
