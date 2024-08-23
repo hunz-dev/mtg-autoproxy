@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update repo structure to separate Photoshop from Python scripts
 - Revise README.md
 - Convert set symbols from encoding instead of pasting symbol (easier to compare)
+- Update python version
 
 ## [1.1.4] - 2024-08-22
 
