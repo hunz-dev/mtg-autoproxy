@@ -12,6 +12,9 @@ templates/
 .env
 templates*.zip
 
+credentials.json
+token.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
