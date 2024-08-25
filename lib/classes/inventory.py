@@ -48,11 +48,6 @@ class InventoryCard:
         except ValueError as e:
             print(f"Invalid value: {row}")
             raise e
-
-    def as_separated_value(self, separator=" "):
-        output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys()}
-        output["counts"] = separator.join([str(c) for c in output["counts"]])
-        return separator.join([str(v) for v in output.values()])
     
     @property
     def csv(self):
@@ -68,6 +63,13 @@ class InventoryCard:
     def __str__(self):
         return self.csv
 
+    def as_separated_value(self, separator=" "):
+        output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys()}
+        output["counts"] = separator.join([str(c) for c in output["counts"]])
+        return separator.join([str(v) for v in output.values()])
+
+    def add_to_order(self, to_add: int) -> None:
+        self.order_count = self.order_count + to_add
 
 class Inventory:
     cards: List[InventoryCard]
