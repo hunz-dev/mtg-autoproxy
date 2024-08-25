@@ -448,6 +448,7 @@ var ability_words = [
 
     // CLB abilities
     "Mold Earth",
+    "Hive Mind",
 ];
 
 // Card rarities
