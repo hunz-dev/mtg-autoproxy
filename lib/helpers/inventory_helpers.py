@@ -1,26 +1,26 @@
 import os
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
-from lib.classes import Proxy
+from lib.classes import InventoryCard
 from lib.helpers import os_helpers
 
 
 def create_unique_proxies(
-    proxies: List[Proxy],
+    proxies: List[InventoryCard],
     proxy_folder: str,
     destination_folder: str,
     duplicate: bool = True,
-) -> Tuple[List[Proxy], List[Proxy]]:
+) -> Tuple[List[InventoryCard], List[InventoryCard]]:
     """Traverse folder of proxies and create unique proxy images.
 
     Args:
-        proxies (List[Proxy]): List of proxies to create files for
+        proxies (List[InventoryCard]): List of proxies to create files for
         proxy_folder (str): Folder of source proxies
         destination_folder (str): Folder to write unique files for
         duplicate (bool): Flag to duplicate file based on proxy count. Defaults to True.
 
     Returns:
-        Tuple[List[Proxy], List[Proxy]]: List of missing files and duplicate files respectively
+        Tuple[List[InventoryCard], List[InventoryCard]]: List of missing files and duplicate files respectively
     """
     errors = { "missing": [], "duplicates": [] }
     for proxy in proxies:
