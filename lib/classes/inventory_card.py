@@ -31,6 +31,7 @@ class InventoryCard:
         "Land",
         "Multi",
         "Colorless",
+        "Token",
     ]
 
     def __init__(self, name: str, modified: str, type_: str, order_count: int):
@@ -47,7 +48,7 @@ class InventoryCard:
         try:
             return cls(
                 name=row[InventoryCard.COLUMN_MAP['name']],
-                type=row[InventoryCard.COLUMN_MAP['type_']],
+                type_=row[InventoryCard.COLUMN_MAP['type_']],
                 modified=row[InventoryCard.COLUMN_MAP['modified']],
                 order_count=row[InventoryCard.COLUMN_MAP['order_count']])
         except IndexError as e:
