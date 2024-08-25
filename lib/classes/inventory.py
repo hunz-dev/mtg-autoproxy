@@ -1,4 +1,9 @@
-from typing import List, Optional, Union
+
+from dataclasses import dataclass
+from typing import List, Optional, Tuple, Union
+
+from lib.classes import ScryfallCard
+from lib.helpers import scryfall_helpers
 
 
 class InventoryCard:
@@ -68,8 +73,37 @@ class InventoryCard:
         output["counts"] = separator.join([str(c) for c in output["counts"]])
         return separator.join([str(v) for v in output.values()])
 
-    def add_to_order(self, to_add: int) -> None:
-        self.order_count = self.order_count + to_add
+    def add_to_order(self, column: int, to_add: int) -> None:
+        self.counts[column] = self.counts[column] + to_add
+
+
+class OrderCard:
+    """Represent a card to find and order from Inventory.
+
+    Attributes:
+        card (str): ScryfallCard instance of the card to order
+        order (int): Number of cards to order
+    """
+    card: ScryfallCard
+    user: str
+    count: int
+
+    def __init__(self, card: ScryfallCard, user: str, count: int):
+        if any([p is None for p in [card, user, count]]):
+            raise ValueError("All `OrderCard` fields are required.")
+
+        self.card = card
+        self.user = user
+        self.count = count
+
+    @property
+    def name(self):
+        return self.card.name
+
+    @classmethod
+    def import_list(cls, order: List[Tuple[str, str]], user: str):
+        return [OrderCard(scryfall_helpers.get_named_card(card), user, count) for card, count in order]
+
 
 class Inventory:
     cards: List[InventoryCard]
@@ -112,3 +146,11 @@ class Inventory:
 
     def __str__(self):
         return f"Inventory: {len(self.cards)} cards for {len(self.users)} users ({', '.join(self.users)})"
+
+    def add_to_order(self, order_card: OrderCard):
+        matched_cards = [c for c in self.cards if order_card.name in c.name]
+        if len(matched_cards) < 1:
+            raise ValueError(f"No cards found named {order_card.name}.")
+
+        to_order = matched_cards[-1]  # Pick the last card if multiple match
+        to_order.add_to_order(self.users.index(order_card.user), order_card.count)
