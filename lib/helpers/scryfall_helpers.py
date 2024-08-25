@@ -6,6 +6,7 @@ from lib.common import get_rate_limit_wait
 
 
 BASE_URL = "https://api.scryfall.com"
+MIN_MAX_WAIT_RATE = (.05, .1)
 
 
 def get_named_card(query: str) -> Optional[ScryfallCard]:
@@ -30,7 +31,7 @@ def get_named_card(query: str) -> Optional[ScryfallCard]:
 
     params = dict(fuzzy=query)
     response = requests.get(f"{BASE_URL}/cards/named/", params=params)
-    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
+    time.sleep(get_rate_limit_wait(*MIN_MAX_WAIT_RATE))  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
         if response.get("status") == 404:
@@ -68,7 +69,7 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
 
     print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end=" ")
     response = requests.get(f"{BASE_URL}/cards/search/", params=params)
-    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
+    time.sleep(get_rate_limit_wait(*MIN_MAX_WAIT_RATE))  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
     except ValueError as e:
