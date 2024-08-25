@@ -10,10 +10,12 @@ class InventoryCard:
     """Represent attributes of a card for an inventory.
 
     Attributes:
+        counts (List[int]): List of card counts requested by users. Defaults to [].
         name (str): Name of the card
         modified (str): Timestamp string of the last modified date
-        type_ (str): Type of the card (ie. color identity or land)
-        order_count (int): Number of proxies to order
+        on_hand (int): Number of cards on hand. Defaults to 0.
+        order_count (int): Total number of proxies to order. Defaults to 0.
+        type_ (str): Type of the card (ie. color identity or land).
     """
     # TODO: Consider tying in `Card` object to class to keep `folder_name` out of that class.
     #       (Optional `type_` and `card` arguments here to infer type through either?)
@@ -25,8 +27,8 @@ class InventoryCard:
     type_: str
 
     def __init__(self,
-            name: str, type_: str, modified: str, counts: List[Union[str, int]],
-            on_hand: Union[str, int], order_count: Union[str, int]):
+            name: str, type_: str, modified: str, counts: List[Union[str, int]] = [],
+            on_hand: Union[str, int] = 0, order_count: Union[str, int] = 0):
         if type_ not in Inventory.VALID_TYPES:
             raise ValueError(f"Type must be one of: {Inventory.VALID_TYPES}")
 
@@ -82,6 +84,7 @@ class OrderCard:
 
     Attributes:
         card (str): ScryfallCard instance of the card to order
+        user (str): Name of the user for the order
         order (int): Number of cards to order
     """
     card: ScryfallCard
