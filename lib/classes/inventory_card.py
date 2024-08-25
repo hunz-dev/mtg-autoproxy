@@ -1,3 +1,5 @@
+from typing import List, Union
+
 class InventoryCard:
     """Represent attributes of a card for an inventory.
 
@@ -9,16 +11,20 @@ class InventoryCard:
     """
     # TODO: Consider tying in `Card` object to class to keep `folder_name` out of that class.
     #       (Optional `type_` and `card` arguments here to infer type through either?)
+    counts: List[int]
     name: str
     modified: str
-    type_: str
+    on_hand: int
     order_count: int
+    type_: str
 
     # Map column numbers from spreadsheet
     COLUMN_MAP = {
         "name": 0,
         "type_": 1,
         "modified": 2,
+        "counts": (3, -3),
+        "on_hand": -2,
         "order_count": -1,
     }
 
@@ -34,13 +40,17 @@ class InventoryCard:
         "Token",
     ]
 
-    def __init__(self, name: str, modified: str, type_: str, order_count: int):
+    def __init__(self,
+            name: str, type_: str, modified: str, counts: List[Union[str, int]],
+            on_hand: Union[str, int], order_count: Union[str, int]):
         if type_ not in InventoryCard.VALID_TYPES:
             raise ValueError(f"Type must be one of: {InventoryCard.VALID_TYPES}")
 
         self.name = name
         self.modified = modified  # TODO: Convert to datetime?
         self.type_ = type_
+        self.counts = [int(count) if count else 0 for count in counts]
+        self.on_hand = int(on_hand) if on_hand else 0
         self.order_count = int(order_count) if order_count else 0
 
     @classmethod
@@ -50,6 +60,8 @@ class InventoryCard:
                 name=row[InventoryCard.COLUMN_MAP['name']],
                 type_=row[InventoryCard.COLUMN_MAP['type_']],
                 modified=row[InventoryCard.COLUMN_MAP['modified']],
+                counts=row[InventoryCard.COLUMN_MAP['counts'][0]:InventoryCard.COLUMN_MAP['counts'][1]],
+                on_hand=row[InventoryCard.COLUMN_MAP['order_count']],
                 order_count=row[InventoryCard.COLUMN_MAP['order_count']])
         except IndexError as e:
             print(f"Error parsing: {row}")
@@ -59,8 +71,9 @@ class InventoryCard:
             raise e
 
     def as_separated_value(self, separator=" "):
-        order = ["name", "type_", "modified", "order_count"]
-        return separator.join([getattr(self, v) for v in order])
+        output = {k: getattr(self, k) for k in InventoryCard.COLUMN_MAP.keys()}
+        output["counts"] = separator.join([str(c) for c in output["counts"]])
+        return separator.join([str(v) for v in output.values()])
     
     @property
     def csv(self):
