@@ -8,6 +8,7 @@ scripts/*.json
 secrets/*
 !secrets/.keep
 templates/
+orders/
 
 .env
 templates*.zip

@@ -71,7 +71,7 @@ def find_missing_files(file_path: str, file_names: List[str]) -> List[str]:
     return missing_files
 
 
-def list_files(source_path: str, ignore: List[str] = None) -> List[str]:
+def list_files(source_path: str, ignore: List[str] = None, include_base: bool = False) -> List[str]:
     """List all files in a directory from a given path with an option to ignore a list of names.
 
     Args:
@@ -81,7 +81,8 @@ def list_files(source_path: str, ignore: List[str] = None) -> List[str]:
     Returns:
         List[str]: File names within `source_path`
     """
-    return [f for f in os.listdir(source_path) if not ignore or f not in ignore]
+    file_wrapper = lambda name: f"{source_path}/{name}" if include_base else name
+    return [file_wrapper(f) for f in os.listdir(source_path) if not ignore or f not in ignore]
 
 
 def split_files(source_path, destination_path, folder_size, prefix="output_{number:02d}"):
