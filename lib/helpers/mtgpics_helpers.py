@@ -100,9 +100,9 @@ def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str]
         print("No `gamerid` detected.")
         return None
     elif len(gamerids) > 1:
-        most_frequent_gamerid = max(set(gamerids), key=gamerids.count)
-        print(f"Multiple versions of `gamerid` found: [{gamerids}], using [{most_frequent_gamerid}]")
-        return most_frequent_gamerid
+        print(f"Multiple versions of `gamerid` found: {gamerids}")
+        found_gamer_id = find_valid_gamerid(card.name, gamerids)
+        return found_gamer_id
     else:
         found_gamer_id = gamerids[0]
         print(f"Found unique `gamerid`: {found_gamer_id}.")
@@ -166,6 +166,26 @@ def find_all_art_versions(card_name: str, gamerid: str) -> List[MtgPicsCardVersi
 
     print(f"{len(payload)} unique version{'s' if len(payload) != 1 else ''} found: {payload}")
     return payload
+
+
+def find_valid_gamerid(card_name: str, gamerids: List[str]) -> Optional[str]:
+    """Tests multiple gamerids to check if any return images.
+
+    Args:
+        card_name (str): Name of the card
+        gamerids (List[str]): List of `gamerid`s to verify
+
+    Returns:
+        Optional[str]: `gamerid` if valid, None otherwise
+    """
+    results = {}
+    for gamerid in gamerids:
+        results[gamerid] = find_all_art_versions(card_name, gamerid)
+    try:
+        return [k for k, v in results.items() if len(v) > 0][-1]
+    except IndexError:
+        print(f"No valid gamerids detected from: {gamerids}")
+        return None
 
 
 def save_image(image_version: MtgPicsCardVersion) -> bool:
