@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Version number and zip templates named alongside
-- Scratchpad function to take decklist as inventory addition
 - Support for fast-saving (not closing template file in between render_all.jsx)
 - Nested log statements when running art scan
 - Use rate limiter decorator
@@ -19,16 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Move `*_helpers` to `lib.helpers`
-- Use `lib/scryfall_helpers.py` in art_scan.py
 - Update repo structure to separate Photoshop from Python scripts
 - Revise README.md
-- Convert set symbols from encoding instead of pasting symbol (easier to compare)
 - Update python version
 
 ### Fixed
 
-- Handling for no results found with `scryfall_helpers.get_named_card`
 - Fix google_auth for private sheets
 
 ## [1.1.4] - 2024-08-22
@@ -41,6 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Capability to capture an TSV-based inventory for all generated proxies
 - Capability to download set icons from Keyrune
 - Structure to the `scratchpad.ipynb` notebook for common operations
+- `gamerid` fetch for MTGPICS for more consistent results
+- Mapping of MTGPICS to Scryfall set code to correct URIs
+- Order import (from decklist to inventory)
+- Order amendments for inventory
 
 ### Changed
 
@@ -48,6 +46,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Classes: `InventoryCard`, `ScryfallCard`, `MtgPicsCard`
     - Modules: `common`, `mtg_helpers`, `os_helpers`, `scryfall_helpers`
 - File output structure to include artist name
+- Move `*_helpers` to `lib.helpers`
+- Merged `InventoryCard` and `Proxy` classes as they were performing overlapping duties
+- Reduced scryfall limiting rate
+- Adjusted file name structure to match art to proxy consistently
 
 ### Fixed
 
