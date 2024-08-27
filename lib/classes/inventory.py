@@ -114,8 +114,25 @@ class OrderCard:
     def name(self):
         return self.card.name
 
+    @property
+    def set_code(self):
+        return self.card.set
+
     @classmethod
-    def import_list(cls, order: List[Tuple[str, str, Optional[str]]], user: str):
+    def import_list(cls, order: List[Union[Tuple[str], Tuple[str,str], Tuple[str,str,str]]], user: str):
+        """Imports a 2D list of strings as a list of `OrderCard`s.
+
+        Args:
+            order (List[Union[Tuple[str], Tuple[str,str], Tuple[str,str,str]): 2D list of strings of either
+                length 1 (card name [assume count is 1]), 2 (card name, count), or 3 (card name, set code, count).
+            user (str): Name of the user to associate order with.
+
+        Raises:
+            ValueError: If any of the list items are a tuple not between lengths 1 and 3 inclusive.
+
+        Returns:
+            List[OrderCard]: List of OrderCard objects
+        """
         order_list = []
         for order_line in order:
             if len(order_line) == 1:
@@ -171,6 +188,14 @@ class Inventory:
         return f"Inventory: {len(self.cards)} cards for {len(self.users)} users ({', '.join(self.users)})"
 
     def add_to_order(self, order_card: OrderCard):
+        """Adds a card to the inventory.
+
+        Args:
+            order_card (OrderCard): Order card to add
+
+        Raises:
+            ValueError: If the card does not exist in the inventory yet.
+        """
         matched_cards = [c for c in self.cards if order_card.name in c.name]
         if len(matched_cards) < 1:
             raise ValueError(f"No cards found named {order_card.name}.")
