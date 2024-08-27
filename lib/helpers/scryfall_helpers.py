@@ -1,14 +1,14 @@
-# TODO: Use requests-cache
-
 from typing import List, Optional
 import time
-import requests
+from requests_cache import CachedSession
 from lib.classes import ScryfallCard
 from lib.common import get_rate_limit_wait
 
 
 BASE_URL = "https://api.scryfall.com"
 MIN_MAX_WAIT_RATE = (.05, .1)
+
+session = CachedSession()
 
 
 def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[ScryfallCard]:
@@ -29,7 +29,7 @@ def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[Scryfa
     print(f"Searching Scryfall: \"{name}{f' [{set_code}]' if set_code else ''}\"...", end=" ")
 
     params = dict(exact=name, set=set_code)
-    response = requests.get(f"{BASE_URL}/cards/named/", params=params)
+    response = session.get(f"{BASE_URL}/cards/named/", params=params)
     time.sleep(get_rate_limit_wait(*MIN_MAX_WAIT_RATE))  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
@@ -67,7 +67,7 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
     params = dict(q=query, unique=unique, order=order, dir=dir)
 
     print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end=" ")
-    response = requests.get(f"{BASE_URL}/cards/search/", params=params)
+    response = session.get(f"{BASE_URL}/cards/search/", params=params)
     time.sleep(get_rate_limit_wait(*MIN_MAX_WAIT_RATE))  # TODO: Use a rate limit wrapper
     try:
         response = response.json()

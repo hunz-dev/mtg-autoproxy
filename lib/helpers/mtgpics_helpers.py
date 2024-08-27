@@ -1,9 +1,9 @@
 import re
-import requests
 import time
 from typing import List, Optional, Tuple
 
 from bs4 import BeautifulSoup
+from requests_cache import CachedSession
 import tinycss2 as tinycss
 
 from lib import MTGPICS_SET_CODE_MAP
@@ -13,6 +13,8 @@ from lib.helpers import scryfall_helpers
 
 BASE_URL = "https://mtgpics.com"
 THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``
+
+session = CachedSession()
 
 
 def convert_set_code(set_code: str) -> str:
@@ -60,7 +62,7 @@ def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str]
     gamerids = []
     for card in cards:
         ref = f"{convert_set_code(card.set)}{card.collector_number.rjust(3, '0')}"
-        response = requests.get(f"{BASE_URL}/card", params=dict(ref=ref))
+        response = session.get(f"{BASE_URL}/card", params=dict(ref=ref))
         time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
         soup = BeautifulSoup(response.content, "html.parser")
 
@@ -122,7 +124,7 @@ def find_all_art_versions(card_name: str, gamerid: str) -> List[MtgPicsCardVersi
         List[MtgPicsCardVersion]: List of unique MTGPICS image versions
     """
     params = dict(gamerid=gamerid)
-    response = requests.get(f"{BASE_URL}/art", params=params)
+    response = session.get(f"{BASE_URL}/art", params=params)
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     soup = BeautifulSoup(response.content, "html.parser")
 
@@ -199,7 +201,7 @@ def save_image(image_version: MtgPicsCardVersion) -> bool:
     """
     print(f"Finding \"{image_version.image_subpath}\" on MTGPICS... ", end="")
     url = f"{BASE_URL}/pics/art/{image_version.image_subpath}"
-    response = requests.get(url)
+    response = session.get(url)
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:
@@ -227,7 +229,7 @@ def save_image_alt(scryfall_card: ScryfallCard) -> MtgPicsCardVersion:
 
     print(f"Finding \"{base_version.image_subpath}\" on MTGPICS... ", end="")
     url = f"{BASE_URL}/pics/art/{base_version.image_subpath}"
-    response = requests.get(url)
+    response = session.get(url)
     time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:

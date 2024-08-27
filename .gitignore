@@ -13,7 +13,10 @@ orders/
 .env
 templates*.zip
 
+*.sqlite
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.bin
