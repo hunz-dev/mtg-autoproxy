@@ -187,11 +187,11 @@ var BaseTemplate = Class({
         var suffix = this.template_suffix();
 
         if (this.layout.artist !== "") {
-            file_name = file_name + " [" + this.layout.artist + "]";
+            file_name = file_name + " (" + this.layout.artist + ", " + this.layout.set + ")";
         }
 
         if (suffix !== "") {
-            file_name = file_name + " (" + suffix + ")";
+            file_name = file_name + " [" + suffix + "]";
         }
 
         return file_name;
