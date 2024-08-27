@@ -115,9 +115,24 @@ class OrderCard:
         return self.card.name
 
     @classmethod
-    def import_list(cls, order: List[Tuple[str, str]], user: str):
-        return [OrderCard(scryfall_helpers.get_named_card(card), user, count) for card, count in order]
+    def import_list(cls, order: List[Tuple[str, str, Optional[str]]], user: str):
+        order_list = []
+        for order_line in order:
+            if len(order_line) == 1:
+                card_name = order_line
+                count = 1
+                set_code = None
+            elif len(order_line) == 2:
+                card_name, count = order_line
+                set_code = None
+            elif len(order_line) == 3:
+                card_name, set_code, count = order_line
+            else:
+                raise ValueError("Each element must be between lengths 1 and 3 inclusive.")
 
+            order_list.append(OrderCard(scryfall_helpers.get_named_card(card_name, set_code), user, count))
+
+        return order_list
 
 class Inventory:
     cards: List[InventoryCard]
