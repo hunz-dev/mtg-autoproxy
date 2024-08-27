@@ -71,7 +71,7 @@ class ScryfallCard:
             return [(str(self), self.image_uris["art_crop"])]
 
     @property
-    def folder_name(self) -> str:
+    def color_name(self) -> str:
         color_map = {
             "W": "White",
             "U": "Blue",
@@ -80,9 +80,7 @@ class ScryfallCard:
             "G": "Green",
         }
 
-        if (self.is_mdfc and "Land" in self.mdfc_front_face_type) or (not self.is_mdfc and "Land" in self.type_line):
-            return "Land"
-        elif len(self.color_identity) > 1:
+        if len(self.color_identity) > 1:
             return "Multi"
         elif len(self.color_identity) < 1:
             return "Colorless"

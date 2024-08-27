@@ -21,6 +21,7 @@ class InventoryCard:
         type_ (str): Type of the card (ie. color identity or land).
     """
     artist: str
+    color: str
     counts: List[int]
     frame: str
     modified: str
@@ -31,8 +32,8 @@ class InventoryCard:
     type_: str
 
     def __init__(self,
-            name: str, set_code: str, artist: str, frame: str, type_: str, modified: str,
-            counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
+            name: str, set_code: str, artist: str, frame: str, type_: str, color: str,
+            modified: str, counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
             order_count: Union[str, int] = 0):
         self.name = name
         self.set_code = set_code
@@ -40,6 +41,7 @@ class InventoryCard:
         self.frame = frame
         self.modified = modified  # TODO: Convert to datetime?
         self.type_ = type_
+        self.color = color
         self.counts = [int(count) if count else 0 for count in counts]
         self.on_hand = int(on_hand) if on_hand else 0
         self.order_count = int(order_count) if order_count else 0
@@ -49,13 +51,14 @@ class InventoryCard:
         try:
             return cls(
                 name=row[Inventory.COLUMN_MAP['name']],
-                set_code_=row[Inventory.COLUMN_MAP['set_code']],
+                set_code=row[Inventory.COLUMN_MAP['set_code']],
                 artist=row[Inventory.COLUMN_MAP['artist']],
                 frame=row[Inventory.COLUMN_MAP['frame']],
                 type_=row[Inventory.COLUMN_MAP['type_']],
+                color=row[Inventory.COLUMN_MAP['color']],
                 modified=row[Inventory.COLUMN_MAP['modified']],
                 counts=row[Inventory.COLUMN_MAP['counts'][0]:Inventory.COLUMN_MAP['counts'][1]],
-                on_hand=row[Inventory.COLUMN_MAP['order_count']],
+                on_hand=row[Inventory.COLUMN_MAP['on_hand']],
                 order_count=row[Inventory.COLUMN_MAP['order_count']])
         except IndexError as e:
             print(f"Error parsing: {row}")
@@ -79,7 +82,7 @@ class InventoryCard:
         return self.csv
 
     def as_separated_value(self, separator=" "):
-        output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys()}
+        output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys() if k not in Inventory.HIDDEN_FIELDS}
         output["counts"] = separator.join([str(c) for c in output["counts"]])
         return separator.join([str(v) for v in output.values()])
 
@@ -128,12 +131,14 @@ class Inventory:
         "artist": 2,
         "frame": 3,
         "type_": 4,
-        "modified": 5,
-        "counts": (6, -3),
+        "color": 5,
+        "modified": 6,
+        "counts": (7, -3),
         "on_hand": -2,
         "order_count": -1,
     }
     HEADER_ROW = 4  # Ignore calculated fields in rows 1-3
+    HIDDEN_FIELDS = ["on_hand", "order_count"]
 
     def __init__(self, cards: List[InventoryCard], users: List[str], sheet_id: str = None):
         self.cards = cards
