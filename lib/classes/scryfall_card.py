@@ -103,6 +103,20 @@ class ScryfallCard:
             raise ValueError("Card must be MDFC to use this property")
         return self.card_faces[0]["type_line"]
 
+    @property
+    def type_alt(self) -> str:
+        simple_types = [
+            "Artifact",
+            "Creature",
+            "Enchantment",
+            "Instant",
+            "Land",
+            "Sorcery",
+            "Planeswalker",
+        ]
+
+        return [t for t in simple_types if t in self.type_line][0]
+
     @staticmethod
     def format_name(name, artist, set) -> str:
         return f"{name} ({artist}) [{set.upper()}]"

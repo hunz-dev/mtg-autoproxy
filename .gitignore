@@ -8,11 +8,15 @@ scripts/*.json
 secrets/*
 !secrets/.keep
 templates/
+orders/
 
 .env
-templates-*.zip
+templates*.zip
+
+*.sqlite
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.bin

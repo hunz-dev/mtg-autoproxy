@@ -1,3 +1,5 @@
+# TODO: Clean up file and expose main behavior as named function instead of main (but still runnable from PS)
+
 import time
 import sys
 import json

@@ -5,24 +5,17 @@ from typing import List
 
 import requests
 
-from lib import mtgpics_helpers, scryfall_helpers
 from lib.classes import ScryfallCard
 from lib.common import get_rate_limit_wait
+from lib.helpers import mtgpics_helpers, scryfall_helpers
 
 
 DEEPAI_BASE_URL = "https://api.deepai.org/api"
-
-# DeepAI API key to use for upscaling models, should be placed in `/.env` file
 DEEPAI_KEY = os.environ['DEEPAI_KEY'].replace("\r", "")
+DEEPAI_MODEL_NAME = "torch-srgan"
 
 
-# Specify a list of queries for Scryfall
-queries = [
-    # ex. "arbor elf set:wwk",
-    # "",
-]
-
-def save_deepai_image(card: ScryfallCard, model_name="waifu2x") -> None:
+def save_deepai_image(card: ScryfallCard, model_name=DEEPAI_MODEL_NAME) -> None:
     """Save a DeepAI generated image upscaled from Scryfall image.
 
     Args:
@@ -85,27 +78,22 @@ def process_query(query: str, force_scryfall=False, skip_mtgpics=False, skip_scr
         skip_mtgpics (bool, optional): Flag to skip MTGPICS.com fetch. Defaults to False.
         skip_scryfall (bool, optional): Flag to skip Scryfall image fetch. Defaults to False.
     """
-    # Fetch all cards for a given query
-    cards = scryfall_helpers.get_matched_cards(query)
-
     # Fetch HTML from MTGPICS with card info and save images
     results = list()
     if not skip_mtgpics:
-        for version in mtgpics_helpers.get_all_versions(cards, dir="asc"):
-            results.append(mtgpics_helpers.save_image(version))
-
-        # If nothing was found using main approach, use alternate
-        if not any(results):
-            for card in cards:
-                results.append(mtgpics_helpers.save_image_alt(card))
+        result = mtgpics_helpers.get_gamerid(query=query)
+        if not result:
+            print("No gamerid found for query...")
+        else:
+            for version in mtgpics_helpers.find_all_art_versions(*result):
+                results.append(mtgpics_helpers.save_image(version))
 
     # If nothing is found, use Scryfall art w/ AI upscale
     if not skip_scryfall and (not any(results) or force_scryfall):
-        for card in cards:
-            save_deepai_image(card, model_name="torch-srgan")
+        for card in scryfall_helpers.get_matched_cards(query):
+            save_deepai_image(card)
 
 
 if __name__ == "__main__":
-    queries = queries if len(queries) > 0 else read_stdin()
     # Parse out asterisk to force scryfall image search
-    [process_query(q.replace("*", ""), force_scryfall=("*" in q)) for q in queries]
+    [process_query(q.replace("*", ""), force_scryfall=("*" in q)) for q in read_stdin()]

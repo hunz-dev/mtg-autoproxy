@@ -6,6 +6,7 @@ from .scryfall_card import ScryfallCard
 # Maps Scryfall set codes to MTGPICS
 SET_CODE_MAP = {
     "5dn": "fda",
+    "5ed": "5th",
 }
 
 @dataclass

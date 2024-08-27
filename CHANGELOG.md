@@ -19,10 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Move `*_helpers` to `lib.helpers`
 - Use `lib/scryfall_helpers.py` in art_scan.py
 - Update repo structure to separate Photoshop from Python scripts
 - Revise README.md
 - Convert set symbols from encoding instead of pasting symbol (easier to compare)
+- Update python version
+
+### Fixed
+
+- Handling for no results found with `scryfall_helpers.get_named_card`
+- Fix google_auth for private sheets
 
 ## [1.1.4] - 2024-08-22
 
