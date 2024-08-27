@@ -10,29 +10,34 @@ class InventoryCard:
     """Represent attributes of a card for an inventory.
 
     Attributes:
+        artist (str): Name of the artist
         counts (List[int]): List of card counts requested by users. Defaults to [].
-        name (str): Name of the card
+        frame (str): Type of frame used on the card
         modified (str): Timestamp string of the last modified date
+        name (str): Name of the card
         on_hand (int): Number of cards on hand. Defaults to 0.
         order_count (int): Total number of proxies to order. Defaults to 0.
+        set_code (str): Set that the card belongs to
         type_ (str): Type of the card (ie. color identity or land).
     """
-    # TODO: Consider tying in `Card` object to class to keep `folder_name` out of that class.
-    #       (Optional `type_` and `card` arguments here to infer type through either?)
+    artist: str
     counts: List[int]
-    name: str
+    frame: str
     modified: str
+    name: str
     on_hand: int
     order_count: int
+    set_code: str
     type_: str
 
     def __init__(self,
-            name: str, type_: str, modified: str, counts: List[Union[str, int]] = [],
-            on_hand: Union[str, int] = 0, order_count: Union[str, int] = 0):
-        if type_ not in Inventory.VALID_TYPES:
-            raise ValueError(f"Type must be one of: {Inventory.VALID_TYPES}")
-
+            name: str, set_code: str, artist: str, frame: str, type_: str, modified: str,
+            counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
+            order_count: Union[str, int] = 0):
         self.name = name
+        self.set_code = set_code
+        self.artist = artist
+        self.frame = frame
         self.modified = modified  # TODO: Convert to datetime?
         self.type_ = type_
         self.counts = [int(count) if count else 0 for count in counts]
@@ -44,6 +49,9 @@ class InventoryCard:
         try:
             return cls(
                 name=row[Inventory.COLUMN_MAP['name']],
+                set_code_=row[Inventory.COLUMN_MAP['set_code']],
+                artist=row[Inventory.COLUMN_MAP['artist']],
+                frame=row[Inventory.COLUMN_MAP['frame']],
                 type_=row[Inventory.COLUMN_MAP['type_']],
                 modified=row[Inventory.COLUMN_MAP['modified']],
                 counts=row[Inventory.COLUMN_MAP['counts'][0]:Inventory.COLUMN_MAP['counts'][1]],
@@ -116,24 +124,16 @@ class Inventory:
     # Map column numbers from spreadsheet
     COLUMN_MAP = {
         "name": 0,
-        "type_": 1,
-        "modified": 2,
-        "counts": (3, -3),
+        "set_code": 1,
+        "artist": 2,
+        "frame": 3,
+        "type_": 4,
+        "modified": 5,
+        "counts": (6, -3),
         "on_hand": -2,
         "order_count": -1,
     }
     HEADER_ROW = 4  # Ignore calculated fields in rows 1-3
-    VALID_TYPES = [
-        "White",
-        "Blue",
-        "Black",
-        "Red",
-        "Green",
-        "Land",
-        "Multi",
-        "Colorless",
-        "Token",
-    ]
 
     def __init__(self, cards: List[InventoryCard], users: List[str], sheet_id: str = None):
         self.cards = cards
