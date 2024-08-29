@@ -8,13 +8,14 @@ import tinycss2 as tinycss
 
 from lib import MTGPICS_SET_CODE_MAP
 from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
-from lib.common import get_rate_limit_wait
+from lib.common import get_requests_session
 from lib.helpers import scryfall_helpers
+
 
 BASE_URL = "https://mtgpics.com"
 THUMBNAIL_STYLE = "display:block;border:4px black solid;cursor:pointer;"  # Style element containing `gamerid``
 
-session = CachedSession()
+session = get_requests_session()
 
 
 def convert_set_code(set_code: str) -> str:
@@ -63,7 +64,6 @@ def get_gamerid(cards: Optional[List[ScryfallCard]] = None, query: Optional[str]
     for card in cards:
         ref = f"{convert_set_code(card.set)}{card.collector_number.rjust(3, '0')}"
         response = session.get(f"{BASE_URL}/card", params=dict(ref=ref))
-        time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Look at title element of the webpage to check card name first
@@ -125,7 +125,6 @@ def find_all_art_versions(card_name: str, gamerid: str) -> List[MtgPicsCardVersi
     """
     params = dict(gamerid=gamerid)
     response = session.get(f"{BASE_URL}/art", params=params)
-    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
     soup = BeautifulSoup(response.content, "html.parser")
 
     # Look in HTML for image URLs, set id, and artist
@@ -202,7 +201,6 @@ def save_image(image_version: MtgPicsCardVersion) -> bool:
     print(f"Finding \"{image_version.image_subpath}\" on MTGPICS... ", end="")
     url = f"{BASE_URL}/pics/art/{image_version.image_subpath}"
     response = session.get(url)
-    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")
@@ -230,7 +228,6 @@ def save_image_alt(scryfall_card: ScryfallCard) -> MtgPicsCardVersion:
     print(f"Finding \"{base_version.image_subpath}\" on MTGPICS... ", end="")
     url = f"{BASE_URL}/pics/art/{base_version.image_subpath}"
     response = session.get(url)
-    time.sleep(get_rate_limit_wait())  # TODO: Use a rate limit wrapper
 
     if len(response.content) <= 0 or "There's nothing here" in response.text:
         print(f"Not found.")

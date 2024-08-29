@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields
 from typing import Dict, List, Tuple, Optional
+from lib.common import strip_accents
 
 
 @dataclass
@@ -57,6 +58,8 @@ class ScryfallCard:
             except KeyError:
                 setattr(self, field.name, None)
 
+        self.name = strip_accents(self.name)
+
     def __str__(self):
         return self.format_name(self.name, self.artist, self.set)
 
@@ -71,7 +74,7 @@ class ScryfallCard:
             return [(str(self), self.image_uris["art_crop"])]
 
     @property
-    def folder_name(self) -> str:
+    def color_name(self) -> str:
         color_map = {
             "W": "White",
             "U": "Blue",
@@ -80,9 +83,7 @@ class ScryfallCard:
             "G": "Green",
         }
 
-        if (self.is_mdfc and "Land" in self.mdfc_front_face_type) or (not self.is_mdfc and "Land" in self.type_line):
-            return "Land"
-        elif len(self.color_identity) > 1:
+        if len(self.color_identity) > 1:
             return "Multi"
         elif len(self.color_identity) < 1:
             return "Colorless"
@@ -96,6 +97,12 @@ class ScryfallCard:
     @property
     def is_mdfc(self) -> bool:
         return self.card_faces
+
+    @property
+    def mdfc_front_face_name(self) -> str:
+        if not self.is_mdfc:
+            raise ValueError("Card must be MDFC to use this property")
+        return self.card_faces[0]["name"]
 
     @property
     def mdfc_front_face_type(self) -> str:

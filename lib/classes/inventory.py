@@ -2,8 +2,12 @@
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
 
+from lib.common import strip_accents
 from lib.classes import ScryfallCard
 from lib.helpers import scryfall_helpers
+
+
+CUSTOM_SET_CODE = "PRX"
 
 
 class InventoryCard:
@@ -21,6 +25,7 @@ class InventoryCard:
         type_ (str): Type of the card (ie. color identity or land).
     """
     artist: str
+    color: str
     counts: List[int]
     frame: str
     modified: str
@@ -31,8 +36,8 @@ class InventoryCard:
     type_: str
 
     def __init__(self,
-            name: str, set_code: str, artist: str, frame: str, type_: str, modified: str,
-            counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
+            name: str, set_code: str, artist: str, frame: str, type_: str, color: str,
+            modified: str, counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
             order_count: Union[str, int] = 0):
         self.name = name
         self.set_code = set_code
@@ -40,6 +45,7 @@ class InventoryCard:
         self.frame = frame
         self.modified = modified  # TODO: Convert to datetime?
         self.type_ = type_
+        self.color = color
         self.counts = [int(count) if count else 0 for count in counts]
         self.on_hand = int(on_hand) if on_hand else 0
         self.order_count = int(order_count) if order_count else 0
@@ -49,13 +55,14 @@ class InventoryCard:
         try:
             return cls(
                 name=row[Inventory.COLUMN_MAP['name']],
-                set_code_=row[Inventory.COLUMN_MAP['set_code']],
+                set_code=row[Inventory.COLUMN_MAP['set_code']],
                 artist=row[Inventory.COLUMN_MAP['artist']],
                 frame=row[Inventory.COLUMN_MAP['frame']],
                 type_=row[Inventory.COLUMN_MAP['type_']],
+                color=row[Inventory.COLUMN_MAP['color']],
                 modified=row[Inventory.COLUMN_MAP['modified']],
                 counts=row[Inventory.COLUMN_MAP['counts'][0]:Inventory.COLUMN_MAP['counts'][1]],
-                on_hand=row[Inventory.COLUMN_MAP['order_count']],
+                on_hand=row[Inventory.COLUMN_MAP['on_hand']],
                 order_count=row[Inventory.COLUMN_MAP['order_count']])
         except IndexError as e:
             print(f"Error parsing: {row}")
@@ -79,9 +86,9 @@ class InventoryCard:
         return self.csv
 
     def as_separated_value(self, separator=" "):
-        output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys()}
+        output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys() if k not in Inventory.HIDDEN_FIELDS}
         output["counts"] = separator.join([str(c) for c in output["counts"]])
-        return separator.join([str(v) for v in output.values()])
+        return separator.join([strip_accents(str(v)) for v in output.values()])
 
     def add_to_order(self, column: int, to_add: int) -> None:
         self.counts[column] = self.counts[column] + to_add
@@ -93,7 +100,7 @@ class OrderCard:
     Attributes:
         card (str): ScryfallCard instance of the card to order
         user (str): Name of the user for the order
-        order (int): Number of cards to order
+        count (int): Number of cards to order
     """
     card: ScryfallCard
     user: str
@@ -109,12 +116,53 @@ class OrderCard:
 
     @property
     def name(self):
-        return self.card.name
+        return self.card.name if not self.card.is_mdfc else self.card.mdfc_front_face_name
+
+    @property
+    def set_code(self):
+        return self.card.set
 
     @classmethod
-    def import_list(cls, order: List[Tuple[str, str]], user: str):
-        return [OrderCard(scryfall_helpers.get_named_card(card), user, count) for card, count in order]
+    def import_list(cls, order: List[Union[Tuple[str], Tuple[str,str], Tuple[str,str,str]]], user: str):
+        """Imports a 2D list of strings as a list of `OrderCard`s.
 
+        Args:
+            order (List[Union[Tuple[str], Tuple[str,str], Tuple[str,str,str]): 2D list of strings of either
+                length 1 (card name [assume count is 1]), 2 (card name, count), or 3 (card name, set code, count).
+            user (str): Name of the user to associate order with.
+
+        Raises:
+            ValueError: If any of the list items are a tuple not between lengths 1 and 3 inclusive.
+
+        Returns:
+            List[OrderCard]: List of OrderCard objects
+        """
+        order_list = []
+        for order_line in order:
+            if len(order_line) == 1:
+                card_name = order_line
+                count = 1
+                set_code = None
+            elif len(order_line) == 2:
+                card_name, count = order_line
+                set_code = None
+            elif len(order_line) == 3:
+                card_name, set_code, count = order_line
+            else:
+                raise ValueError("Each element must be between lengths 1 and 3 inclusive.")
+
+            # Ignore set code in search if desired card is custom (to avoid not being found)
+            if set_code == CUSTOM_SET_CODE:
+                scryfall_card = scryfall_helpers.get_named_card(card_name)
+            else:
+                scryfall_card = scryfall_helpers.get_named_card(card_name, set_code)
+
+            if scryfall_card is None:
+                raise ValueError(f"No card found for {card_name}.")
+
+            order_list.append(OrderCard(scryfall_card, user, count))
+
+        return order_list
 
 class Inventory:
     cards: List[InventoryCard]
@@ -128,12 +176,14 @@ class Inventory:
         "artist": 2,
         "frame": 3,
         "type_": 4,
-        "modified": 5,
-        "counts": (6, -3),
+        "color": 5,
+        "modified": 6,
+        "counts": (7, -3),
         "on_hand": -2,
         "order_count": -1,
     }
     HEADER_ROW = 4  # Ignore calculated fields in rows 1-3
+    HIDDEN_FIELDS = ["on_hand", "order_count"]
 
     def __init__(self, cards: List[InventoryCard], users: List[str], sheet_id: str = None):
         self.cards = cards
@@ -151,6 +201,14 @@ class Inventory:
         return f"Inventory: {len(self.cards)} cards for {len(self.users)} users ({', '.join(self.users)})"
 
     def add_to_order(self, order_card: OrderCard):
+        """Adds a card to the inventory.
+
+        Args:
+            order_card (OrderCard): Order card to add
+
+        Raises:
+            ValueError: If the card does not exist in the inventory yet.
+        """
         matched_cards = [c for c in self.cards if order_card.name in c.name]
         if len(matched_cards) < 1:
             raise ValueError(f"No cards found named {order_card.name}.")

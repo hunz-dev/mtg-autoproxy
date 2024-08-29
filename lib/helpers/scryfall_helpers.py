@@ -1,14 +1,13 @@
 from typing import List, Optional
 import time
-from requests_cache import CachedSession
 from lib.classes import ScryfallCard
-from lib.common import get_rate_limit_wait
+from lib.common import get_requests_session
 
 
 BASE_URL = "https://api.scryfall.com"
 MIN_MAX_WAIT_RATE = (.05, .1)
 
-session = CachedSession()
+session = get_requests_session()
 
 
 def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[ScryfallCard]:
@@ -30,7 +29,6 @@ def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[Scryfa
 
     params = dict(exact=name, set=set_code)
     response = session.get(f"{BASE_URL}/cards/named/", params=params)
-    time.sleep(get_rate_limit_wait(*MIN_MAX_WAIT_RATE))  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
         if response.get("status") == 404:
@@ -68,7 +66,6 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
 
     print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end=" ")
     response = session.get(f"{BASE_URL}/cards/search/", params=params)
-    time.sleep(get_rate_limit_wait(*MIN_MAX_WAIT_RATE))  # TODO: Use a rate limit wrapper
     try:
         response = response.json()
     except ValueError as e:
