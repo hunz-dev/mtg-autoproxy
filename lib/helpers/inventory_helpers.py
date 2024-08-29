@@ -5,12 +5,13 @@ from lib.classes import InventoryCard
 from lib.helpers import os_helpers, scryfall_helpers
 
 
-def create_inventory_card(file_name: str) -> InventoryCard:
+def create_inventory_card(file_name: str, folder: str) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format.
     (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
 
     Args:
         file_name (str): File name to parse and generate `InventoryCard` for
+        folder (str): Directory that the file belongs to
 
     Returns:
         InventoryCard: Generated `InventoryCard`
@@ -33,7 +34,7 @@ def create_inventory_card(file_name: str) -> InventoryCard:
         frame=frame,
         type_=scryfall_card.type_alt,
         color=scryfall_card.color_name,
-        modified=os_helpers.get_modified_date_utc(f"{PROXY_FOLDER}/{file_name}"),
+        modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
     )
 
     return inventory_card
