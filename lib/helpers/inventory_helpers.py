@@ -2,7 +2,41 @@ import os
 from typing import List, Tuple
 
 from lib.classes import InventoryCard
-from lib.helpers import os_helpers
+from lib.helpers import os_helpers, scryfall_helpers
+
+
+def create_inventory_card(file_name: str) -> InventoryCard:
+    """Generates an `InventoryCard` off a file name in a specific format.
+    (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
+
+    Args:
+        file_name (str): File name to parse and generate `InventoryCard` for
+
+    Returns:
+        InventoryCard: Generated `InventoryCard`
+    """
+    name = file_name[:file_name.index("(")-1]
+    artist_set = file_name[file_name.index("(")+1:file_name.index(")")]
+    artist, set_code = artist_set.split(", ")
+
+    try:
+        frame = file_name[file_name.index("[")+1:file_name.index("]")]
+    except ValueError:
+        frame = "Normal"
+
+    scryfall_card = scryfall_helpers.get_named_card(name, set_code)
+
+    inventory_card = InventoryCard(
+        name=name,
+        set_code=set_code,
+        artist=artist,
+        frame=frame,
+        type_=scryfall_card.type_alt,
+        color=scryfall_card.color_name,
+        modified=os_helpers.get_modified_date_utc(f"{PROXY_FOLDER}/{file_name}"),
+    )
+
+    return inventory_card
 
 
 def create_unique_proxies(
