@@ -147,7 +147,15 @@ class OrderCard:
             else:
                 raise ValueError("Each element must be between lengths 1 and 3 inclusive.")
 
-            order_list.append(OrderCard(scryfall_helpers.get_named_card(card_name, set_code), user, count))
+            if set_code == "PRX":
+                scryfall_card = scryfall_helpers.get_named_card(card_name)
+            else:
+                scryfall_card = scryfall_helpers.get_named_card(card_name, set_code)
+
+            if scryfall_card is None:
+                raise ValueError(f"No card found for {card_name}.")
+
+            order_list.append(OrderCard(scryfall_card, user, count))
 
         return order_list
 
