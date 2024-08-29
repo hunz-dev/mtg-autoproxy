@@ -4,6 +4,7 @@ from typing import List, Optional, Tuple, Union
 
 from lib.classes import ScryfallCard
 from lib.helpers import scryfall_helpers
+from lib.common import strip_accents
 
 
 CUSTOM_SET_CODE = "PRX"
@@ -87,7 +88,7 @@ class InventoryCard:
     def as_separated_value(self, separator=" "):
         output = {k: getattr(self, k) for k in Inventory.COLUMN_MAP.keys() if k not in Inventory.HIDDEN_FIELDS}
         output["counts"] = separator.join([str(c) for c in output["counts"]])
-        return separator.join([str(v) for v in output.values()])
+        return separator.join([strip_accents(str(v)) for v in output.values()])
 
     def add_to_order(self, column: int, to_add: int) -> None:
         self.counts[column] = self.counts[column] + to_add
