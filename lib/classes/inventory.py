@@ -6,6 +6,9 @@ from lib.classes import ScryfallCard
 from lib.helpers import scryfall_helpers
 
 
+CUSTOM_SET_CODE = "PRX"
+
+
 class InventoryCard:
     """Represent attributes of a card for an inventory.
 
@@ -147,7 +150,8 @@ class OrderCard:
             else:
                 raise ValueError("Each element must be between lengths 1 and 3 inclusive.")
 
-            if set_code == "PRX":
+            # Ignore set code in search if desired card is custom (to avoid not being found)
+            if set_code == CUSTOM_SET_CODE:
                 scryfall_card = scryfall_helpers.get_named_card(card_name)
             else:
                 scryfall_card = scryfall_helpers.get_named_card(card_name, set_code)
