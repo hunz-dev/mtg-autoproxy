@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields
 from typing import Dict, List, Tuple, Optional
+from lib.common import strip_accents
 
 
 @dataclass
@@ -56,6 +57,8 @@ class ScryfallCard:
                 setattr(self, field.name, _json[field.name])
             except KeyError:
                 setattr(self, field.name, None)
+
+        self.name = strip_accents(self.name)
 
     def __str__(self):
         return self.format_name(self.name, self.artist, self.set)

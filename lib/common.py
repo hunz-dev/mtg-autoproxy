@@ -1,7 +1,8 @@
 import csv
-import requests
 import random
 from typing import List
+import unicodedata
+import requests
 
 
 def load_csv(url: str, encoding="utf-8", delimiter=",") -> List[List[str]]:
@@ -43,3 +44,17 @@ def get_rate_limit_wait(min=1.0, max=3.0) -> float:
         float: Random float between the range defined in `RATE_LIMIT_RANGE_S`
     """
     return random.uniform(min, max)
+
+def strip_accents(text: str) -> str:
+    """Convert accented characters to basic.
+
+    Args:
+        text (str): Text to convert
+
+    Returns:
+        str: Non-accented text
+    """
+    text = unicodedata.normalize('NFD', text)
+    text = text.encode('ascii', 'ignore')
+    text = text.decode("utf-8")
+    return str(text)
