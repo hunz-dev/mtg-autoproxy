@@ -99,7 +99,7 @@ class OrderCard:
     Attributes:
         card (str): ScryfallCard instance of the card to order
         user (str): Name of the user for the order
-        order (int): Number of cards to order
+        count (int): Number of cards to order
     """
     card: ScryfallCard
     user: str
