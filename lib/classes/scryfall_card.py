@@ -96,6 +96,12 @@ class ScryfallCard:
         return self.card_faces
 
     @property
+    def mdfc_front_face_name(self) -> str:
+        if not self.is_mdfc:
+            raise ValueError("Card must be MDFC to use this property")
+        return self.card_faces[0]["name"]
+
+    @property
     def mdfc_front_face_type(self) -> str:
         if not self.is_mdfc:
             raise ValueError("Card must be MDFC to use this property")

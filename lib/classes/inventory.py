@@ -112,7 +112,7 @@ class OrderCard:
 
     @property
     def name(self):
-        return self.card.name
+        return self.card.name if not self.card.is_mdfc else self.card.mdfc_front_face_name
 
     @property
     def set_code(self):
