@@ -5,9 +5,13 @@ from lib.classes import InventoryCard
 from lib.helpers import os_helpers, scryfall_helpers
 
 
-def create_inventory_card(file_name: str, folder: str) -> InventoryCard:
-    """Generates an `InventoryCard` off a file name in a specific format.
-    (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
+SET_CODE_CUSTOM = "PRX"
+SET_CODE_TOKEN = "TOK"
+
+
+def create_normal_inventory_card(file_name: str, folder: str) -> InventoryCard:
+    """Generates an `InventoryCard` off a file name in a specific format for
+    generated cards. (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
 
     Args:
         file_name (str): File name to parse and generate `InventoryCard` for
@@ -34,6 +38,42 @@ def create_inventory_card(file_name: str, folder: str) -> InventoryCard:
         frame=frame,
         type_=scryfall_card.type_alt,
         color=scryfall_card.color_name,
+        modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
+    )
+
+    return inventory_card
+
+
+def create_token_inventory_card(file_name: str, folder: str) -> InventoryCard:
+    """Generates an `InventoryCard` off a file name in a specific format for token
+    cards. (ex. "Forest Dryad (Donato Giancola) [Green, 1-1].png)
+
+    Args:
+        file_name (str): File name to parse and generate `InventoryCard` for
+        folder (str): Directory that the file belongs to
+
+    Returns:
+        InventoryCard: Generated `InventoryCard`
+    """
+    name = file_name[:file_name.index("(")-1]
+    artist = file_name[file_name.index("(")+1:file_name.index(")")]
+    stats = file_name[file_name.index("[")+1:file_name.index("]")]
+
+    try:
+        color, power_toughness = stats.split(", ")
+    except Exception as e:
+        print(e)
+        color = "Colorless"
+        power_toughness = None
+
+    inventory_name = f"{color} {name}" + f" ({power_toughness})" if power_toughness else ""
+    inventory_card = InventoryCard(
+        name=inventory_name,
+        set_code=SET_CODE_TOKEN,
+        artist=artist,
+        frame="Token",
+        type_="Token",
+        color=color,
         modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
     )
 
