@@ -45,6 +45,7 @@ def create_custom_inventory_card(file_name: str, folder: str, set_code: str = SE
         type_=scryfall_card.type_alt,
         color=scryfall_card.color_name,
         modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
+        file_path=f"{folder}/{file_name}",
     )
 
     return inventory_card
@@ -81,6 +82,7 @@ def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool =
         type_=scryfall_card.type_alt,
         color=scryfall_card.color_name,
         modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
+        file_path=f"{folder}/{file_name}",
     )
 
     return inventory_card
@@ -118,6 +120,7 @@ def create_token_inventory_card(file_name: str, folder: str) -> InventoryCard:
         type_="Token",
         color=color,
         modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
+        file_path=f"{folder}/{file_name}",
     )
 
     return inventory_card

@@ -27,6 +27,7 @@ class InventoryCard:
     artist: str
     color: str
     counts: List[int]
+    file_path: str
     frame: str
     modified: str
     name: str
@@ -38,12 +39,13 @@ class InventoryCard:
     def __init__(self,
             name: str, set_code: str, artist: str, frame: str, type_: str, color: str,
             modified: str, counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
-            order_count: Union[str, int] = 0):
+            order_count: Union[str, int] = 0, file_path: str = None):
         self.name = name
         self.set_code = set_code
         self.artist = artist
         self.frame = frame
         self.modified = modified  # TODO: Convert to datetime?
+        self.file_path = file_path
         self.type_ = type_
         self.color = color
         self.counts = [int(count) if count else 0 for count in counts]
@@ -61,6 +63,7 @@ class InventoryCard:
                 type_=row[Inventory.COLUMN_MAP['type_']],
                 color=row[Inventory.COLUMN_MAP['color']],
                 modified=row[Inventory.COLUMN_MAP['modified']],
+                file_path=row[Inventory.COLUMN_MAP['file_path']],
                 counts=row[Inventory.COLUMN_MAP['counts'][0]:Inventory.COLUMN_MAP['counts'][1]],
                 on_hand=row[Inventory.COLUMN_MAP['on_hand']],
                 order_count=row[Inventory.COLUMN_MAP['order_count']])
@@ -178,7 +181,8 @@ class Inventory:
         "type_": 4,
         "color": 5,
         "modified": 6,
-        "counts": (7, -3),
+        "file_path": 7,
+        "counts": (8, -3),
         "on_hand": -2,
         "order_count": -1,
     }
