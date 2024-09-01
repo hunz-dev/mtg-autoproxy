@@ -9,13 +9,14 @@ SET_CODE_CUSTOM = "PRX"
 SET_CODE_TOKEN = "TOK"
 
 
-def create_custom_inventory_card(file_name: str, folder: str) -> InventoryCard:
+def create_custom_inventory_card(file_name: str, folder: str, set_code: str = SET_CODE_CUSTOM) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
     generated cards. (ex. "Anara, Wolvid Familiar (Fenrir, the Mighty) [Custom, Fullart].png)
 
     Args:
         file_name (str): File name to parse and generate `InventoryCard` for
         folder (str): Directory that the file belongs to
+        set_code (str): Custom set code to assign to card. Defaults to "PRX".
 
     Returns:
         InventoryCard: Generated `InventoryCard`
@@ -38,7 +39,7 @@ def create_custom_inventory_card(file_name: str, folder: str) -> InventoryCard:
 
     inventory_card = InventoryCard(
         name=full_name,
-        set_code="PRX",
+        set_code=set_code,
         artist=artist,
         frame=frame,
         type_=scryfall_card.type_alt,
