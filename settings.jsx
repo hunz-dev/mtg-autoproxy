@@ -31,16 +31,16 @@ var specified_template = null;
 // var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
 
-var specified_template = NormalTemplate;             // NORMAL
-// var specified_template = SilvanExtendedTemplate;     // EXTENDED
-// var specified_template = WomensDayTemplate;          // SHOWCASE
-// var specified_template = NormalClassicTemplate;      // RETRO
+var specified_template = NormalTemplate;            // NORMAL
+// specified_template = SilvanExtendedTemplate;     // EXTENDED
+// specified_template = WomensDayTemplate;          // FULLART
+// specified_template = NormalClassicTemplate;      // RETRO
 
 // var specified_template = [NormalTemplate, SilvanExtendedTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
-// var exit_early = true;
+// exit_early = true;
 
 // Automatically input and size set symbol, change outline thickness
 var automatic_set_symbol = true;
