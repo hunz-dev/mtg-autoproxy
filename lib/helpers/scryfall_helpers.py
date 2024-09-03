@@ -1,5 +1,4 @@
 from typing import List, Optional
-import time
 from lib.classes import ScryfallCard
 from lib.common import get_requests_session
 
@@ -25,14 +24,14 @@ def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[Scryfa
     Returns:
         Optional[ScryfallCard]: ScryfallCard object if card was found, None otherwise
     """
-    print(f"Searching Scryfall: \"{name}{f' [{set_code}]' if set_code else ''}\"...", end=" ")
+    # print(f"Searching Scryfall: \"{name}{f' [{set_code}]' if set_code else ''}\"...", end=" ")
 
     params = dict(exact=name, set=set_code)
     response = session.get(f"{BASE_URL}/cards/named/", params=params)
     try:
         response = response.json()
         if response.get("status") == 404:
-            print(f"Unable to find unique result.")
+            print(f"Unable to find unique result for \"{name} [{set_code.upper()}]\".")
             return None
         else:
             card = ScryfallCard(response)
@@ -40,7 +39,7 @@ def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[Scryfa
         print(f"Unable to parse response from Scryfall: {e}")
         raise e
 
-    print(f"Found: {card}")
+    # print(f"Found: {card}")
     return card
 
 
@@ -64,7 +63,7 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
     """
     params = dict(q=query, unique=unique, order=order, dir=dir)
 
-    print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end=" ")
+    # print(f"Searching Scryfall for \"{query}\" [with unique {params['unique']}]... ", end=" ")
     response = session.get(f"{BASE_URL}/cards/search/", params=params)
     try:
         response = response.json()
@@ -79,5 +78,5 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
         print(f"Found 0 cards.")
         return []
 
-    print(f"Found {len(cards)} result{'s' if len(cards) > 1 else ''}.")
+    # print(f"Found {len(cards)} result{'s' if len(cards) > 1 else ''}.")
     return cards
