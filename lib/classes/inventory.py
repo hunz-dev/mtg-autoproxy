@@ -214,7 +214,7 @@ class Inventory:
             to_order = matched_cards[0]
         else:
             matched_card = [c for c in matched_cards if order_card.set_code.upper() == c.set_code.upper()]
-            to_order = matched_card[0] if len(matched_card) > 1 else matched_cards[-1]
+            to_order = matched_card[0] if len(matched_card) > 1 else matched_cards[0]
 
         to_order.add_to_order(self.users.index(order_card.user), order_card.count)
 
