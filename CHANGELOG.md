@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add JSX script to create based on card.json (to avoid scryfall search)
 - Add logging levels and make use of debug logs
-- Add scratchpad block for adding on hand cards to inventory
 - Allow token & custom import without Scryfall
 - Support for fast-saving (not closing template file in between render_all.jsx)
 - https://pypi.org/project/rich/
@@ -27,10 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use color instead of color identity for inventory cards
 - Fix google_auth for private sheets
 
-## [1.1.4] - 2024-08-22
+## [1.1.4] - 2024-09-03
 
 ### Added
 
+- Order import from JSON files
+- Inventory support for custom, token, and in stock cards
 - Docstrings to missing functions/classes
 - Error handling for `Proxy` initialization (from CSV)
 - Additional method to download MTGPICS images
