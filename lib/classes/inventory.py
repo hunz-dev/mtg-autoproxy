@@ -7,9 +7,6 @@ from lib.classes import ScryfallCard
 from lib.helpers import scryfall_helpers
 
 
-CUSTOM_SET_CODE = "PRX"
-
-
 class InventoryCard:
     """Represent attributes of a card for an inventory.
 
@@ -150,9 +147,8 @@ class OrderCard:
             else:
                 raise ValueError("Each element must be between lengths 1 and 3 inclusive.")
 
-            # Ignore set code in search if desired card is custom (to avoid not being found)
-            if set_code == CUSTOM_SET_CODE:
-                scryfall_card = scryfall_helpers.get_named_card(card_name)
+            if set_code in [Inventory.SET_CODE_CUSTOM, Inventory.SET_CODE_TOKEN]:
+                scryfall_card = scryfall_helpers.generate_dummy_card(card_name, set_code)
             else:
                 scryfall_card = scryfall_helpers.get_named_card(card_name, set_code)
 
@@ -184,6 +180,8 @@ class Inventory:
     }
     HEADER_ROW = 4  # Ignore calculated fields in rows 1-3
     HIDDEN_FIELDS = ["order_count"]
+    SET_CODE_CUSTOM = "PRX"
+    SET_CODE_TOKEN = "TOK"
 
     @classmethod
     def from_csv(cls, input: List[List[str]]):
