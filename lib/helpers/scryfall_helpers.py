@@ -31,7 +31,7 @@ def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[Scryfa
     try:
         response = response.json()
         if response.get("status") == 404:
-            print(f"Unable to find unique result for \"{name} [{set_code.upper()}]\".")
+            print(f"Unable to find unique result for \"{name} [{set_code}]\".")
             return None
         else:
             card = ScryfallCard(response)
