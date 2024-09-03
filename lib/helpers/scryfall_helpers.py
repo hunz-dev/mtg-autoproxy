@@ -80,3 +80,41 @@ def get_matched_cards(query, unique="art", order="released", dir="desc") -> List
 
     # print(f"Found {len(cards)} result{'s' if len(cards) > 1 else ''}.")
     return cards
+
+
+def generate_dummy_card(name: str, set_code: str) -> ScryfallCard:
+    """Generate an object that has necessary attributes of a `ScryfallCard` but most
+    values are stubbed in.
+
+    Args:
+        name (str): Name of card
+        set_code (str): Set code of card
+
+    Returns:
+        ScryfallCard: ScryfallCard instance
+    """
+    return ScryfallCard({
+        "artist": "Dummy",
+        "card_faces": None,
+        "collector_number": 0,
+        "color_identity": [],
+        "frame": 2015,
+        "full_art": False,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "image_uris": {
+            "small": "",
+            "normal": "",
+            "large": "",
+            "png": "",
+            "art_crop": "",
+            "border_crop": ""
+	    },
+        "layout": "normal",
+        "name": name,
+        "oracle_id": "00000000-0000-0000-0000-000000000000",
+        "rarity": "common",
+        "scryfall_uri": "",
+        "set": set_code,
+        "set_name": "Dummy",
+        "type_line": "Token",
+    })
