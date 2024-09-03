@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add logging levels and make use of debug logs
 - Add scratchpad block for adding on hand cards to inventory
 - Allow token & custom import without Scryfall
 - Support for fast-saving (not closing template file in between render_all.jsx)
