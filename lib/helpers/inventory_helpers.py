@@ -62,9 +62,14 @@ def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool =
     Returns:
         InventoryCard: Generated `InventoryCard`
     """
-    name = file_name[:file_name.index("(")-1]
-    artist_set = file_name[file_name.index("(")+1:file_name.index(")")]
-    artist, set_code = artist_set.split(", ")
+    try:
+        name = file_name[:file_name.index("(")-1]
+        artist_set = file_name[file_name.index("(")+1:file_name.index(")")]
+        artist, set_code = artist_set.split(", ")
+    except ValueError as e:
+        example = "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png"
+        print(f"Unexpected file name format: {file_name}\nShould match: {example}")
+        raise e
 
     try:
         frame = file_name[file_name.index("[")+1:file_name.index("]")]
