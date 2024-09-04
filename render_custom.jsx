@@ -1,4 +1,4 @@
-#include "scripts/render_custom.jsx";
+#include "scripts/jsx/render_custom.jsx";
 #include "settings.jsx";
 
 file = app.openDialog();
