@@ -6,6 +6,10 @@ import json
 from urllib import request, parse, error
 
 
+# TODO: Clean up
+CARD_OUTPUT_PATH = "C:\\Users\\evanh\\Code\\mtg-autoproxy\\scripts\\jsx\\card.json"
+
+
 def add_meld_info(card_json):
     """
     If the current card is a meld card, it's important to retrieve information about its faces here, since it'll be
@@ -50,10 +54,8 @@ def main(card_name: str):
         input("\nError occurred while attempting to query Scryfall. Press enter to exit.")
 
     print(" and done! Saving JSON...", end="", flush=True)
-
-    card_json = add_meld_info(json.loads(card))
-    json_dump = json.dumps(card_json)
-    with open(sys.path[0] + "/card.json", 'w') as f:
+    with open(CARD_OUTPUT_PATH, 'w') as f:
+        json_dump = json.dumps(add_meld_info(json.loads(card)))
         json.dump(json_dump, f)
 
     print(" and done!", flush=True)

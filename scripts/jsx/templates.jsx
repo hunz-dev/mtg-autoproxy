@@ -141,7 +141,7 @@ var BaseTemplate = Class({
          * Opens the template's PSD file in Photoshop.
          */
 		
-        var template_path = file_path + "/templates/" + this.template_file_name() + file_extension;
+        var template_path = file_path + "/../templates/" + this.template_file_name() + file_extension;
         var template_file = new File(template_path);
         try {
             app.open(template_file);

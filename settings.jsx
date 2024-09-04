@@ -1,7 +1,7 @@
-#include "scripts/templates.jsx";
-#include "scripts/constants.jsx";
-#include "scripts/helpers.jsx";
-#include "scripts/plugins/includes.jsx"
+#include "scripts/jsx/templates.jsx";
+#include "scripts/jsx/constants.jsx";
+#include "scripts/jsx/helpers.jsx";
+#include "scripts/jsx/plugins/includes.jsx"
 
 // This feature needs more work
 //includeFolder("scripts/plugins");
