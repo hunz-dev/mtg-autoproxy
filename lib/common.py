@@ -12,6 +12,25 @@ from requests_cache import CachedSession
 session = None  # TODO: Could be cleaner
 
 
+def read_stdin(prompt="> ") -> List[str]:
+    """Read text input and append to list until nothing is entered
+
+    Args:
+        prompt (str, optional): System prompt to use. Defaults to "> ".
+
+    Returns:
+        List[str]: Array of all entered queries
+    """
+    queries = list()
+    while True:
+        input_query = input(prompt)
+        if len(input_query) > 0:
+            queries.append(input_query)
+        else:
+            break
+    return queries
+
+
 def load_csv(url: str, encoding="utf-8", delimiter=",") -> List[List[str]]:
     """Load a CSV-formatted result from an HTTP endpoint.
 
