@@ -9,6 +9,26 @@ MIN_MAX_WAIT_RATE = (.05, .1)
 session = get_requests_session()
 
 
+def get_set_info(set_code: str):
+    """Get set details from Scryfall based on the set code.
+
+    Args:
+        set_code (str): Set code to look for
+
+    Raises:
+        ValueError: If the returned JSON isn't serializable
+
+    Returns:
+        dict: Set payload from Scryfall
+    """
+    response = session.get(f"{BASE_URL}/sets/{set_code}")
+    try:
+        return response.json()
+    except ValueError as e:
+        print(f"Unable to parse response from Scryfall: {e}")
+        raise e
+
+
 def get_named_card(name: str, set_code: Optional[str] = None) -> Optional[ScryfallCard]:
     """Fetch single card from Scryfall based on a (Scryfall syntax) query, for
     more details see: https://scryfall.com/docs/api/cards/named.
