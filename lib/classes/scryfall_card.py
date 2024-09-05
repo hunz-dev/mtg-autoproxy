@@ -40,8 +40,10 @@ class ScryfallCard:
     id: str
     image_uris: Dict
     layout: str
+    mana_cost: str
     name: str
     oracle_id: str
+    oracle_text: str
     rarity: str
     scryfall_uri: str
     set: str
@@ -97,6 +99,10 @@ class ScryfallCard:
     @property
     def is_mdfc(self) -> bool:
         return self.card_faces
+
+    @property
+    def json(self) -> dict:
+        return {f.name: getattr(self, f.name) for f in fields(ScryfallCard)}
 
     @property
     def mdfc_front_face_name(self) -> str:

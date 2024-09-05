@@ -69,7 +69,7 @@ function call_python(card_name, file_path, set) {
             "Try running the command from the command line as that may help you debug the issue"
         );
     }
-    return JSON.parse(JSON.parse(json_string));
+    return JSON.parse(json_string);
 }
 
 function call_python_set(card_set, file_path) {
