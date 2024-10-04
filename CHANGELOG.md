@@ -7,30 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Add
 
-- Moxfield integration to load all cards in decks tagged as "Need" into a list
 - Allow `lib` to be installable as module (to fix calling from JSX)
-- Check viability of Photoshop running from Python
-- Add JSX script to create based on card.json (to avoid scryfall search)
+- Moxfield integration to load all cards in decks tagged as "Need" into a list
 - Add logging levels and make use of debug logs
 - Allow token & custom import without Scryfall
 - Support for fast-saving (not closing template file in between render_all.jsx)
-- https://pypi.org/project/rich/
+- Add progress bars and markdown output (https://pypi.org/project/rich/)
+- Add JSX script to create based on card.json (to avoid scryfall search)
 
-### Changed
+### Change
 
 - Revise scratchpad entrypoints or JSX variables to handle more dynamic template selection (ie. old cards -> Classic template, rare+ cards -> Extended template)
-- Update repo structure to separate Photoshop from Python scripts
 - Revise README.md
 - Update python version
 
-### Fixed
+### Fix
 
-- `card.json` isn't updating for retro
-- Have MDFC cards only take a single line in inventory (ie. skip back sides)
+- Have MDFC cards only take a single line in inventory (ie. skip back sides, but ensure both are in `art/` directory)
+- Fix `google_auth.py` for private sheets
+
+## [1.1.5] - TBD
+
+### Added
+- Capability of adding token and custom cards to inventory
+- `on_hand` handling for `InventoryCard`
+- Error handling on `InventoryCard` creation
+- Duskmourn icons
+- Moxfield helpers and scratchpad functions
+
+### Changed
+- Update repo structure to separate Photoshop from Python scripts and keep assets separate
 - Use color instead of color identity for inventory cards
-- Fix google_auth for private sheets
+- Revised art scan process and toggle for upscaling
+
+### Fixed
+- Issue where multiple cards match to fall back on set code
 
 ## [1.1.4] - 2024-09-03
 
