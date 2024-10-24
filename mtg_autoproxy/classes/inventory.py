@@ -2,9 +2,9 @@
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Union
 
-from lib.common import strip_accents
-from lib.classes import ScryfallCard
-from lib.helpers import scryfall_helpers
+from mtg_autoproxy.common import strip_accents
+from mtg_autoproxy.classes import ScryfallCard
+from mtg_autoproxy.helpers import scryfall_helpers
 
 
 class InventoryCard:

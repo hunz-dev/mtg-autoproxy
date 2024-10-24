@@ -1,6 +1,6 @@
 from dataclasses import dataclass, fields
 from typing import Dict, List, Tuple, Optional
-from lib.common import strip_accents
+from mtg_autoproxy.common import strip_accents
 
 
 @dataclass

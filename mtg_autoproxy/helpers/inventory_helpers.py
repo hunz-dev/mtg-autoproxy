@@ -1,9 +1,9 @@
 import os
 from typing import List, Tuple
 
-from lib import common
-from lib.classes import InventoryCard, Inventory
-from lib.helpers import os_helpers, scryfall_helpers
+from mtg_autoproxy import common
+from mtg_autoproxy.classes import InventoryCard, Inventory
+from mtg_autoproxy.helpers import os_helpers, scryfall_helpers
 
 
 

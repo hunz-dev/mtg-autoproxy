@@ -6,10 +6,10 @@ from bs4 import BeautifulSoup
 from requests_cache import CachedSession
 import tinycss2 as tinycss
 
-from lib import MTGPICS_SET_CODE_MAP
-from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
-from lib.common import get_requests_session
-from lib.helpers import scryfall_helpers
+from mtg_autoproxy import MTGPICS_SET_CODE_MAP
+from mtg_autoproxy.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
+from mtg_autoproxy.common import get_requests_session
+from mtg_autoproxy.helpers import scryfall_helpers
 
 
 BASE_URL = "https://mtgpics.com"
