@@ -1,5 +1,5 @@
-from lib.helpers import deepai_helpers, mtgpics_helpers, scryfall_helpers
-from lib.common import read_stdin
+from mtg_autoproxy.helpers import deepai_helpers, mtgpics_helpers, scryfall_helpers
+from mtg_autoproxy.common import read_stdin
 
 
 def process_query(

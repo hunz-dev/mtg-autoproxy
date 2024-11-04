@@ -51,7 +51,7 @@ function call_python(card_name, file_path, set) {
      */
 
     // default to Windows command
-    var python_command = "py \"" + file_path + "/py/get_card_info.py\" \"" + card_name + "\" \"" + set + "\"";
+    var python_command = python_exe + " \"" + file_path + "\\py\\get_card_info.py\" \"" + card_name + " set:" + set + "\" " + output_directory + "card.json";
     if ($.os.search(/windows/i) === -1) {
         // macOS
         python_command = "/usr/local/bin/python3 \"" + file_path + "/py/get_card_info.py\" \"" + card_name + "\" \"" + set + "\" >> " + file_path + "/py/debug.log 2>&1";
@@ -69,6 +69,9 @@ function call_python(card_name, file_path, set) {
             "Try running the command from the command line as that may help you debug the issue"
         );
     }
+
+    // TODO: Match JSON card name to card_name as a verification step
+
     return JSON.parse(json_string);
 }
 
@@ -78,7 +81,7 @@ function call_python_set(card_set, file_path) {
      */
 
     // default to Windows command
-    var python_command = "py \"" + file_path + "/py/get_set_info.py\" \"" + card_set + "\"";
+    var python_command = python_exe + " \"" + file_path + "/py/get_set_info.py\" \"" + card_set + "\" " + output_directory + "set.json";;
     if ($.os.search(/windows/i) === -1) {
         // macOS
         python_command = "/usr/local/bin/python3 \"" + file_path + "/py/get_set_info.py\" \"" + card_set + "\" >> " + file_path + "/py/debug.log 2>&1";
@@ -91,7 +94,7 @@ function call_python_set(card_set, file_path) {
     json_file.close();
     if (json_string === "") {
         throw new Error(
-            "\n\ncard.json does not exist - the system failed to successfully run get_card_info.py.\nThe attempted Python call was made with the " +
+            "\n\nset.json does not exist - the system failed to successfully run get_card_info.py.\nThe attempted Python call was made with the " +
             "following command:\n\n" + python_command + "\n\nYou may need to edit this command in render.jsx depending on your computer's configuration. " +
             "Try running the command from the command line as that may help you debug the issue"
         );
@@ -143,7 +146,7 @@ function render(file,current_template) {
         if (layout_name in layout_map) {
             var layout = new layout_map[layout_name](scryfall, card_name);
         } else {
-            throw new Error("Layout" + layout_name + " is not supported. Sorry!");
+            throw new Error("Layout " + layout_name + " is not supported. Sorry!");
         }
 
         // if artist specified in file name, insert the specified artist into layout obj
