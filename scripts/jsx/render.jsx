@@ -1,9 +1,8 @@
 // Instantiate the template map
 var class_template_map = {};
 
-#include "json2.js";
-#include "../settings.jsx";
-#include "layouts.jsx";
+#include "scripts/jsx/json2.js";
+#include "scripts/jsx/layouts.jsx";
 
 function retrieve_card_name_and_artist(file) {
     /**
@@ -52,10 +51,10 @@ function call_python(card_name, file_path, set) {
      */
 
     // default to Windows command
-    var python_command = "py \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\"";
+    var python_command = "py \"" + file_path + "/py/get_card_info.py\" \"" + card_name + "\" \"" + set + "\"";
     if ($.os.search(/windows/i) === -1) {
         // macOS
-        python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_card_info.py\" \"" + card_name + "\" \"" + set + "\" >> " + file_path + "/scripts/debug.log 2>&1";
+        python_command = "/usr/local/bin/python3 \"" + file_path + "/py/get_card_info.py\" \"" + card_name + "\" \"" + set + "\" >> " + file_path + "/py/debug.log 2>&1";
     }
     app.system(python_command);
 
@@ -79,10 +78,10 @@ function call_python_set(card_set, file_path) {
      */
 
     // default to Windows command
-    var python_command = "py \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\"";
+    var python_command = "py \"" + file_path + "/py/get_set_info.py\" \"" + card_set + "\"";
     if ($.os.search(/windows/i) === -1) {
         // macOS
-        python_command = "/usr/local/bin/python3 \"" + file_path + "/scripts/get_set_info.py\" \"" + card_set + "\" >> " + file_path + "/scripts/debug.log 2>&1";
+        python_command = "/usr/local/bin/python3 \"" + file_path + "/py/get_set_info.py\" \"" + card_set + "\" >> " + file_path + "/py/debug.log 2>&1";
     }
     app.system(python_command);
 
