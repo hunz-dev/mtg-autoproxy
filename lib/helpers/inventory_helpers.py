@@ -9,7 +9,7 @@ SET_CODE_CUSTOM = "PRX"
 SET_CODE_TOKEN = "TOK"
 
 
-def create_normal_inventory_card(file_name: str, folder: str) -> InventoryCard:
+def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool = False) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
     generated cards. (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
 
@@ -29,7 +29,8 @@ def create_normal_inventory_card(file_name: str, folder: str) -> InventoryCard:
     except ValueError:
         frame = "Normal"
 
-    scryfall_card = scryfall_helpers.get_named_card(name, set_code)
+    scryfall_args = (name, set_code) if not ignore_set else (name, )
+    scryfall_card = scryfall_helpers.get_named_card(*scryfall_args)
 
     inventory_card = InventoryCard(
         name=name,
@@ -61,6 +62,7 @@ def create_token_inventory_card(file_name: str, folder: str) -> InventoryCard:
 
     try:
         color, power_toughness = stats.split(", ")
+        power_toughness = power_toughness.replace("-", "/")
     except Exception as e:
         print(e)
         color = "Colorless"
