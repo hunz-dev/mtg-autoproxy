@@ -212,8 +212,12 @@ class Inventory:
         matched_cards = [c for c in self.cards if order_card.name in c.name]
         if len(matched_cards) < 1:
             raise ValueError(f"No cards found named {order_card.name}.")
+        elif len(matched_cards) == 1:
+            to_order = matched_cards[0]
+        else:
+            matched_card = [c for c in matched_cards if order_card.set_code.upper() == c.set_code.upper()]
+            to_order = matched_card[0] if len(matched_card) > 1 else matched_cards[-1]
 
-        to_order = matched_cards[-1]  # Pick the last card if multiple match
         to_order.add_to_order(self.users.index(order_card.user), order_card.count)
 
     def add_to_stock(self, order_card: OrderCard):
