@@ -3,8 +3,8 @@ art/*
 !art/.keep
 env/
 out/
-scripts/*.jpg
-scripts/*.json
+scripts/**/*.jpg
+scripts/**/*.json
 secrets/*
 !secrets/.keep
 templates/
