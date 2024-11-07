@@ -119,7 +119,7 @@ def create_token_inventory_card(file_name: str, folder: str) -> InventoryCard:
         color = "Colorless"
         power_toughness = None
 
-    inventory_name = f"{color} {name}" + f" ({power_toughness})" if power_toughness else ""
+    inventory_name = f"{name}" + f" ({power_toughness})" if power_toughness else ""
     inventory_card = InventoryCard(
         name=inventory_name,
         set_code=SET_CODE_TOKEN,
