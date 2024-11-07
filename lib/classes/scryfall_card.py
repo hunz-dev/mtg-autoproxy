@@ -120,6 +120,7 @@ class ScryfallCard:
             "Land",
             "Sorcery",
             "Planeswalker",
+            "Token",
         ]
 
         return [t for t in simple_types if t in self.type_line][0]
