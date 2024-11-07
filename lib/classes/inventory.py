@@ -202,7 +202,7 @@ class Inventory:
         return Inventory(cards, users)
 
     def __str__(self):
-        return f"Inventory: {len(self.cards)} cards for {len(self.users)} users ({', '.join(self.users)})"
+        return f"Inventory: {len(self.cards)} cards for {len(self.users)} people ({', '.join(self.users)})"
 
     def add_to_order(self, order_card: OrderCard):
         """Adds a card to the inventory.
