@@ -9,6 +9,46 @@ SET_CODE_CUSTOM = "PRX"
 SET_CODE_TOKEN = "TOK"
 
 
+def create_custom_inventory_card(file_name: str, folder: str) -> InventoryCard:
+    """Generates an `InventoryCard` off a file name in a specific format for
+    generated cards. (ex. "Anara, Wolvid Familiar (Fenrir, the Mighty) [Custom, Fullart].png)
+
+    Args:
+        file_name (str): File name to parse and generate `InventoryCard` for
+        folder (str): Directory that the file belongs to
+
+    Returns:
+        InventoryCard: Generated `InventoryCard`
+    """
+    full_name = file_name[:file_name.index("[")-1]
+    artist_frame = file_name[file_name.index("[")+1:file_name.index("]")]
+
+    try:
+        artist, frame = artist_frame.split(", ")
+    except ValueError as e:
+        frame = artist_frame
+        artist = "Custom"
+
+    try:
+        real_name = full_name[:full_name.index("(")-1]
+    except ValueError:
+        real_name = full_name
+
+    scryfall_card = scryfall_helpers.get_named_card(real_name)
+
+    inventory_card = InventoryCard(
+        name=full_name,
+        set_code="PRX",
+        artist=artist,
+        frame=frame,
+        type_=scryfall_card.type_alt,
+        color=scryfall_card.color_name,
+        modified=os_helpers.get_modified_date_utc(f"{folder}/{file_name}"),
+    )
+
+    return inventory_card
+
+
 def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool = False) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
     generated cards. (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
