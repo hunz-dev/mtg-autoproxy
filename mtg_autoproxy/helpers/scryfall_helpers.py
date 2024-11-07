@@ -1,6 +1,6 @@
 from typing import List, Optional
-from lib.classes import ScryfallCard
-from lib.common import get_requests_session
+from mtg_autoproxy.classes import ScryfallCard
+from mtg_autoproxy.common import get_requests_session
 
 
 BASE_URL = "https://api.scryfall.com"

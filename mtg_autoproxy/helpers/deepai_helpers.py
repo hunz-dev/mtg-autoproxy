@@ -1,8 +1,8 @@
 import os
 import requests
 import urllib  # TODO: Don't use urllib
-from lib.classes import ScryfallCard
-from lib.common import get_rate_limit_wait
+from mtg_autoproxy.classes import ScryfallCard
+from mtg_autoproxy.common import get_rate_limit_wait
 
 
 DEEPAI_BASE_URL = "https://api.deepai.org/api"
