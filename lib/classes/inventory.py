@@ -19,7 +19,6 @@ class InventoryCard:
         frame (str): Type of frame used on the card
         modified (str): Timestamp string of the last modified date
         name (str): Name of the card
-        on_hand (int): Number of cards on hand. Defaults to 0.
         order_count (int): Total number of proxies to order. Defaults to 0.
         set_code (str): Set that the card belongs to
         type_ (str): Type of the card (ie. color identity or land).
@@ -31,15 +30,14 @@ class InventoryCard:
     frame: str
     modified: str
     name: str
-    on_hand: int
     order_count: int
     set_code: str
     type_: str
 
     def __init__(self,
             name: str, set_code: str, artist: str, frame: str, type_: str, color: str,
-            modified: str, counts: List[Union[str, int]] = [], on_hand: Union[str, int] = 0,
-            order_count: Union[str, int] = 0, file_path: str = None):
+            modified: str, counts: List[Union[str, int]] = [], order_count: Union[str, int] = 0,
+            file_path: str = None):
         self.name = name
         self.set_code = set_code
         self.artist = artist
@@ -49,7 +47,6 @@ class InventoryCard:
         self.type_ = type_
         self.color = color
         self.counts = [int(count) if count else 0 for count in counts]
-        self.on_hand = int(on_hand) if on_hand else 0
         self.order_count = int(order_count) if order_count else 0
 
     @classmethod
@@ -65,7 +62,6 @@ class InventoryCard:
                 modified=row[Inventory.COLUMN_MAP['modified']],
                 file_path=row[Inventory.COLUMN_MAP['file_path']],
                 counts=row[Inventory.COLUMN_MAP['counts'][0]:Inventory.COLUMN_MAP['counts'][1]],
-                on_hand=row[Inventory.COLUMN_MAP['on_hand']],
                 order_count=row[Inventory.COLUMN_MAP['order_count']])
         except IndexError as e:
             print(f"Error parsing: {row}")
@@ -95,9 +91,6 @@ class InventoryCard:
 
     def add_to_order(self, column: int, to_add: int) -> None:
         self.counts[column] = self.counts[column] + to_add
-
-    def add_to_stock(self, to_add: int) -> None:
-        self.on_hand += to_add
 
 
 class OrderCard:
@@ -186,12 +179,11 @@ class Inventory:
         "color": 5,
         "modified": 6,
         "file_path": 7,
-        "counts": (8, -3),
-        "on_hand": -2,
+        "counts": (8, -2),
         "order_count": -1,
     }
     HEADER_ROW = 4  # Ignore calculated fields in rows 1-3
-    HIDDEN_FIELDS = ["on_hand", "order_count"]
+    HIDDEN_FIELDS = ["order_count"]
 
     @classmethod
     def from_csv(cls, input: List[List[str]]):
