@@ -1,3 +1,5 @@
+# TODO: Clean up file and expose main behavior as named function instead of main (but still runnable from PS)
+
 import time
 import sys
 import json
@@ -20,10 +22,7 @@ def add_meld_info(card_json):
 
     return card_json
 
-
-if __name__ == "__main__":
-    card_name = sys.argv[1]
-    # Use Scryfall to search for this card
+def main(card_name: str):
     card = None
 
     # If the card specifies which set to retrieve the scan from, do that
@@ -59,3 +58,7 @@ if __name__ == "__main__":
 
     print(" and done!", flush=True)
     time.sleep(0.1)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1])
