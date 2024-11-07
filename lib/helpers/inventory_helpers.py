@@ -8,11 +8,9 @@ from lib.helpers import os_helpers, scryfall_helpers
 
 
 DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheet/ccc?key=1JbJy3kM34XUOPud4qPaAhp2luU0Qgidq4CPQVm0TTw0&output=csv"
-SET_CODE_CUSTOM = "PRX"
-SET_CODE_TOKEN = "TOK"
 
 
-def create_custom_inventory_card(file_name: str, folder: str, set_code: str = SET_CODE_CUSTOM) -> InventoryCard:
+def create_custom_inventory_card(file_name: str, folder: str, set_code: str = Inventory.SET_CODE_CUSTOM) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
     generated cards. (ex. "Anara, Wolvid Familiar (Fenrir, the Mighty) [Custom, Fullart].png)
 
@@ -122,7 +120,7 @@ def create_token_inventory_card(file_name: str, folder: str) -> InventoryCard:
     inventory_name = f"{name}" + f" ({power_toughness})" if power_toughness else ""
     inventory_card = InventoryCard(
         name=inventory_name,
-        set_code=SET_CODE_TOKEN,
+        set_code=Inventory.SET_CODE_TOKEN,
         artist=artist,
         frame="Token",
         type_="Token",
