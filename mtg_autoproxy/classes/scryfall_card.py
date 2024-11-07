@@ -1,6 +1,6 @@
 from dataclasses import dataclass, fields
 from typing import Dict, List, Tuple, Optional
-from lib.common import strip_accents
+from mtg_autoproxy.common import strip_accents
 
 
 @dataclass
@@ -40,8 +40,10 @@ class ScryfallCard:
     id: str
     image_uris: Dict
     layout: str
+    mana_cost: str
     name: str
     oracle_id: str
+    oracle_text: str
     rarity: str
     scryfall_uri: str
     set: str
@@ -99,6 +101,10 @@ class ScryfallCard:
         return self.card_faces
 
     @property
+    def json(self) -> dict:
+        return {f.name: getattr(self, f.name) for f in fields(ScryfallCard)}
+
+    @property
     def mdfc_front_face_name(self) -> str:
         if not self.is_mdfc:
             raise ValueError("Card must be MDFC to use this property")
@@ -120,6 +126,7 @@ class ScryfallCard:
             "Land",
             "Sorcery",
             "Planeswalker",
+            "Token",
         ]
 
         return [t for t in simple_types if t in self.type_line][0]

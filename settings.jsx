@@ -1,7 +1,7 @@
-#include "scripts/templates.jsx";
-#include "scripts/constants.jsx";
-#include "scripts/helpers.jsx";
-#include "scripts/plugins/includes.jsx"
+#include "scripts/jsx/templates.jsx";
+#include "scripts/jsx/constants.jsx";
+#include "scripts/jsx/helpers.jsx";
+#include "scripts/jsx/plugins/includes.jsx"
 
 // This feature needs more work
 //includeFolder("scripts/plugins");
@@ -31,16 +31,16 @@ var specified_template = null;
 // var specified_template = CrimsonFangTemplate; // REGULAR - Crimson Vow showcase
 // var specified_template = DoubleFeatureTemplate; // NORMAL - Mid/Vow double feature
 
-var specified_template = NormalTemplate;             // NORMAL
-// var specified_template = SilvanExtendedTemplate;     // EXTENDED
-// var specified_template = WomensDayTemplate;          // SHOWCASE
-// var specified_template = NormalClassicTemplate;      // RETRO
+var specified_template = NormalTemplate;            // NORMAL
+// specified_template = SilvanExtendedTemplate;     // EXTENDED
+// specified_template = WomensDayTemplate;          // FULLART
+// specified_template = NormalClassicTemplate;      // RETRO
 
 // var specified_template = [NormalTemplate, SilvanExtendedTemplate]; // Do multiple templates at a time
 
 // Specify whether to end the script when the card is finished being formatted (for manual intervention)
 var exit_early = false;
-// var exit_early = true;
+// exit_early = true;
 
 // Automatically input and size set symbol, change outline thickness
 var automatic_set_symbol = true;
@@ -72,3 +72,8 @@ var fast_saving = false;
 
 // Choose file extension, advanced users only
 var file_extension = ".psd";
+
+// Directory/Python variables
+var working_directory = "C:\\Users\\evanh\\Code\\mtg-autoproxy"
+var python_exe = working_directory + "\\env\\Scripts\\python.exe"
+var output_directory = working_directory + "\\scripts\\out\\"

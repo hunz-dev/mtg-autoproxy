@@ -1,9 +1,9 @@
 ﻿// TODO: consistency between camelcase and snakecase
 
-var json_file_path = "/scripts/card.json";
-var json_set_file_path = "/scripts/set.json"; // MY STUFF
-var json_custom_file_path = "/scripts/custom_card.json"; // MY STUFF
-var image_file_path = "/scripts/card.jpg";
+var json_file_path = "/out/card.json";
+var json_set_file_path = "/out/set.json"; // MY STUFF
+var json_custom_file_path = "/out/custom_card.json"; // MY STUFF
+var image_file_path = "/out/card.jpg";
 
 // Card classes - finer grained than Scryfall layouts
 var normal_class = "normal";
@@ -572,6 +572,7 @@ var set_symbols = {
     "DRB": "",
     "DRK": "",
     "DST": "",
+    "DSK": "",
     "DTK": "",
     "E01": "",
     "E02": "",

@@ -7,9 +7,3 @@ venv:
 
 load-config:
 	env $$(cat .env | xargs)
-
-scan-scryfall:
-	$(load_config) $(PYTHON) -u art_scan_scryfall.py
-
-art-scan:
-	$(load_config) $(PYTHON) -u art_scan.py

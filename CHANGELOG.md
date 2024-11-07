@@ -7,28 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Add
 
+- Match JSON card name to `card_name` as a verification step in JSX render function
+- Moxfield integration to load all cards in decks tagged as "Need" into a list
+- Add logging levels and make use of debug logs
+- Allow token & custom import without Scryfall
 - Support for fast-saving (not closing template file in between render_all.jsx)
-- Nested log statements when running art scan
-- Use rate limiter decorator
-- https://pypi.org/project/inflect/
-- https://pypi.org/project/rich/
+- Add progress bars and markdown output (https://pypi.org/project/rich/)
+- Add JSX script to create based on card.json (to avoid scryfall search)
 
-### Changed
+### Change
 
-- Update repo structure to separate Photoshop from Python scripts
+- Revise scratchpad entrypoints or JSX variables to handle more dynamic template selection (ie. old cards -> Classic template, rare+ cards -> Extended template)
 - Revise README.md
 - Update python version
 
+### Fix
+
+- Have MDFC cards only take a single line in inventory (ie. skip back sides, but ensure both are in `art/` directory)
+- Fix `google_auth.py` for private sheets
+
+## [1.1.5] - TBD
+
+### Added
+- Allow `lib` to be installable as module (to fix calling from JSX)
+- Capability of adding token and custom cards to inventory
+- `on_hand` handling for `InventoryCard`
+- Error handling on `InventoryCard` creation
+- Duskmourn icons
+- Moxfield helpers and scratchpad functions
+
+### Changed
+- Update repo structure to separate Photoshop from Python scripts and keep assets separate
+- Use color instead of color identity for inventory cards
+- Revised art scan process and toggle for upscaling
+
 ### Fixed
+- Issue where multiple cards match to fall back on set code
 
-- Fix google_auth for private sheets
-
-## [1.1.4] - 2024-08-22
+## [1.1.4] - 2024-09-03
 
 ### Added
 
+- Order import from JSON files
+- Inventory support for custom, token, and in stock cards
 - Docstrings to missing functions/classes
 - Error handling for `Proxy` initialization (from CSV)
 - Additional method to download MTGPICS images
@@ -53,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- MDFC inventory update (see. test.json)
 - Changed fixed column number to look at last column instead of a hardcoded value (to be flexible with any number of users)
 
 ## [1.1.3] - 2023-07-23

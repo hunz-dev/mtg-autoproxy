@@ -6,10 +6,10 @@ from bs4 import BeautifulSoup
 from requests_cache import CachedSession
 import tinycss2 as tinycss
 
-from lib import MTGPICS_SET_CODE_MAP
-from lib.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
-from lib.common import get_requests_session
-from lib.helpers import scryfall_helpers
+from mtg_autoproxy import MTGPICS_SET_CODE_MAP
+from mtg_autoproxy.classes import MtgPicsCard, MtgPicsCardVersion, ScryfallCard
+from mtg_autoproxy.common import get_requests_session
+from mtg_autoproxy.helpers import scryfall_helpers
 
 
 BASE_URL = "https://mtgpics.com"
@@ -189,11 +189,12 @@ def find_valid_gamerid(card_name: str, gamerids: List[str]) -> Optional[str]:
         return None
 
 
-def save_image(image_version: MtgPicsCardVersion) -> bool:
+def save_image(image_version: MtgPicsCardVersion, output_path: str) -> bool:
     """Save an image from MTGPICS.com using site identifier.
 
     Args:
         ids (MtgPicsCard): MTGPICS.com identifier object
+        output_path (str): Output file path to save image to
 
     Returns:
         bool: Success flag
@@ -206,7 +207,7 @@ def save_image(image_version: MtgPicsCardVersion) -> bool:
         print(f"Not found.")
         return False
     else:
-        file_name = f"art/{str(image_version).replace('/', '')}.jpg"
+        file_name = f"{output_path}/{str(image_version).replace('/', '')}.jpg"
         print(f"Saving as \"{file_name}\"... ", end="")
         with open(file_name, "wb") as f:
             f.write(response.content)
