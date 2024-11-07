@@ -96,6 +96,9 @@ class InventoryCard:
     def add_to_order(self, column: int, to_add: int) -> None:
         self.counts[column] = self.counts[column] + to_add
 
+    def add_to_stock(self, to_add: int) -> None:
+        self.on_hand += to_add
+
 
 class OrderCard:
     """Represent a card to find and order from Inventory.
@@ -167,6 +170,7 @@ class OrderCard:
 
         return order_list
 
+
 class Inventory:
     cards: List[InventoryCard]
     sheet_id: Optional[str]
@@ -189,17 +193,17 @@ class Inventory:
     HEADER_ROW = 4  # Ignore calculated fields in rows 1-3
     HIDDEN_FIELDS = ["on_hand", "order_count"]
 
-    def __init__(self, cards: List[InventoryCard], users: List[str], sheet_id: str = None):
-        self.cards = cards
-        self.sheet_id = sheet_id
-        self.users = users
-
     @classmethod
     def from_csv(cls, input: List[List[str]]):
         header = input[Inventory.HEADER_ROW - 1]
         users = header[Inventory.COLUMN_MAP["counts"][0]:Inventory.COLUMN_MAP["counts"][1]]
         cards = [InventoryCard.from_row(r) for r in input[Inventory.HEADER_ROW:]]
         return Inventory(cards, users)
+
+    def __init__(self, cards: List[InventoryCard], users: List[str], sheet_id: str = None):
+        self.cards = cards
+        self.sheet_id = sheet_id
+        self.users = users
 
     def __str__(self):
         return f"Inventory: {len(self.cards)} cards for {len(self.users)} people ({', '.join(self.users)})"
@@ -219,3 +223,19 @@ class Inventory:
 
         to_order = matched_cards[-1]  # Pick the last card if multiple match
         to_order.add_to_order(self.users.index(order_card.user), order_card.count)
+
+    def add_to_stock(self, order_card: OrderCard):
+        """Adds a card to the inventory stock.
+
+        Args:
+            order_card (OrderCard): Order card to add
+
+        Raises:
+            ValueError: If the card does not exist in the inventory yet.
+        """
+        matched_cards = [c for c in self.cards if order_card.name in c.name]
+        if len(matched_cards) < 1:
+            raise ValueError(f"No cards found named {order_card.name}.")
+
+        to_add = matched_cards[-1]  # Pick the last card if multiple match
+        to_add.add_to_stock(to_add.count)
