@@ -9,10 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add scratchpad block for adding on hand cards to inventory
+- Allow token & custom import without Scryfall
 - Support for fast-saving (not closing template file in between render_all.jsx)
-- Nested log statements when running art scan
-- Use rate limiter decorator
-- https://pypi.org/project/inflect/
 - https://pypi.org/project/rich/
 
 ### Changed
@@ -23,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Have MDFC cards only take a single line in inventory (ie. skip back sides)
+- Use color instead of color identity for inventory cards
 - Fix google_auth for private sheets
 
 ## [1.1.4] - 2024-08-22
@@ -53,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- MDFC inventory update (see. test.json)
 - Changed fixed column number to look at last column instead of a hardcoded value (to be flexible with any number of users)
 
 ## [1.1.3] - 2023-07-23
