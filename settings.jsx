@@ -72,3 +72,8 @@ var fast_saving = false;
 
 // Choose file extension, advanced users only
 var file_extension = ".psd";
+
+// Directory/Python variables
+var working_directory = "C:\\Users\\evanh\\Code\\mtg-autoproxy"
+var python_exe = working_directory + "\\env\\Scripts\\python.exe"
+var output_directory = working_directory + "\\scripts\\out\\"
