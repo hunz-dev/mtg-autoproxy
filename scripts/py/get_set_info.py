@@ -3,6 +3,11 @@ import sys
 import json
 from urllib import request, parse, error
 
+
+# TODO: Clean up
+CARD_OUTPUT_PATH = "C:\\Users\\evanh\\Code\\mtg-autoproxy\\scripts\\jsx\\set.json"
+
+
 if __name__ == "__main__":
     set_code = sys.argv[1]
     # Use Scryfall to search for this card
@@ -21,7 +26,7 @@ if __name__ == "__main__":
     print(" and done! Saving JSON...", end="", flush=True)
 
     json_dump = json.dumps(json.loads(mtg_set))
-    with open(sys.path[0] + "/set.json", 'w') as f:
+    with open(CARD_OUTPUT_PATH, 'w') as f:
         json.dump(json_dump, f)
 
     print(" and done!", flush=True)

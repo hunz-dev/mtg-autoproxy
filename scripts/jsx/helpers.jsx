@@ -276,7 +276,7 @@ function save_and_close(file_name, file_path) {
     var idPNGF = charIDToTypeID("PNGF");
     desc3.putObject(idAs, idPNGF, desc4);
     var idIn = charIDToTypeID("In  ");
-    var file_name_with_path = file_path + '/out/' + file_name + '.png';
+    var file_name_with_path = file_path + '/../out/' + file_name + '.png';
     desc3.putPath(idIn, new File(file_name_with_path));
     var idCpy = charIDToTypeID("Cpy ");
     desc3.putBoolean(idCpy, true);
