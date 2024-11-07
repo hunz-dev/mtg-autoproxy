@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Add
 
-- Allow `lib` to be installable as module (to fix calling from JSX)
+- Match JSON card name to `card_name` as a verification step in JSX render function
 - Moxfield integration to load all cards in decks tagged as "Need" into a list
 - Add logging levels and make use of debug logs
 - Allow token & custom import without Scryfall
@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.5] - TBD
 
 ### Added
+- Allow `lib` to be installable as module (to fix calling from JSX)
 - Capability of adding token and custom cards to inventory
 - `on_hand` handling for `InventoryCard`
 - Error handling on `InventoryCard` creation
