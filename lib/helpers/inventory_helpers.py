@@ -10,7 +10,7 @@ from lib.helpers import os_helpers, scryfall_helpers
 DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheet/ccc?key=1JbJy3kM34XUOPud4qPaAhp2luU0Qgidq4CPQVm0TTw0&output=csv"
 
 
-def create_custom_inventory_card(file_name: str, folder: str, set_code: str = Inventory.SET_CODE_CUSTOM) -> InventoryCard:
+def create_custom_card(file_name: str, folder: str, set_code: str = Inventory.SET_CODE_CUSTOM) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
     generated cards. (ex. "Anara, Wolvid Familiar (Fenrir, the Mighty) [Custom, Fullart].png)
 
@@ -52,7 +52,7 @@ def create_custom_inventory_card(file_name: str, folder: str, set_code: str = In
     return inventory_card
 
 
-def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool = False) -> InventoryCard:
+def create_normal_card(file_name: str, folder: str, ignore_set: bool = False) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
     generated cards. (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png")
 
@@ -94,7 +94,7 @@ def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool =
     return inventory_card
 
 
-def create_token_inventory_card(file_name: str, folder: str) -> InventoryCard:
+def create_token_card(file_name: str, folder: str) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for token
     cards. (ex. "Forest Dryad (Donato Giancola) [Green, 1-1].png)
 
