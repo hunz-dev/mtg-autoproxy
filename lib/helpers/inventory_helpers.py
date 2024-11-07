@@ -170,12 +170,12 @@ def create_unique_proxies(
 
 
 def load_inventory_from_url(url: str = DEFAULT_SHEET_URL) -> Inventory:
-    """_summary_
+    """Loads inventory from CSV-based export via URL.
 
     Args:
-        url (str, optional): _description_. Defaults to DEFAULT_SHEET_URL.
+        url (str, optional): URL to the CSV to import. Defaults to DEFAULT_SHEET_URL.
 
     Returns:
-        Inventory: _description_
+        Inventory: `Inventory` instance
     """
     return Inventory.from_csv(common.load_csv(url))
