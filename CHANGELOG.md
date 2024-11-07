@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Moxfield integration to load all cards in decks tagged as "Need" into a list
 - Allow `lib` to be installable as module (to fix calling from JSX)
 - Check viability of Photoshop running from Python
 - Add JSX script to create based on card.json (to avoid scryfall search)
