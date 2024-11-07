@@ -1,13 +1,12 @@
-# TODO: Clean up file and expose main behavior as named function instead of main (but still runnable from PS)
-
 import time
 import sys
-import json
-from urllib import request, parse, error
+import simplejson as json
+from urllib import request
+from lib.helpers import scryfall_helpers
 
 
 # TODO: Clean up
-CARD_OUTPUT_PATH = "C:\\Users\\evanh\\Code\\mtg-autoproxy\\scripts\\jsx\\card.json"
+CARD_OUTPUT_PATH = "scripts/jsx/card.json"
 
 
 def add_meld_info(card_json):
@@ -26,40 +25,16 @@ def add_meld_info(card_json):
 
     return card_json
 
+
 def main(card_name: str):
-    card = None
+    print(f"Searching Scryfall for: {card_name}...", end=" ")
+    card = scryfall_helpers.get_matched_cards(card_name, unique="cards")[0]
 
-    # If the card specifies which set to retrieve the scan from, do that
-    try:
-        pipe_idx = card_name.index("$")
-        card_set = card_name[pipe_idx + 1:]
-        card_name = card_name[0:pipe_idx]
-        print(f"Searching Scryfall for: {card_name}, set: {card_set}...", end="", flush=True)
-        card = request.urlopen(
-            f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
-        ).read()
-    except ValueError:
-        try:
-            card_set = sys.argv[2]
-            print(f"Searching Scryfall for: {card_name}, set: {card_set}...", end="", flush=True)
-            card = request.urlopen(
-                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}&set={parse.quote(card_set)}"
-            ).read()
-        except:
-            print(f"Searching Scryfall for: {card_name}...", end="", flush=True)
-            card = request.urlopen(
-                f"https://api.scryfall.com/cards/named?fuzzy={parse.quote(card_name)}"
-            ).read()
-    except error.HTTPError:
-        input("\nError occurred while attempting to query Scryfall. Press enter to exit.")
-
-    print(" and done! Saving JSON...", end="", flush=True)
+    print("Saving JSON...", end=" ")
     with open(CARD_OUTPUT_PATH, 'w') as f:
-        json_dump = json.dumps(add_meld_info(json.loads(card)))
-        json.dump(json_dump, f)
+        f.write(json.dumps(card.json, indent=4, sort_keys=True))
 
-    print(" and done!", flush=True)
-    time.sleep(0.1)
+    print("Done!")
 
 
 if __name__ == "__main__":
