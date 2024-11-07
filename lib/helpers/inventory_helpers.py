@@ -1,10 +1,13 @@
 import os
 from typing import List, Tuple
 
-from lib.classes import InventoryCard
+from lib import common
+from lib.classes import InventoryCard, Inventory
 from lib.helpers import os_helpers, scryfall_helpers
 
 
+
+DEFAULT_SHEET_URL = "https://docs.google.com/spreadsheet/ccc?key=1JbJy3kM34XUOPud4qPaAhp2luU0Qgidq4CPQVm0TTw0&output=csv"
 SET_CODE_CUSTOM = "PRX"
 SET_CODE_TOKEN = "TOK"
 
@@ -53,7 +56,7 @@ def create_custom_inventory_card(file_name: str, folder: str, set_code: str = SE
 
 def create_normal_inventory_card(file_name: str, folder: str, ignore_set: bool = False) -> InventoryCard:
     """Generates an `InventoryCard` off a file name in a specific format for
-    generated cards. (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png)
+    generated cards. (ex. "Crucible of Worlds (Ron Spencer, 5DN) [Extended].png")
 
     Args:
         file_name (str): File name to parse and generate `InventoryCard` for
@@ -166,3 +169,15 @@ def create_unique_proxies(
         os_helpers.duplicate_file(proxy_path, destination_folder, order_count)
 
     return errors["missing"], errors["duplicates"]
+
+
+def load_inventory_from_url(url: str = DEFAULT_SHEET_URL) -> Inventory:
+    """_summary_
+
+    Args:
+        url (str, optional): _description_. Defaults to DEFAULT_SHEET_URL.
+
+    Returns:
+        Inventory: _description_
+    """
+    return Inventory.from_csv(common.load_csv(url))
